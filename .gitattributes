@@ -1,5 +1,6 @@
 *.html linguist-detectable=false
 *.php linguist-detectable=false
+*.inc linguist-detectable=false
 *.wo linguist-language=DataFlex
 *.src linguist-language=DataFlex
 *.fd linguist-language=DataFlex
