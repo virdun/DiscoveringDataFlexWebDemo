@@ -1,0 +1,7 @@
+#REPLACE FILE2 item
+#REPLACE item.Recnum |FN2,0
+#REPLACE item.id |FN2,1
+#REPLACE item.name |FS2,2
+#REPLACE item.description |FS2,3
+#REPLACE item.category |FS2,4
+#REPLACE item.location_id |FN2,5

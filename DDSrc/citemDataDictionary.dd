@@ -1,0 +1,40 @@
+﻿Use DataDict.pkg
+
+Open Item
+Open location
+Open system
+
+Object category_val is a ValidationTable
+    Procedure Fill_List
+        Forward Send Fill_List
+        Send Add_Table_Value "Attik"
+        Send Add_Table_Value "Basement"
+        Send Add_Table_Value "Wardrobe 1"
+        Send Add_Table_Value "Wardrobe 2"
+    End_Procedure
+End_Object
+
+Class citemDataDictionary is a DataDictionary
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Set Main_File to Item.File_Number
+
+        Set Add_System_File to system.File_Number DD_Lock_On_All
+
+        Set Add_Server_File to location.File_Number
+
+        Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
+        Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
+        Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
+        Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
+
+        Set Field_Auto_Increment Field Item.id to File_Field system.item_id
+
+        Set Field_Option Field Item.name DD_REQUIRED to True
+
+        Set Field_Value_Table Field Item.category to ctegory_val
+
+    End_Procedure
+
+End_Class

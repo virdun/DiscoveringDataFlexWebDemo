@@ -1,0 +1,4 @@
+#REPLACE FILE1 system
+#REPLACE system.Recnum |FN1,0
+#REPLACE system.item_id |FN1,1
+#REPLACE system.location_id |FN1,2

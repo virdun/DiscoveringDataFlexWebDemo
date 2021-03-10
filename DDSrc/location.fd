@@ -1,0 +1,4 @@
+#REPLACE FILE3 location
+#REPLACE location.Recnum |FN3,0
+#REPLACE location.id |FN3,1
+#REPLACE location.name |FS3,2

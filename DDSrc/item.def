@@ -1,0 +1,43 @@
+-----------------------------------------------------------------------------
+  DATE: 2021-03-10      TIME: 09:28                                  PAGE:  1
+  FILE DEFINITION FOR FILE: item (# 2)
+-----------------------------------------------------------------------------
+  DRIVER NAME               : DATAFLEX
+  FILE ROOT NAME            : item
+  USER DISPLAY NAME         : item
+  DATAFLEX FILE NAME        : item
+-----------------------------------------------------------------------------
+  RECORD LENGTH             : 256       ( USED: 204 )
+  MAX NUMBER OF RECORDS     : 10000     ( USED: 0 )
+  FILE COMPRESSION          : NONE
+  RE-USE DELETED SPACE      : YES
+  LOCKING TYPE              : FILE
+  HEADER INTEGRITY CHECKING : YES
+  TRANSACTION TYPE          : CLIENT ATOMIC
+  RECORD IDENTITY INDEX     : 0 ( 0 , 0 )
+  FILE LOGIN PARAMETER      : 
+  SYSTEM FILE               : NO 
+-----------------------------------------------------------------------------
+
+NUM  FIELD NAME       TYPE SIZE  OFFST IX   RELATES TO FILE.FIELD
+---  ---------------  ---- ----- ----- --   ---------------------------------
+  1  id               NUM    6.0     1  1   
+  2  name             ASC     50     4  2   
+  3  description      TEX    128    54      
+  4  category         ASC     20   182  3   
+  5  location_id      NUM    6.0   202  4   location.FIELD_1 (3,1)
+
+
+INDEX# FIELDS          DES U/C    LENGTH LEVELS SEGMENTS MODE
+------ --------------- --- ---    ------ ------ -------- -------
+  1    id              NO  NO       3      2       1     ON-LINE
+
+  2    name            NO  NO       53     5       2     ON-LINE
+       id              NO  NO 
+
+  3    category        NO  NO       23     3       2     ON-LINE
+       id              NO  NO 
+
+  4    location_id     NO  NO       6      3       2     ON-LINE
+       id              NO  NO 
+
