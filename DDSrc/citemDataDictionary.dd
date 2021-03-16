@@ -29,11 +29,11 @@ Class citemDataDictionary is a DataDictionary
         Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
         Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
 
-        Set Field_Auto_Increment Field Item.id to File_Field system.item_id
+        Set Field_Auto_Increment Field Item.ID to File_Field system.item_id
 
-        Set Field_Option Field Item.name DD_REQUIRED to True
+        Set Field_Option Field Item.Name DD_REQUIRED to True
 
-        Set Field_Value_Table Field Item.category to ctegory_val
+        Set Field_Value_Table Field Item.Category to ctegory_val
 
     End_Procedure
 
