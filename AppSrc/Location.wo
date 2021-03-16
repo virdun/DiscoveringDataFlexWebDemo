@@ -1,0 +1,43 @@
+﻿// E:\DataFlex Projects\DiscoveringDataFlexWebDemo\AppSrc\Location.wo
+// Location
+//
+
+Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg
+
+Use clocationDataDictionary.dd
+
+Object oLocation is a cWebView
+    Set piColumnCount to 12
+    Set psCaption to "Location"
+    Set piWidth to 700
+
+    Object olocation_DD is a clocationDataDictionary
+    End_Object 
+
+    Set Main_DD To olocation_DD
+    Set Server  To olocation_DD
+
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object olocationID is a cWebForm
+            Entry_Item location.ID
+            Set piColumnSpan to 2
+            Set piColumnIndex to 0
+            Set peLabelPosition to lpTop
+            Set psLabel to "ID"
+        End_Object 
+
+        Object olocationName is a cWebForm
+            Entry_Item location.Name
+            Set piColumnSpan to 6
+            Set piColumnIndex to 2
+            Set peLabelPosition to lpTop
+            Set psLabel to "Name"
+        End_Object 
+    End_Object 
+
+End_Object 

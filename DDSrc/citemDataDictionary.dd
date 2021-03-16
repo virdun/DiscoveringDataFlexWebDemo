@@ -7,12 +7,14 @@ Open system
 Object category_val is a ValidationTable
     Procedure Fill_List
         Forward Send Fill_List
-        Send Add_Table_Value "Attik"
-        Send Add_Table_Value "Basement"
-        Send Add_Table_Value "Wardrobe 1"
-        Send Add_Table_Value "Wardrobe 2"
+        Send Add_Table_Value "Food"
+        Send Add_Table_Value "Cloths"
+        Send Add_Table_Value "Renovation"
+        Send Add_Table_Value "Hollidays"
     End_Procedure
 End_Object
+
+Register_Object oitemWebLookup
 
 Class citemDataDictionary is a DataDictionary
     
@@ -32,9 +34,17 @@ Class citemDataDictionary is a DataDictionary
         Set Field_Auto_Increment Field Item.ID to File_Field system.item_id
 
         Set Field_Option Field Item.Name DD_REQUIRED to True
+        Set Field_WebPrompt_Object Field Item.Name to oitemWebLookup
+
         Set Field_Value_Table Field Item.Category to category_val
 
+        Set Field_WebPrompt_Object Field Item.ExpirationDate to oitemWebLookup
 
     End_Procedure
 
 End_Class
+
+#IFDEF Is$WebApp
+Use itemWebLookup.wo
+#ELSE
+#ENDIF

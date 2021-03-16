@@ -4,6 +4,8 @@ Open location
 Open Item
 Open system
 
+Register_Object olocationWebLookup
+
 Class clocationDataDictionary is a DataDictionary
     
     Procedure Construct_Object
@@ -21,6 +23,14 @@ Class clocationDataDictionary is a DataDictionary
 
         Set Field_Auto_Increment Field location.ID to File_Field system.location_id
 
+        Set Field_WebPrompt_Object Field location.ID to olocationWebLookup
+        Set Field_WebPrompt_Object Field location.Name to olocationWebLookup
+
     End_Procedure
 
 End_Class
+
+#IFDEF Is$WebApp
+Use locationWebLookup.wo
+#ELSE
+#ENDIF

@@ -1,0 +1,72 @@
+﻿// E:\DataFlex Projects\DiscoveringDataFlexWebDemo\AppSrc\Overview.wo
+// Overview
+//
+
+Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg
+Use cWebGrid.pkg
+Use cWebColumn.pkg
+
+Use clocationDataDictionary.dd
+Use citemDataDictionary.dd
+Use cWebColumnDate.pkg
+Use cWebColumnCombo.pkg
+
+Object oOverview is a cWebView
+    Set piColumnCount to 12
+    Set psCaption to "Overview"
+    Set piWidth to 700
+
+    Object olocation_DD is a clocationDataDictionary
+        // this lets you save a new parent DD from within child DD
+        Set Allow_Foreign_New_Save_State to True
+    End_Object 
+
+    Object oitem_DD is a citemDataDictionary
+        Set DDO_Server To olocation_DD
+        Set Constrain_File To location.File_Number
+    End_Object 
+
+    Set Main_DD To olocation_DD
+    Set Server  To olocation_DD
+
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object olocationName is a cWebForm
+            Entry_Item location.Name
+            Set piColumnSpan to 6
+            Set piColumnIndex to 0
+            Set peLabelPosition to lpTop
+            Set psLabel to "Location"
+        End_Object 
+
+        Object oDetailGrid is a cWebGrid
+            Set Server to oitem_DD
+            Set piOrdering to 4
+            Set pbFillHeight to True
+            Set piColumnSpan to 12
+
+            Object oitemName is a cWebColumn
+                Entry_Item item.Name
+                Set psCaption to "Name"
+                Set piWidth to 500
+            End_Object 
+
+            Object oitemCategory is a cWebColumnCombo
+                Entry_Item item.Category
+                Set psCaption to "Category"
+                Set piWidth to 200
+            End_Object 
+
+            Object oitemExpirationDate is a cWebColumnDate
+                Entry_Item item.ExpirationDate
+                Set psCaption to "ExpirationDate"
+                Set piWidth to 100
+            End_Object 
+        End_Object 
+    End_Object 
+
+End_Object 

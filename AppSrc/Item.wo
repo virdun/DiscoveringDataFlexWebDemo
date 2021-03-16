@@ -1,0 +1,74 @@
+﻿// E:\DataFlex Projects\DiscoveringDataFlexWebDemo\AppSrc\Item.wo
+// Item
+//
+
+Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg
+Use cWebEdit.pkg
+
+Use clocationDataDictionary.dd
+Use citemDataDictionary.dd
+
+Object oItem is a cWebView
+    Set piColumnCount to 12
+    Set psCaption to "Item"
+    Set piWidth to 700
+
+    Object olocation_DD is a clocationDataDictionary
+    End_Object 
+
+    Object oitem_DD is a citemDataDictionary
+        Set DDO_Server To olocation_DD
+    End_Object 
+
+    Set Main_DD To oitem_DD
+    Set Server  To oitem_DD
+
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oitemName is a cWebForm
+            Entry_Item item.Name
+            Set piColumnSpan to 9
+            Set piColumnIndex to 0
+            Set peLabelPosition to lpTop
+            Set psLabel to "Name"
+        End_Object 
+
+        Object oitemDescription is a cWebEdit
+            Entry_Item item.Description
+            Set piColumnSpan to 6
+            Set piColumnIndex to 0
+            Set peLabelPosition to lpTop
+            Set psLabel to "Description"
+            Set pbFillHeight to True
+        End_Object 
+
+        Object oitemCategory is a cWebCombo
+            Entry_Item item.Category
+            Set piColumnSpan to 4
+            Set piColumnIndex to 0
+            Set peLabelPosition to lpTop
+            Set psLabel to "Category"
+        End_Object 
+
+        Object olocationName is a cWebForm
+            Entry_Item location.Name
+            Set piColumnSpan to 6
+            Set piColumnIndex to 4
+            Set peLabelPosition to lpTop
+            Set psLabel to "Location"
+        End_Object 
+
+        Object oitemExpirationDate is a cWebDateForm
+            Entry_Item item.ExpirationDate
+            Set piColumnSpan to 2
+            Set piColumnIndex to 0
+            Set peLabelPosition to lpTop
+            Set psLabel to "ExpirationDate"
+        End_Object 
+    End_Object 
+
+End_Object 

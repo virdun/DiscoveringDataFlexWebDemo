@@ -1,5 +1,6 @@
 ﻿Use AllWebAppClasses.pkg
 Use cConnection.pkg
+Use cWebMenuItemLoadView.pkg
 
 Object oApplication is a cApplication
     Object oConnection is a cConnection
@@ -88,6 +89,21 @@ Object oWebApp is a cWebApp
     
             Object oViewMenu is a cWebMenuItem
                 Set psCaption to C_$View
+
+                Object oLocationItem1 is a cWebMenuItemLoadView
+                    Set psCaption to "Location"
+                    Set psLoadViewOnClick to "oLocation"
+                End_Object
+
+                Object oItemItem1 is a cWebMenuItemLoadView
+                    Set psCaption to "Item"
+                    Set psLoadViewOnClick to "oItem"
+                End_Object
+
+                Object oOverviewItem1 is a cWebMenuItemLoadView
+                    Set psCaption to "Overview"
+                    Set psLoadViewOnClick to "oOverview"
+                End_Object
             End_Object  
         End_Object  
         
@@ -131,6 +147,9 @@ Object oWebApp is a cWebApp
     Use SessionManager.wo
     Use LoginDialog.wo
     Use WebResourceManager.wo
+    Use Location.wo
+    Use Item.wo
+    Use Overview.wo
     
 End_Object
 
