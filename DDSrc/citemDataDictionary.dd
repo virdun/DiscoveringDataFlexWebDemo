@@ -32,8 +32,8 @@ Class citemDataDictionary is a DataDictionary
         Set Field_Auto_Increment Field Item.ID to File_Field system.item_id
 
         Set Field_Option Field Item.Name DD_REQUIRED to True
+        Set Field_Value_Table Field Item.Category to category_val
 
-        Set Field_Value_Table Field Item.Category to ctegory_val
 
     End_Procedure
 
