@@ -6,6 +6,9 @@ Use cWebColumn.pkg
 
 Use citemDataDictionary.dd
 Use clocationDataDictionary.dd
+Use cWebButton.pkg
+Use locationWebLookup.wo
+
 Object oItemOverview is a cWebView
     Set piWidth to 700
     Set psCaption to "ItemOverview"
@@ -16,12 +19,133 @@ Object oItemOverview is a cWebView
     
     Object oItem_DD is a citemDataDictionary
         Set DDO_Server to oLocation_DD
+        
+        Procedure OnConstrain
+            String sName sCategory sLocation sFrom sTo
+            
+            WebGet psValue of oSearchItem to sName
+            WebGet psValue of oSearchCategory to sCategory
+            WebGet psValue of oSearchLocation to sLocation
+            WebGet psValue of oSearchFrom to sFrom
+            WebGet psValue of oSearchTo to sTo
+            
+            If (sName <> "") Begin
+                Constrain Item.name ge sName
+            End
+            If (sCategory <> "") Begin
+                Constrain Item.Category eq sCategory 
+            End
+            If (sLocation <> "") Begin
+                Clear location
+                Move sLocation to location.Name
+                Find GE location by Index.2
+                If (Found and ((Trim(sLocation)) = (trim(location.Name)) )) Begin
+                    Constrain Item.Location_Id eq (Integer(location.ID))
+                End
+            End
+            
+            If (sFrom <> "") Begin
+                Constrain Item.ExpirationDate ge (Date(sFrom))
+            End
+            If (sTo <> "") Begin
+                Constrain Item.ExpirationDate le (Date(sTo))
+            End
+
+        End_Procedure
     End_Object    
     
     Set Main_DD to oItem_DD
     Set Server to oItem_DD
+
+    Handle hoLocationLookup
+    Move olocationWebLookup to hoLocationLookup
+    
     Object oWebMainPanel is a cWebPanel
         Set piColumnCount to 12
+
+        Object oSearchItem is a cWebForm
+            Set piColumnSpan to 3
+            Set psLabel to "Item"
+            Set peLabelPosition to lpTop
+        End_Object
+        
+        Object oSearchCategory is a cWebCombo
+            Set piColumnSpan to 3
+            Set psLabel to "Category"
+            Set piColumnIndex to 3
+            Set peLabelPosition to lpTop
+            //Set pbAddEmptyItem to True
+            
+            Procedure OnFill
+                Forward Send OnFill
+                String sCat
+                
+                Send AddComboItem "" "Select"
+                Move "" to sCat
+                Clear Item
+                Find gt Item by 3
+                While (Found)
+                    If (sCat <> Item.Category) Begin
+                        Send AddComboItem Item.Category Item.Category
+                    End
+                    Move Item.Category to sCat
+                    Find gt Item by 3
+                Loop
+                
+            End_Procedure
+
+        End_Object
+        
+        Object oSearchLocation is a cWebForm
+            Set piColumnSpan to 2
+            Set psLabel to "Location"
+            Set piColumnIndex to 6
+            Set peLabelPosition to lpTop
+            Set pbPromptButton to True
+            Set phoPrompt to hoLocationLookup
+
+            Procedure OnPrompt
+                Forward Send OnPrompt
+            End_Procedure
+            
+            WebPublishProcedure PromptUpdateCallback 
+            Procedure PromptUpdateCallback Handle hoPrompt
+            End_Procedure
+
+            Procedure Prompt_Callback Handle hoPrompt
+                WebSet psPromptUpdateCallback of hoPrompt to "PromptUpdateCallback"
+                WebSet peUpdateMode of hoPrompt to umPromptValue
+            End_Procedure
+
+        End_Object
+        
+        Object oSearchFrom is a cWebDateForm
+            Set piColumnSpan to 2
+            Set psLabel to "From"
+            Set peLabelPosition to lpTop
+            Set piColumnIndex to 8
+        End_Object
+        
+        Object oSearchTo is a cWebDateForm
+            Set piColumnSpan to 2
+            Set psLabel to "To"
+            Set piColumnIndex to 10
+            Set peLabelPosition to lpTop
+        End_Object
+
+        Object oWebButtonSearch is a cWebButton
+            Set piColumnSpan to 2
+            Set psCaption to "Search"
+            Set piColumnIndex to 10
+        
+            Procedure OnClick
+                Send Rebuild_Constraints of oItem_DD
+                Send FindDDRecordInBuffer of oWebGrid1
+            End_Procedure
+        End_Object
+        
+        
+
         Object oWebGrid1 is a cWebGrid
             Object oWebColumnName is a cWebColumn
                 Entry_Item Item.Name
