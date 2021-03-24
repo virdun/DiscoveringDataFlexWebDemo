@@ -155,6 +155,14 @@ Object oWebApp is a cWebApp
     Use Location.wo
     Use Item.wo
     Use Overview.wo
+    Use ItemOverview.wo
+    
+    Function GetDefaultView Returns Handle
+        Handle hView
+ 
+        Move oItemOverview to hView
+        Function_Return (hView)
+    End_Function
     
 End_Object
 
