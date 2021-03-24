@@ -1,0 +1,16 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg 
+Use cWebGrid.pkg
+Use cWebColumn.pkg
+Object oItemOverview is a cWebView
+    Set piWidth to 700
+    Set psCaption to "ItemOverview"
+
+    // Your DDO structure will go here
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+        
+    End_Object 
+    
+End_Object
