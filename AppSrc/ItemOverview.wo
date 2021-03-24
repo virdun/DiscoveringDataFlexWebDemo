@@ -3,14 +3,56 @@ Use cWebPanel.pkg
 Use cWebForm.pkg 
 Use cWebGrid.pkg
 Use cWebColumn.pkg
+
+Use citemDataDictionary.dd
+Use clocationDataDictionary.dd
 Object oItemOverview is a cWebView
     Set piWidth to 700
     Set psCaption to "ItemOverview"
 
     // Your DDO structure will go here
+    Object oLocation_DD is a clocationDataDictionary
+    End_Object
+    
+    Object oItem_DD is a citemDataDictionary
+        Set DDO_Server to oLocation_DD
+    End_Object    
+    
+    Set Main_DD to oItem_DD
+    Set Server to oItem_DD
     Object oWebMainPanel is a cWebPanel
         Set piColumnCount to 12
+        Object oWebGrid1 is a cWebGrid
+            Object oWebColumnName is a cWebColumn
+                Entry_Item Item.Name
+                Set psCaption to "Item"
+                Set piWidth to 50
+            End_Object
+            
+            Object oWebColumnCategory is a cWebColumn
+                Entry_Item Item.Category
+                Set psCaption to "Category"
+                Set piWidth to 50
+            End_Object
+            
+            Object oWebColumnExpiration is a cWebColumn
+                Entry_Item Item.ExpirationDate
+                Set psCaption to "Exp. Date"
+                Set piWidth to 50
+            End_Object
+                    
+            Object oWebColumnLocation is a cWebColumn
+                Entry_Item location.Name
+                Set psCaption to "Location"
+                Set piWidth to 50
+            End_Object
+        End_Object
         
     End_Object 
+    
+    Procedure OnLoad
+        Send Find of oItem_DD FIRST_RECORD 1
+    End_Procedure
+
     
 End_Object
