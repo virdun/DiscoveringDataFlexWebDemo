@@ -1,0 +1,46 @@
+-----------------------------------------------------------------------------
+  DATE: 2021-03-24      TIME: 17:08                                  PAGE:  1
+  FILE DEFINITION FOR FILE: WebAppServerProps (# 265)
+-----------------------------------------------------------------------------
+  DRIVER NAME               : DATAFLEX
+  FILE ROOT NAME            : WebAppServerProps
+  USER DISPLAY NAME         : WebApp Server Props
+  DATAFLEX FILE NAME        : WebAppServerProps
+-----------------------------------------------------------------------------
+  RECORD LENGTH             : 14464     ( USED: 14450 )
+  MAX NUMBER OF RECORDS     : 10000     ( USED: 84 )
+  FILE COMPRESSION          : NONE
+  RE-USE DELETED SPACE      : YES
+  LOCKING TYPE              : FILE
+  HEADER INTEGRITY CHECKING : YES
+  TRANSACTION TYPE          : CLIENT ATOMIC
+  RECORD IDENTITY INDEX     : 0 ( 0 , 0 )
+  FILE LOGIN PARAMETER      : 
+  SYSTEM FILE               : NO 
+-----------------------------------------------------------------------------
+
+NUM  FIELD NAME       TYPE SIZE  OFFST IX   RELATES TO FILE.FIELD
+---  ---------------  ---- ----- ----- --   ---------------------------------
+  1  Key              ASC     64     1  1   
+  2  CreateDate       DAT      6    65      
+  3  CreateTime       ASC     12    68      
+  4  ExpiresDate      DAT      6    80  2   
+  5  ExpiresTime      ASC     12    83  2   
+  6  Locked           NUM    2.0    95      
+  7  LockedDate       DAT      6    96      
+  8  LockedTime       ASC     12    99      
+  9  Page             NUM    4.0   111  1   
+ 10  Pages            NUM    4.0   113      
+ 11  Data             TEX  14336   115      
+
+
+INDEX# FIELDS          DES U/C    LENGTH LEVELS SEGMENTS MODE
+------ --------------- --- ---    ------ ------ -------- -------
+  1    Key             NO  NO       66     5       2     ON-LINE
+       Page            NO  NO 
+
+  2    ExpiresDate     YES NO       81     6       4     ON-LINE
+       ExpiresTime     YES NO 
+       Key             NO  NO 
+       Page            NO  NO 
+

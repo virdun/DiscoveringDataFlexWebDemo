@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
-  DATE: 2021-03-10      TIME: 09:28                                  PAGE:  1
+  DATE: 2021-03-24      TIME: 17:08                                  PAGE:  1
   FILE DEFINITION FOR FILE: item (# 2)
 -----------------------------------------------------------------------------
   DRIVER NAME               : DATAFLEX
@@ -7,8 +7,8 @@
   USER DISPLAY NAME         : item
   DATAFLEX FILE NAME        : item
 -----------------------------------------------------------------------------
-  RECORD LENGTH             : 256       ( USED: 204 )
-  MAX NUMBER OF RECORDS     : 10000     ( USED: 0 )
+  RECORD LENGTH             : 256       ( USED: 207 )
+  MAX NUMBER OF RECORDS     : 10000     ( USED: 5 )
   FILE COMPRESSION          : NONE
   RE-USE DELETED SPACE      : YES
   LOCKING TYPE              : FILE
@@ -21,23 +21,26 @@
 
 NUM  FIELD NAME       TYPE SIZE  OFFST IX   RELATES TO FILE.FIELD
 ---  ---------------  ---- ----- ----- --   ---------------------------------
-  1  id               NUM    6.0     1  1   
-  2  name             ASC     50     4  2   
-  3  description      TEX    128    54      
-  4  category         ASC     20   182  3   
-  5  location_id      NUM    6.0   202  4   location.FIELD_1 (3,1)
+  1  ID               NUM    6.0     1  1   
+  2  Name             ASC     50     4  2   
+  3  Description      TEX    128    54      
+  4  Category         ASC     20   182  3   
+  5  Location_Id      NUM    6.0   202  4   location.FIELD_1 (3,1)
+  6  ExpirationDate   DAT      6   205  5   
 
 
 INDEX# FIELDS          DES U/C    LENGTH LEVELS SEGMENTS MODE
 ------ --------------- --- ---    ------ ------ -------- -------
-  1    id              NO  NO       3      2       1     ON-LINE
+  1    ID              NO  NO       3      2       1     ON-LINE
 
-  2    name            NO  NO       53     5       2     ON-LINE
-       id              NO  NO 
+  2    Name            NO  NO       53     5       2     ON-LINE
+       ID              NO  NO 
 
-  3    category        NO  NO       23     3       2     ON-LINE
-       id              NO  NO 
+  3    Category        NO  NO       23     3       2     ON-LINE
+       ID              NO  NO 
 
-  4    location_id     NO  NO       6      3       2     ON-LINE
-       id              NO  NO 
+  4    Location_Id     NO  NO       6      3       2     ON-LINE
+       ID              NO  NO 
+
+  5    ExpirationDate  NO  NO       3      2       1     ON-LINE
 

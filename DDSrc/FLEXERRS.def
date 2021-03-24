@@ -1,18 +1,18 @@
 -----------------------------------------------------------------------------
   DATE: 2021-03-24      TIME: 17:08                                  PAGE:  1
-  FILE DEFINITION FOR FILE: location (# 3)
+  FILE DEFINITION FOR FILE: FLEXERRS (# 50)
 -----------------------------------------------------------------------------
   DRIVER NAME               : DATAFLEX
-  FILE ROOT NAME            : location
-  USER DISPLAY NAME         : location
-  DATAFLEX FILE NAME        : location
+  FILE ROOT NAME            : FLEXERRS
+  USER DISPLAY NAME         : @DataFlex Error Table
+  DATAFLEX FILE NAME        : FLEXERRS
 -----------------------------------------------------------------------------
-  RECORD LENGTH             : 34        ( USED: 33 )
-  MAX NUMBER OF RECORDS     : 10000     ( USED: 5 )
+  RECORD LENGTH             : 64        ( USED: 64 )
+  MAX NUMBER OF RECORDS     : 125       ( USED: 120 )
   FILE COMPRESSION          : NONE
   RE-USE DELETED SPACE      : YES
   LOCKING TYPE              : FILE
-  HEADER INTEGRITY CHECKING : YES
+  HEADER INTEGRITY CHECKING : NO 
   TRANSACTION TYPE          : CLIENT ATOMIC
   RECORD IDENTITY INDEX     : 0 ( 0 , 0 )
   FILE LOGIN PARAMETER      : 
@@ -21,14 +21,6 @@
 
 NUM  FIELD NAME       TYPE SIZE  OFFST IX   RELATES TO FILE.FIELD
 ---  ---------------  ---- ----- ----- --   ---------------------------------
-  1  ID               NUM    6.0     1  1   
-  2  Name             ASC     30     4  2   
-
-
-INDEX# FIELDS          DES U/C    LENGTH LEVELS SEGMENTS MODE
------- --------------- --- ---    ------ ------ -------- -------
-  1    ID              NO  NO       3      2       1     ON-LINE
-
-  2    Name            NO  NO       33     4       2     ON-LINE
-       ID              NO  NO 
+  1  Error_Descr      ASC     40     1      
+  2  Note             ASC     24    41      
 

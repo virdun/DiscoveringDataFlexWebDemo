@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
-  DATE: 2021-03-10      TIME: 09:28                                  PAGE:  1
+  DATE: 2021-03-24      TIME: 17:08                                  PAGE:  1
   FILE DEFINITION FOR FILE: system (# 1)
 -----------------------------------------------------------------------------
   DRIVER NAME               : DATAFLEX
@@ -8,7 +8,7 @@
   DATAFLEX FILE NAME        : system
 -----------------------------------------------------------------------------
   RECORD LENGTH             : 8         ( USED: 6 )
-  MAX NUMBER OF RECORDS     : 1         ( USED: 0 )
+  MAX NUMBER OF RECORDS     : 1         ( USED: 1 )
   FILE COMPRESSION          : NONE
   RE-USE DELETED SPACE      : YES
   LOCKING TYPE              : FILE
