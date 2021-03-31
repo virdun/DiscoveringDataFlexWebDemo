@@ -1,8 +1,9 @@
 #REPLACE FILE2 item
-#REPLACE item.Recnum |FN2,0
+#REPLACE item.File_Number |CI2
 #REPLACE item.ID |FN2,1
 #REPLACE item.Name |FS2,2
 #REPLACE item.Description |FS2,3
 #REPLACE item.Category |FS2,4
 #REPLACE item.Location_Id |FN2,5
 #REPLACE item.ExpirationDate |FD2,6
+#REPLACE item.Created |FM2,7

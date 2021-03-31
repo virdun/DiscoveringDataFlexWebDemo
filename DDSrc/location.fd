@@ -1,4 +1,4 @@
 #REPLACE FILE3 location
-#REPLACE location.Recnum |FN3,0
+#REPLACE location.File_Number |CI3
 #REPLACE location.ID |FN3,1
 #REPLACE location.Name |FS3,2

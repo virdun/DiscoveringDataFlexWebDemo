@@ -21,7 +21,7 @@ Object oItemOverview is a cWebView
         Set DDO_Server to oLocation_DD
         
         Procedure OnConstrain
-            String sName sCategory sLocation sFrom sTo
+            String sName sCategory sLocation sFrom sTo sFilter sFilterTMP
             
             WebGet psValue of oSearchItem to sName
             WebGet psValue of oSearchCategory to sCategory
@@ -30,28 +30,70 @@ Object oItemOverview is a cWebView
             WebGet psValue of oSearchTo to sTo
             
             If (sName <> "") Begin
-                Constrain Item.name ge sName
+                //Constrain Item.name ge sName
+                Get SQLStrLike (RefTable(Item.Name)) sName to sFilter
+                Get SQLStrAppend sFilterTMP sFilter to sFilter
             End
             If (sCategory <> "") Begin
-                Constrain Item.Category eq sCategory 
+                //Constrain Item.Category eq sCategory
+                Get SQLStrLike (RefTable(Item.Category)) sCategory to sFilterTMP
+                Get SQLStrAppend sFilterTMP sFilter to sFilter
             End
             If (sLocation <> "") Begin
-                Clear location
-                Move sLocation to location.Name
-                Find GE location by Index.2
-                If (Found and ((Trim(sLocation)) = (trim(location.Name)) )) Begin
-                    Constrain Item.Location_Id eq (Integer(location.ID))
-                End
+//                Clear location
+//                Move sLocation to location.Name
+//                Find GE location by Index.2
+//                If (Found and ((Trim(sLocation)) = (trim(location.Name)) )) Begin
+//                    Constrain Item.Location_Id eq (Integer(location.ID))
+//                End
+//                Get SQLStrLike (RefTable(Item.Location_Id)) location.ID to sFilterTMP
+//                Get SQLStrAppend sFilterTMP sFilter to sFilter
+                Move ("Exists (SELECT id FROM location WHERE location.id=item.location_id AND location.Name LIKE '%" + sLocation + "%')") to sFilterTMP
+                Get SQLStrAppend sFilterTMP sFilter to sFilter
             End
             
             If (sFrom <> "") Begin
-                Constrain Item.ExpirationDate ge (Date(sFrom))
+                //Constrain Item.ExpirationDate ge (Date(sFrom))
+                Get DateToSQLDate (Date(sFrom)) to sFrom
+                Move ("Item.ExpirationDate >= '" + sFrom + "'") to sFilterTMP
+                Get SQLStrAppend sFilterTMP sFilter to sFilter
             End
             If (sTo <> "") Begin
-                Constrain Item.ExpirationDate le (Date(sTo))
+                //Constrain Item.ExpirationDate le (Date(sTo))
+                Get DateToSQLDate (Date(sTo)) to sTo
+                Move ("Item.ExpirationDate <= '" + sTo + "'") to sFilterTMP
+                Get SQLStrAppend sFilterTMP sFilter to sFilter
+            End
+            
+            If (sFilter <> "") Begin
+                Set psSQLFilter to sFilter
+                Set pbUseDDSQLFilters to True
+            End
+            Else Begin
+               Set pbUseDDSQLFilters to False 
             End
 
         End_Procedure
+        
+        Function DateToSQLDate Date dDFDate Returns String
+            String sSQLDate
+            Integer iOrgDateFmt
+            Integer iOrgDateSep
+            
+            //*** Change date format to military, SQL dates are military dates
+            Get_Attribute DF_DATE_FORMAT to iOrgDateFmt
+            Get_Attribute DF_DATE_SEPARATOR to iOrgDateSep
+            Set_Attribute DF_DATE_FORMAT to DF_DATE_MILITARY
+            Set_Attribute DF_DATE_SEPARATOR to (Ascii('-'))
+            
+            Move dDFDate to sSQLDate
+            
+            //*** Change date format back to original
+            Set_Attribute DF_DATE_FORMAT to iOrgDateFmt
+            Set_Attribute DF_DATE_SEPARATOR to iOrgDateSep
+            
+            Function_Return sSQLDate
+        End_Function
     End_Object    
     
     Set Main_DD to oItem_DD
