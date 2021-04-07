@@ -1,0 +1,98 @@
+﻿// E:\DataFlex Projects\DiscoveringDataFlexWebDemo\AppSrc\Item.wo
+// Item
+//
+
+Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg
+Use cWebEdit.pkg
+
+Use clocationDataDictionary.dd
+Use citemDataDictionary.dd
+Use cWebButton.pkg
+
+Object oItemModal is a cWebModalDialog
+    Set piColumnCount to 12
+    Set psCaption to "Item Modal"
+    Set piWidth to 700
+
+    Object olocation_DD is a clocationDataDictionary
+    End_Object 
+
+    Object oitem_DD is a citemDataDictionary
+        Set DDO_Server to olocation_DD
+    End_Object 
+
+    Set Main_DD to oitem_DD
+    Set Server  to oitem_DD
+
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oitemName is a cWebForm
+            Entry_Item Item.Name
+            Set piColumnSpan to 9
+            Set piColumnIndex to 0
+            Set peLabelPosition to lpTop
+            Set psLabel to "Name"
+        End_Object 
+
+        Object oitemDescription is a cWebEdit
+            Entry_Item Item.Description
+            Set piColumnSpan to 9
+            Set piColumnIndex to 0
+            Set peLabelPosition to lpTop
+            Set psLabel to "Description"
+            Set piHeight to 100
+        End_Object 
+
+        Object oitemCategory is a cWebCombo
+            Entry_Item Item.Category
+            Set piColumnSpan to 4
+            Set piColumnIndex to 0
+            Set peLabelPosition to lpTop
+            Set psLabel to "Category"
+        End_Object 
+
+        Object olocationName is a cWebForm
+            Entry_Item location.Name
+            Set piColumnSpan to 5
+            Set piColumnIndex to 4
+            Set peLabelPosition to lpTop
+            Set psLabel to "Location"
+        End_Object 
+
+        Object oitemExpirationDate is a cWebDateForm
+            Entry_Item Item.ExpirationDate
+            Set piColumnSpan to 2
+            Set piColumnIndex to 0
+            Set peLabelPosition to lpTop
+            Set psLabel to "ExpirationDate"
+        End_Object 
+
+        Object oWebButton1 is a cWebButton
+            Set piColumnSpan to 3
+            Set psCaption to "Save"
+            Set piColumnIndex to 6
+            Set pbShowLabel to True
+            Set peLabelPosition to lpTop
+        
+            Procedure OnClick
+                Send Request_Save of oitem_DD
+                Send Ok
+            End_Procedure
+        End_Object
+    End_Object 
+    
+    // used to initialize the dialog
+    Procedure Popup Handle hoReturnObject Integer iItemID
+        Forward Send Popup hoReturnObject Self
+        
+        Send Request_Clear oitem_DD
+        Move iItemID to Item.ID
+        Send Find of oitem_DD EQ 1
+        
+    End_Procedure
+    
+End_Object 

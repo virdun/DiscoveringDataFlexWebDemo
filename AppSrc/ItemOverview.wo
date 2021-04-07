@@ -8,6 +8,7 @@ Use citemDataDictionary.dd
 Use clocationDataDictionary.dd
 Use cWebButton.pkg
 Use locationWebLookup.wo
+Use ItemModal.wo
 
 Object oItemOverview is a cWebView
     Set piWidth to 700
@@ -188,7 +189,9 @@ Object oItemOverview is a cWebView
         
         
 
-        Object oWebGrid1 is a cWebGrid
+        Object oWebGrid1 is a cWebList
+            Set pbServerOnRowClick to True
+            
             Object oWebColumnName is a cWebColumn
                 Entry_Item Item.Name
                 Set psCaption to "Item"
@@ -212,6 +215,19 @@ Object oItemOverview is a cWebView
                 Set psCaption to "Location"
                 Set piWidth to 50
             End_Object
+            
+            Procedure OnRowClick String sRowID
+                Forward Send OnRowClick sRowID
+                
+                Send FindByRowId of oItem_DD (RefTable(Item)) (DeserializeRowID(sRowID))
+                
+                Send Popup of oItemModal Self Item.ID
+            End_Procedure
+            
+            Procedure OnCloseModalDialog Handle hoModalDialog
+                Send Rebuild_Constraints of oItem_DD
+                Send FindDDRecordInBuffer of oWebGrid1
+            End_Procedure
         End_Object
         
     End_Object 
