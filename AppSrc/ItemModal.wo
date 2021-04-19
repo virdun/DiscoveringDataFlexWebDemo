@@ -10,6 +10,9 @@ Use cWebEdit.pkg
 Use clocationDataDictionary.dd
 Use citemDataDictionary.dd
 Use cWebButton.pkg
+Use cWebFileUploadButton.pkg
+Use cWebImage.pkg
+Use cWebResourceManager.pkg
 
 Object oItemModal is a cWebModalDialog
     Set piColumnCount to 12
@@ -26,9 +29,62 @@ Object oItemModal is a cWebModalDialog
     Set Main_DD to oitem_DD
     Set Server  to oitem_DD
 
+    { WebProperty=Server }
+    Property String psFilePath
+    
+    Object oItemResourceManager is a cWebResourceManager
+    End_Object
 
     Object oWebMainPanel is a cWebPanel
         Set piColumnCount to 12
+
+        Object oWebImage1 is a cWebImage
+            Set piColumnSpan to 9
+            Set pbFillHeight to True
+            Set psCSSClass to "item_image"
+        End_Object
+
+        Object oWebFileUploadButton1 is a cWebFileUploadButton
+            Set piColumnSpan to 9
+            Set psCaption to "Upload File(s)"
+        
+            // Called for each file upload to generate the local path where the file is stored.
+            Function OnFileUpload String sFileName Integer iBytes String sMime Returns String
+                String sPath
+                Boolean bFileExists
+                Integer iItemID
+                
+                Get Field_Current_Value of oitem_DD Field Item.ID to iItemID
+                // Determine local path based on workspace setting
+                Get psDataPath of (phoWorkspace(ghoApplication)) to sPath
+                File_Exist (sPath + "\Uploads") bFileExists
+                If (not(bFileExists)) Make_Directory (sPath + "\Uploads")
+                Move (sPath + "\Uploads") to sPath
+                
+                File_Exist (sPath + "\" + String(iItemID)) bFileExists
+                If (not(bFileExists)) Make_Directory (sPath + "\" + String(iItemID))
+                Move (sPath + "\" + String(iItemID)) to sPath
+                
+                Send RegisterDownloadFolder of oItemResourceManager sPath
+                
+                EraseFile (sPath + "\*.*")
+                
+                Move (sPath + "\" + sFileName) to sPath
+                
+                WebSet psFilePath of oItemModal to sPath
+                
+                Function_Return sPath
+            End_Function
+            
+            Procedure OnUploadFinished 
+                String sPath
+                
+                WebGet psFilePath of oItemModal to sPath
+                
+                //WebSet psURL of oWebImage1 to sPath
+                Send UpdateLocalImage of oWebImage1 sPath
+            End_Procedure
+        End_Object
 
         Object oitemName is a cWebForm
             Entry_Item Item.Name
@@ -92,6 +148,31 @@ Object oItemModal is a cWebModalDialog
         Send Request_Clear oitem_DD
         Move iItemID to Item.ID
         Send Find of oitem_DD EQ 1
+        
+        String sPath sFileName
+        Boolean bFileExists
+        
+        If (iItemID > 0) Begin
+            Get psDataPath of (phoWorkspace(ghoApplication)) to sPath
+            File_Exist (sPath + "\Uploads") bFileExists
+            If (not(bFileExists)) Make_Directory (sPath + "\Uploads")
+            Move (sPath + "\Uploads") to sPath
+            
+            File_Exist (sPath + "\" + String(iItemID)) bFileExists
+            If (not(bFileExists)) Make_Directory (sPath + "\" + String(iItemID))
+            Move (sPath + "\" + String(iItemID)) to sPath
+            
+            Send RegisterDownloadFolder of oItemResourceManager sPath
+            
+            Direct_Input ("dir: " + sPath)
+            Repeat
+                Readln sFileName
+                If (sFileName <> "" and sFileName <> "[.]" and sFileName <> "[..]") Begin
+                    Send UpdateLocalImage of oWebImage1 (sPath + "\" + sFileName)
+                End
+            Until (SeqEof)
+            Close_Input ("dir: " + sPath)
+        End
         
     End_Procedure
     

@@ -5,3 +5,7 @@
 #branding img {
     height: 40px;
 }
+
+.item_image img {
+    width: 100%;
+}
