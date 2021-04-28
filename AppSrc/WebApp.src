@@ -12,6 +12,7 @@ Object oWebApp is a cWebApp
     Set psTheme to "MyCustomTheme"
     Set peApplicationStateMode to asmHistoryAndUrls
     Set psEncryptPassword to "ywQ`yZxpzFkMF_P/k7B~ip4Y5^+O@WDox[~Z_1th"
+    Set psApplicationTitle to "Item manager app"
 
     Object oCommandbar is a cWebCommandBar                
         Object oMenuBar is a cWebMenuBar
