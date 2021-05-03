@@ -2,3 +2,4 @@
 #REPLACE location.File_Number |CI3
 #REPLACE location.ID |FN3,1
 #REPLACE location.Name |FS3,2
+#REPLACE location.ItemCounter |FN3,3

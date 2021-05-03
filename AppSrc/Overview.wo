@@ -43,6 +43,14 @@ Object oOverview is a cWebView
             Set psLabel to "Location"
         End_Object 
 
+        Object olocation_ItemCounter is a cWebForm
+            Entry_Item location.ItemCounter
+            Set piColumnSpan to 5
+            Set psLabel to "Items:"
+            Set piColumnIndex to 6
+            Set peLabelPosition to lpTop
+        End_Object
+
         Object oDetailGrid is a cWebGrid
             Set Server to oitem_DD
             Set piOrdering to 4
