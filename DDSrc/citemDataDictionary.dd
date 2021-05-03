@@ -42,6 +42,22 @@ Class citemDataDictionary is a DataDictionary
 
     End_Procedure
 
+    Procedure Field_Defaults
+        String sCreatedTimestamp
+        Forward Send Field_Defaults
+        Move (CurrentDateTime()) to sCreatedTimestamp
+        Set Field_Changed_Value Field Item.Created to sCreatedTimestamp
+    End_Procedure
+    
+    Procedure Update
+        Forward Send Update
+        Move (location.ItemCounter + 1) to location.ItemCounter
+    End_Procedure
+    
+    Procedure Backout
+        Forward Send Backout
+        Move (location.ItemCounter - 1) to location.ItemCounter
+    End_Procedure
 End_Class
 
 #IFDEF Is$WebApp

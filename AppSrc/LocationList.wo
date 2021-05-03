@@ -1,0 +1,42 @@
+﻿// E:\DataFlex Projects\DiscoveringDataFlexWebDemo\AppSrc\LocationList.wo
+// LocationList
+//
+
+Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg
+
+Use clocationDataDictionary.dd
+Use cWebList.pkg
+Use cWebColumn.pkg
+
+Object oLocationList is a cWebView
+    Set piColumnCount to 12
+    Set psCaption to "LocationList"
+    Set piWidth to 700
+
+    Object olocation_DD is a clocationDataDictionary
+    End_Object 
+
+    Set Main_DD To olocation_DD
+    Set Server  To olocation_DD
+
+    Procedure OnLoad
+        Send Find of olocation_DD FIRST_RECORD 1
+    End_Procedure
+
+    Object oWebList1 is a cWebList
+        Object olocation_Name is a cWebColumn
+            Entry_Item location.Name
+            Set psCaption to "Name"
+            Set piWidth to 50
+        End_Object
+
+        Object olocation_ItemCounter is a cWebColumn
+            Entry_Item location.ItemCounter
+            Set psCaption to "Items"
+            Set piWidth to 50
+        End_Object
+    End_Object
+
+End_Object 
