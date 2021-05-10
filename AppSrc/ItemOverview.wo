@@ -140,8 +140,7 @@ Object oItemOverview is a cWebView
             Set piColumnIndex to 10
         
             Procedure OnClick
-                Send Rebuild_Constraints of oItem_DD
-                Send FindDDRecordInBuffer of oWebGrid1
+                Send Search
             End_Procedure
         End_Object
         
@@ -207,15 +206,21 @@ Object oItemOverview is a cWebView
             End_Procedure
             
             Procedure OnCloseModalDialog Handle hoModalDialog
-                Send Rebuild_Constraints of oItem_DD
-                Send FindDDRecordInBuffer of oWebGrid1
+                Send Search
             End_Procedure
         End_Object
         
-    End_Object 
+    End_Object
+    
+    WebPublishProcedure Search
+    Procedure Search
+        Send Rebuild_Constraints of oItem_DD
+        Send FindDDRecordInBuffer of oWebGrid1
+    End_Procedure
     
     Procedure OnLoad
         Send Find of oItem_DD FIRST_RECORD 1
+        Send AddKeyHandler (RefProc(Search)) 13 False False False
     End_Procedure
 
     
