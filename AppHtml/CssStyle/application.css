@@ -9,3 +9,8 @@
 .item_image img {
     width: 100%;
 }
+.outdated {
+    color: #300;
+    font-weight: bold;
+    background: #fcc;
+}
