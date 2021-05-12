@@ -154,24 +154,48 @@ Object oItemOverview is a cWebView
                 Entry_Item Item.Name
                 Set psCaption to "Item"
                 Set piWidth to 50
+                
+                Procedure OnDefineCssClass String ByRef sCSSClass
+                    If (Item.ExpirationDate < (CurrentDateTime())) Begin
+                        Move "outdated" to sCSSClass
+                    End
+                End_Procedure
             End_Object
             
             Object oWebColumnCategory is a cWebColumn
                 Entry_Item Item.Category
                 Set psCaption to "Category"
                 Set piWidth to 50
+
+                Procedure OnDefineCssClass String ByRef sCSSClass
+                    If (Item.ExpirationDate < (CurrentDateTime())) Begin
+                        Move "outdated" to sCSSClass
+                    End
+                End_Procedure
             End_Object
             
             Object oWebColumnExpiration is a cWebColumn
                 Entry_Item Item.ExpirationDate
                 Set psCaption to "Exp. Date"
                 Set piWidth to 50
+
+                Procedure OnDefineCssClass String ByRef sCSSClass
+                    If (Item.ExpirationDate < (CurrentDateTime())) Begin
+                        Move "outdated" to sCSSClass
+                    End
+                End_Procedure
             End_Object
                     
             Object oWebColumnLocation is a cWebColumn
                 Entry_Item location.Name
                 Set psCaption to "Location"
                 Set piWidth to 50
+
+                Procedure OnDefineCssClass String ByRef sCSSClass
+                    If (Item.ExpirationDate < (CurrentDateTime())) Begin
+                        Move "outdated" to sCSSClass
+                    End
+                End_Procedure
             End_Object
             
             Procedure OnRowClick String sRowID
