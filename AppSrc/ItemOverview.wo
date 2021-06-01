@@ -9,6 +9,7 @@ Use clocationDataDictionary.dd
 Use cWebButton.pkg
 Use locationWebLookup.wo
 Use ItemModal.wo
+Use cWebColumnButton.pkg
 
 Object oItemOverview is a cWebView
     Set piWidth to 700
@@ -208,6 +209,27 @@ Object oItemOverview is a cWebView
             Procedure OnCloseModalDialog Handle hoModalDialog
                 Send Search
             End_Procedure
+
+            Object oWebColumnDeleteBtn is a cWebColumnButton
+                Set psCaption to "Del"
+                Set psButtonCaption to ""
+                Set psBtnCssClass to "WebButtonIcon WebIcon_Delete"
+                Set piWidth to 20
+                
+                WebPublishProcedure DeleteItem
+                Procedure DeleteItem Integer eConfirmMode
+                    If (eConfirmMode=cmYes) Begin
+                        Send Request_Delete of oItem_DD
+                        Send Search of oItemOverview
+                    End
+                End_Procedure
+                
+                Procedure OnClick String sButton String sRowId
+                    Forward Send OnClick sButton sRowId
+                    
+                    Send ShowYesNo (Self) (RefProc(DeleteItem)) "Are you sure you want to delete this item?" "Delete item"
+                End_Procedure
+            End_Object
         End_Object
         
     End_Object
