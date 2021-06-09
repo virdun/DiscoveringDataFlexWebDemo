@@ -10,6 +10,7 @@ Use cWebButton.pkg
 Use locationWebLookup.wo
 Use ItemModal.wo
 Use cWebColumnButton.pkg
+Use cWebVoice.pkg
 
 Object oItemOverview is a cWebView
     Set piWidth to 700
@@ -23,13 +24,16 @@ Object oItemOverview is a cWebView
         Set DDO_Server to oLocation_DD
         
         Procedure OnConstrain
-            String sName sCategory sLocation sFrom sTo sFilter sFilterTMP
+            String sName sCategory sLocation sFrom sTo sTranscript sFilter sFilterTMP
+            String[] asTranscript
+            Integer iItems iCnt iAddedWords
             
             WebGet psValue of oSearchItem to sName
             WebGet psValue of oSearchCategory to sCategory
             WebGet psValue of oSearchLocation to sLocation
             WebGet psValue of oSearchFrom to sFrom
             WebGet psValue of oSearchTo to sTo
+            WebGet psValue of oWebVoiceSearch to sTranscript
             
             If (sName <> "") Begin
                 //Constrain Item.name ge sName
@@ -65,6 +69,24 @@ Object oItemOverview is a cWebView
                 Get DateToSQLDate (Date(sTo)) to sTo
                 Move ("Item.ExpirationDate <= '" + sTo + "'") to sFilterTMP
                 Get SQLStrAppend sFilterTMP sFilter to sFilter
+            End
+            
+            If (sTranscript <> "") Begin
+                Move (StrSplitToArray(sTranscript, " ")) to asTranscript
+                Move (SizeOfArray(asTranscript)) to iItems
+                Move 0 to iCnt
+                Move 0 to iAddedWords
+                Move ("(") to sFilterTMP
+                For iCnt from 0 to (iItems-1)
+                    If ((Length(asTranscript[iCnt]) > 2)) Begin
+                        If (sFilterTMP <> "(") Move (sFilterTMP + " OR ") to sFilterTMP
+                        Move (sFilterTMP + " Item.Name LIKE '%" + asTranscript[iCnt] + "%' ") to sFilterTMP
+                        Increment iAddedWords
+                    End
+                Loop
+                Move (sFilterTMP + ") ") to sFilterTMP
+
+                If (iAddedWords > 0) Get SQLStrAppend sFilterTMP sFilter to sFilter
             End
             
             If (sFilter <> "") Begin
@@ -177,12 +199,31 @@ Object oItemOverview is a cWebView
             Set peLabelPosition to lpTop
         End_Object
 
+        Object oWebVoice1 is a cWebVoice
+            Set piColumnSpan to 2
+            Set psCaption to "VOICE"
+            
+            Procedure OnResponse String sTranscript
+                //WebSet psValue of oSearchItem to sTranscript
+                WebSet psValue of oWebVoiceSearch to sTranscript
+                Send Search
+            End_Procedure
+        End_Object
+
+        Object oWebVoiceSearch is a cWebForm
+            Set piColumnSpan to 8
+            Set psLabel to "form"
+            Set piColumnIndex to 2
+            Set pbShowLabel to False
+        End_Object
+
         Object oWebButtonSearch is a cWebButton
             Set piColumnSpan to 2
             Set psCaption to "Search"
             Set piColumnIndex to 10
         
             Procedure OnClick
+                WebSet psValue of oWebVoiceSearch to ""
                 Send Search
             End_Procedure
         End_Object
