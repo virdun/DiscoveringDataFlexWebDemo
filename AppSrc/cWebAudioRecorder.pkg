@@ -1,0 +1,41 @@
+﻿Use cWebButton.pkg
+
+Class cWebAudioRecorder is a cWebButton
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        
+        {WebProperty = Client}
+        Property String psAudioStream ""
+        {WebProperty = Client}
+        Property Integer piRecordingTime 3000
+        
+        Set psJSClass to "dfcc.WebAudioRecorder"
+
+    End_Procedure
+    
+    Procedure AddRecordedValue String sAudio
+        tWebValueTree tAudio
+        Boolean bOK
+        String sData
+        String sAudioStream
+        
+        Get ptActionData to tAudio
+        
+        ValueTreeDeserializeParameter tAudio to sData
+        Send OnRecievedAudio sData
+    End_Procedure
+    
+    { MethodType = Event }
+    Procedure OnRecievedAudio String sAudio
+        
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+        
+        WebPublishProcedure AddRecordedValue
+
+    End_Procedure
+
+End_Class

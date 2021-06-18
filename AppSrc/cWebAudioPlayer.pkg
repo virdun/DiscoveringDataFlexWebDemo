@@ -1,0 +1,30 @@
+﻿Use cWebBaseControl.pkg
+
+Class cWebAudioPlayer is a cWebBaseControl
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        
+        {WebProperty = Client}
+        Property String psAudioStream ""
+        
+        Set psJSClass to "dfcc.WebAudioPlayer"
+
+    End_Procedure
+    
+    //{ MethodType = Method }
+    Procedure DoPlayAudio String sAudio
+        tWebValueTree tAudio
+        Boolean bOK
+        String[] aParams
+        
+        Move sAudio to aParams[0]
+        ValueTreeSerializeParameter sAudio to tAudio
+        Send ClientAction "doPlayAudio" aParams tAudio
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+    End_Procedure
+
+End_Class
