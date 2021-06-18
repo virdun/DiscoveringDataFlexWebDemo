@@ -92,6 +92,12 @@ df.defineClass("dfcc.WebVoice", "df.WebButton", {
     onResponse: function(text) {
         this.serverAction("OnResponse", [text]);
 
+    },
+    
+    speak: function(utterance) {
+        let synth = window.speechSynthesis;
+        speech = new SpeechSynthesisUtterance(utterance);
+        synth.speak(speech);
     }
 
 });

@@ -204,9 +204,22 @@ Object oItemOverview is a cWebView
             Set psCaption to "VOICE"
             
             Procedure OnResponse String sTranscript
+                Handle hoColumn
+                String sResult
                 //WebSet psValue of oSearchItem to sTranscript
                 WebSet psValue of oWebVoiceSearch to sTranscript
                 Send Search
+                
+                Get GetColumnObject of oWebGrid1 3 to hoColumn
+                If (hoColumn) Begin
+                    WebGet psValue of hoColumn to sResult
+                    If ((Trim(sResult)) = "") Begin
+                        Send Speak "Sorry, not found. Try again."
+                    End
+                    Else Begin
+                        Send Speak ("Found in the " + sResult)
+                    End
+                End
             End_Procedure
         End_Object
 

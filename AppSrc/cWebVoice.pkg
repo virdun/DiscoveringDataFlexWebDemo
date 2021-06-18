@@ -14,6 +14,14 @@ Class cWebVoice is a cWebButton
         
     End_Procedure
 
+    { Visibility = Public }
+    Procedure Speak String sUtterance
+        String[] aParams
+        
+        Move sUtterance to aParams[0]
+        Send ClientAction "speak" aParams
+    End_Procedure
+
     Procedure End_Construct_Object
         Forward Send End_Construct_Object
         
