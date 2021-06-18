@@ -115,6 +115,10 @@ Object oWebApp is a cWebApp
                     Set psCaption to "LocationList"
                     Set psLoadViewOnClick to "oLocationList"
                 End_Object
+                Object oItemImportItem1 is a cWebMenuItemLoadView
+                    Set psCaption to "ItemImport"
+                    Set psLoadViewOnClick to "oItemImport"
+                End_Object
             End_Object  
         End_Object  
         
@@ -163,6 +167,7 @@ Object oWebApp is a cWebApp
     Use Overview.wo
     Use ItemOverview.wo
     Use LocationList.wo
+    Use ItemImport.wo
     
     Function GetDefaultView Returns Handle
         Handle hView

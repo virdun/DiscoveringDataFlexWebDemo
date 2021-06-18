@@ -1,0 +1,100 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg 
+Use cWebFileUploadButton.pkg
+Use cCharTranslate.pkg
+
+Object oCharTranslate is a cCharTranslate
+End_Object
+
+Object oItemImport is a cWebView
+    Set piWidth to 700
+    Set psCaption to "ItemImport"
+
+    // Your DDO structure will go here
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oWebFileUploadButton1 is a cWebFileUploadButton
+            Set piColumnSpan to 0
+            Set psCaption to "Upload File(s)"
+        
+            // Called for each file upload to generate the local path where the file is stored.
+            Function OnFileUpload String sFileName Integer iBytes String sMime Returns String
+                String sPath
+                
+                // Determine local path based on workspace setting
+                Get psDataPath of (phoWorkspace(ghoApplication)) to sPath
+                Move (sPath + "\Uploads\import.csv") to sPath
+                
+                EraseFile sPath
+                Function_Return sPath
+            End_Function
+            
+            Procedure OnUploadFinished
+                String sBuffer sPath
+                String[] asData
+                
+                Address aUTF8Buffer
+                Integer iBufferLength iVoid iLocationID
+                
+                Readln channel 9 sBuffer
+                If (SeqEof) Begin
+                    Send Stop_Box "Error!" "Cannot open file. Channel 9 is busy."
+                    Function_Return 0
+                End
+                Else Begin
+                    Get psDataPath of (phoWorkspace(ghoApplication)) to sPath
+                    Move (sPath + "\Uploads\import.csv") to sPath
+                    Move ("PC-TEXT:"+"EOL: 13:"+sPath) to sPath
+                    Direct_Input channel 9 sPath
+                    If (not(SeqEof)) Begin
+                        Readln channel 9 sBuffer
+                        While (not(SeqEof))
+                            Readln channel 9 sBuffer
+                            Get Utf8FromStr of oCharTranslate sBuffer CP_ACP to aUTF8Buffer
+                            Get Utf8ToStr of oCharTranslate aUTF8Buffer CP_OEMCP to sBuffer
+                            Move (CStringLength(aUTF8Buffer)) to iBufferLength
+                            If (iBufferLength > 0) Begin
+                                If ((Trim(sBuffer)) <> "") Begin
+                                    Move (StrSplitToArray(sBuffer, ";")) to asData
+                                    
+                                    Clear location
+                                    Move asData[3] to location.Name
+                                    Find GE location by Index.2
+                                    If (asData[3] <> location.Name) Begin
+                                        Clear location
+                                        Move system.location_id to location.ID
+                                        Increment system.location_id
+                                        SaveRecord system
+                                        Move asData[3] to location.Name
+                                        Move 0 to location.ItemCounter
+                                    End
+                                    Increment location.ItemCounter
+                                    SaveRecord location
+                                    
+                                    Clear Item
+                                    Move system.item_id to Item.ID
+                                    Increment system.item_id
+                                    SaveRecord system
+                                    Move asData[0] to Item.Name
+                                    Move asData[1] to Item.Description
+                                    Move asData[2] to Item.Category
+                                    Move location.ID to Item.Location_Id
+                                    Move asData[4] to Item.ExpirationDate
+                                    Move (CurrentDateTime()) to Item.Created
+                                    SaveRecord Item
+                                End
+                            End
+                        Loop
+                    End
+                    Move (Free(aUTF8Buffer)) to iVoid
+                End
+            End_Procedure
+        End_Object
+
+        
+    End_Object 
+
+End_Object
