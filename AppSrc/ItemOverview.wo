@@ -156,7 +156,8 @@ Object oItemOverview is a cWebView
                 Set piWidth to 50
                 
                 Procedure OnDefineCssClass String ByRef sCSSClass
-                    If (Item.ExpirationDate < (CurrentDateTime())) Begin
+                    If ((Item.ExpirationDate < (CurrentDateTime())) ;
+                        and (Item.ExpirationDate <> "")) Begin
                         Move "outdated" to sCSSClass
                     End
                 End_Procedure
@@ -168,7 +169,8 @@ Object oItemOverview is a cWebView
                 Set piWidth to 50
 
                 Procedure OnDefineCssClass String ByRef sCSSClass
-                    If (Item.ExpirationDate < (CurrentDateTime())) Begin
+                    If ((Item.ExpirationDate < (CurrentDateTime())) ;
+                        and (Item.ExpirationDate <> "")) Begin
                         Move "outdated" to sCSSClass
                     End
                 End_Procedure
@@ -180,7 +182,8 @@ Object oItemOverview is a cWebView
                 Set piWidth to 50
 
                 Procedure OnDefineCssClass String ByRef sCSSClass
-                    If (Item.ExpirationDate < (CurrentDateTime())) Begin
+                    If ((Item.ExpirationDate < (CurrentDateTime())) ;
+                        and (Item.ExpirationDate <> "")) Begin
                         Move "outdated" to sCSSClass
                     End
                 End_Procedure
@@ -192,7 +195,8 @@ Object oItemOverview is a cWebView
                 Set piWidth to 50
 
                 Procedure OnDefineCssClass String ByRef sCSSClass
-                    If (Item.ExpirationDate < (CurrentDateTime())) Begin
+                    If ((Item.ExpirationDate < (CurrentDateTime())) ;
+                        and (Item.ExpirationDate <> "")) Begin
                         Move "outdated" to sCSSClass
                     End
                 End_Procedure
