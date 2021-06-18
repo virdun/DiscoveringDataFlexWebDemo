@@ -11,6 +11,7 @@ Use locationWebLookup.wo
 Use ItemModal.wo
 Use cWebColumnButton.pkg
 Use cWebVoice.pkg
+Use cWebColumnCheckBox.pkg
 
 Object oItemOverview is a cWebView
     Set piWidth to 700
@@ -119,6 +120,9 @@ Object oItemOverview is a cWebView
             Function_Return sSQLDate
         End_Function
     End_Object    
+
+    { WebProperty=Server }
+    Property Integer[] piaSelectedRows
     
     Set Main_DD to oItem_DD
     Set Server to oItem_DD
@@ -243,8 +247,40 @@ Object oItemOverview is a cWebView
         
         
 
-        Object oWebGrid1 is a cWebList
+        Object oWebGrid1 is a cWebGrid
             Set pbServerOnRowClick to True
+
+            Object oWebColumnSelected is a cWebColumnCheckbox
+                Set piWidth to 15
+                Set pbServerOnChange to True
+                Set pbEnabledStatic to True
+                Set peAlign to alignCenter
+                
+                Procedure OnChange String sNewValue String sOldValue
+                    Integer iSize iCnt iItemID
+                    Integer[] aiSelectedRows
+                    
+                    WebGet psValue of oitem_ID to iItemID
+                    WebGet piaSelectedRows of oItemOverview to aiSelectedRows
+                    Move (SizeOfArray(aiSelectedRows)) to iSize
+                    
+                    If (sNewValue = "1") Begin
+                        Move iItemID to aiSelectedRows[iSize]
+                    End
+                    Else Begin
+                        Move 0 to iCnt
+                        While (iCnt < iSize)
+                            If (aiSelectedRows[iCnt] = iItemID) Begin
+                                Move (RemoveFromArray(aiSelectedRows, iCnt)) to aiSelectedRows
+                                Move iSize to iCnt
+                            End
+                            Increment iCnt
+                        Loop
+                    End
+
+                    WebSet piaSelectedRows of oItemOverview to aiSelectedRows                
+                End_Procedure
+            End_Object
             
             Object oWebColumnName is a cWebColumn
                 Entry_Item Item.Name
@@ -298,17 +334,40 @@ Object oItemOverview is a cWebView
                 End_Procedure
             End_Object
             
-            Procedure OnRowClick String sRowID
-                Forward Send OnRowClick sRowID
-                
-                Send FindByRowId of oItem_DD (RefTable(Item)) (DeserializeRowID(sRowID))
-                
-                Send Popup of oItemModal Self Item.ID
-            End_Procedure
+//            Procedure OnRowClick String sRowID
+//                Forward Send OnRowClick sRowID
+//                
+//                Send FindByRowId of oItem_DD (RefTable(Item)) (DeserializeRowID(sRowID))
+//                
+//                Send Popup of oItemModal Self Item.ID
+//            End_Procedure
             
             Procedure OnCloseModalDialog Handle hoModalDialog
                 Send Search
             End_Procedure
+
+            Object oitem_ID is a cWebColumn
+                Entry_Item Item.ID
+                Set psCaption to "ID"
+                Set piWidth to 0
+//                Set pbRender to False
+//                Set pbEnabled to False
+                Set pbReadOnly to True
+            End_Object
+
+            Object oWebColumnEditBtn is a cWebColumnButton
+                Set psCaption to "Edit"
+                Set psButtonCaption to ""
+                Set psBtnCssClass to "WebButtonIcon WebEditMenuItem"
+                Set piWidth to 20
+                
+                Procedure OnClick String sButton String sRowId
+                    Send FindByRowId of oItem_DD (RefTable(Item)) (DeserializeRowID(sRowID))
+                    Send Popup of oItemModal Self Item.ID
+                End_Procedure
+            End_Object
+            
+            
 
             Object oWebColumnDeleteBtn is a cWebColumnButton
                 Set psCaption to "Del"
@@ -330,6 +389,57 @@ Object oItemOverview is a cWebView
                     Send ShowYesNo (Self) (RefProc(DeleteItem)) "Are you sure you want to delete this item?" "Delete item"
                 End_Procedure
             End_Object
+        End_Object
+        
+        Object oMoveLocation is a cWebForm
+            Set piColumnSpan to 7
+            Set psLabel to "Move to location"
+            Set pbPromptButton to True
+            Set phoPrompt to hoLocationLookup
+
+            Procedure OnPrompt
+                Forward Send OnPrompt
+            End_Procedure
+            
+            WebPublishProcedure PromptUpdateCallback 
+            Procedure PromptUpdateCallback Handle hoPrompt
+            End_Procedure
+
+            Procedure Prompt_Callback Handle hoPrompt
+                WebSet psPromptUpdateCallback of hoPrompt to "PromptUpdateCallback"
+                WebSet peUpdateMode of hoPrompt to umPromptValue
+            End_Procedure
+
+        End_Object
+
+        Object oWebButton1 is a cWebButton
+            Set piColumnSpan to 2
+            Set psCaption to "Move"
+            Set piColumnIndex to 7
+        
+            Procedure OnClick
+                Integer iRowId iSize iCnt iTotal iNewLocationId
+                Integer[] aiSelectedRows
+                
+                WebGet psValue of oMoveLocation to iNewLocationId
+                If (iNewLocationId = 0) Procedure_Return
+                
+                WebGet piaSelectedRows of oItemOverview to aiSelectedRows
+                Move (SizeOfArray(aiSelectedRows)) to iSize
+                WebGet piRowCount of oWebGrid1 to iTotal
+                Move 0 to iCnt
+                While (iCnt < iSize)
+                    Clear Item
+                    Move aiSelectedRows[iCnt] to Item.id
+                    Find EQ Item by Index.1
+                    If (Found) Begin
+                        Move iNewLocationId to Item.Location_Id
+                        SaveRecord Item
+                    End
+                    Increment iCnt
+                Loop
+                
+            End_Procedure
         End_Object
         
     End_Object
