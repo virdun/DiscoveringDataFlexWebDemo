@@ -11,6 +11,7 @@ Object category_val is a ValidationTable
         Send Add_Table_Value "Cloths"
         Send Add_Table_Value "Renovation"
         Send Add_Table_Value "Hollidays"
+        Send Add_Table_Value "Decorations"
     End_Procedure
 End_Object
 

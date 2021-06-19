@@ -9,6 +9,9 @@ Use cWebEdit.pkg
 
 Use clocationDataDictionary.dd
 Use citemDataDictionary.dd
+Use cWebRadio.pkg
+Use cWebCardContainer.pkg
+Use cWebCard.pkg
 
 Object oItem is a cWebView
     Set piColumnCount to 12
@@ -43,8 +46,46 @@ Object oItem is a cWebView
             Set piColumnIndex to 0
             Set peLabelPosition to lpTop
             Set psLabel to "Description"
-            Set pbFillHeight to True
+            Set piHeight to 150
         End_Object 
+
+        Object oWebCardContainer1 is a cWebCardContainer
+            Set pbShowBorder to True
+            Set piColumnSpan to 3
+            Set piColumnIndex to 6
+
+            Object oWebCard1 is a cWebCard
+                Set piColumnCount to 6    
+                
+                Object oWebRadio1 is a cWebRadio
+                    Entry_Item Item.Importance
+                    Set piColumnSpan to 6
+                    Set psGroupName to "importance"
+                    Set psCaption to "Keeper"
+                    Set psRadioValue to "2"
+                    Set pbShowLabel to True
+                    Set peLabelPosition to lpTop
+                End_Object
+        
+                Object oWebRadio2 is a cWebRadio
+                    Entry_Item Item.Importance
+                    Set piColumnSpan to 6
+                    Set psGroupName to "importance"
+                    Set psCaption to "Usefull"
+                    Set psRadioValue to "1"
+                End_Object
+        
+                Object oWebRadio3 is a cWebRadio
+                    Entry_Item Item.Importance
+                    Set piColumnSpan to 6
+                    Set psGroupName to "importance"
+                    Set psCaption to "Trash"
+                    Set psRadioValue to "0"
+                End_Object
+
+            End_Object
+
+        End_Object
 
         Object oitemCategory is a cWebCombo
             Entry_Item item.Category

@@ -7,3 +7,4 @@
 #REPLACE item.Location_Id |FN2,5
 #REPLACE item.ExpirationDate |FD2,6
 #REPLACE item.Created |FM2,7
+#REPLACE item.Importance |FN2,8
