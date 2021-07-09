@@ -8,3 +8,4 @@
 #REPLACE item.ExpirationDate |FD2,6
 #REPLACE item.Created |FM2,7
 #REPLACE item.Importance |FN2,8
+#REPLACE item.DefaultLocatioID |FN2,9

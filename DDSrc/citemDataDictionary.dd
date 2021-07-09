@@ -3,6 +3,7 @@
 Open Item
 Open location
 Open system
+Open DefaultLocation
 
 Object category_val is a ValidationTable
     Procedure Fill_List
@@ -26,6 +27,7 @@ Class citemDataDictionary is a DataDictionary
         Set Add_System_File to system.File_Number DD_Lock_On_All
 
         Set Add_Server_File to location.File_Number
+        Set Add_Server_File to DefaultLocation.File_Number
 
         Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
         Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
