@@ -9,20 +9,39 @@ Use cWebEdit.pkg
 
 Use clocationDataDictionary.dd
 Use citemDataDictionary.dd
+Use cDefaultLocationDataDictionary.dd
 Use cWebRadio.pkg
 Use cWebCardContainer.pkg
 Use cWebCard.pkg
+Use cWebButton.pkg
 
 Object oItem is a cWebView
     Set piColumnCount to 12
     Set psCaption to "Item"
     Set piWidth to 700
 
+    Object oDefaultLocation_DD is a cDefaultLocationDataDictionary
+    End_Object
+
     Object olocation_DD is a clocationDataDictionary
     End_Object 
 
     Object oitem_DD is a citemDataDictionary
-        Set DDO_Server To olocation_DD
+        Set DDO_Server to oDefaultLocation_DD
+        Set DDO_Server to olocation_DD
+        
+        //Send Remove_Server_File DefaultLocation.File_Number
+        
+        Set ParentNullAllowed DefaultLocation.File_Number to True
+        
+        Procedure OnConstrain
+            String sCategory
+            WebGet psValue of oitemCategory to sCategory
+            Set ParentNullAllowed DefaultLocation.File_Number to True
+            If (sCategory = "Food") Begin
+                Set ParentNullAllowed DefaultLocation.File_Number to False
+            End
+        End_Procedure
     End_Object 
 
     Set Main_DD To oitem_DD
@@ -110,6 +129,27 @@ Object oItem is a cWebView
             Set peLabelPosition to lpTop
             Set psLabel to "ExpirationDate"
         End_Object 
+
+        Object oDefaultLocation_Name is a cWebForm
+            Entry_Item DefaultLocation.Name
+            Set piColumnSpan to 4
+            Set psLabel to "Default Location"
+            Set piColumnIndex to 4
+            Set peLabelPosition to lpTop
+        End_Object
+
+        Object oWebButton1 is a cWebButton
+            Set piColumnSpan to 2
+            Set psCaption to "Clear"
+            Set piColumnIndex to 8
+            Set psLabel to ""
+            Set peLabelPosition to lpTop
+            Set pbShowLabel to True
+        
+            Procedure OnClick
+                Send Request_ClearBindingTable of oDefaultLocation_Name
+            End_Procedure
+        End_Object
     End_Object 
 
 End_Object 
