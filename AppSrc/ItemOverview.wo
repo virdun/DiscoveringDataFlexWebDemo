@@ -345,5 +345,11 @@ Object oItemOverview is a cWebView
         Send AddKeyHandler (RefProc(Search)) 13 False False False
     End_Procedure
 
+    Procedure OnBeforeShow
+        Forward Send OnBeforeShow
+        
+        WebSet pbRender of oFindToolBar to False
+        WebSet pbRender of oFileToolBar to False
+    End_Procedure
     
 End_Object

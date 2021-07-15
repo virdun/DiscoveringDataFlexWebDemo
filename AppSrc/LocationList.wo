@@ -39,4 +39,10 @@ Object oLocationList is a cWebView
         End_Object
     End_Object
 
+    Procedure OnBeforeShow
+        Forward Send OnBeforeShow
+        
+        WebSet pbRender of oFindToolBar to False
+        WebSet pbRender of oFileToolBar to False
+    End_Procedure
 End_Object 

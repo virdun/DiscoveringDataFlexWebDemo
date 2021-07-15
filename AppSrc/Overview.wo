@@ -77,4 +77,10 @@ Object oOverview is a cWebView
         End_Object 
     End_Object 
 
+    Procedure OnBeforeShow
+        Forward Send OnBeforeShow
+        
+        WebSet pbRender of oFindToolBar to True
+        WebSet pbRender of oFileToolBar to True
+    End_Procedure
 End_Object 
