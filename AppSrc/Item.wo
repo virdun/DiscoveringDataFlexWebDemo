@@ -32,8 +32,6 @@ Object oItem is a cWebView
         
         //Send Remove_Server_File DefaultLocation.File_Number
         
-        Set ParentNullAllowed DefaultLocation.File_Number to True
-        
         Procedure OnConstrain
             String sCategory
             WebGet psValue of oitemCategory to sCategory

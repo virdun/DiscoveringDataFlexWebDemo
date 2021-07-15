@@ -42,6 +42,9 @@ Class citemDataDictionary is a DataDictionary
         Set Field_Value_Table Field Item.Category to category_val
 
         Set Field_WebPrompt_Object Field Item.ExpirationDate to oitemWebLookup
+        
+        Set ParentNullAllowed DefaultLocation.File_Number to True
+
 
     End_Procedure
 
