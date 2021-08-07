@@ -24,6 +24,7 @@ Object oItem is a cWebView
     End_Object
 
     Object olocation_DD is a clocationDataDictionary
+        Set Allow_Foreign_New_Save_State to True
     End_Object 
 
     Object oitem_DD is a citemDataDictionary
