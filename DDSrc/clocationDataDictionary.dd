@@ -25,6 +25,7 @@ Class clocationDataDictionary is a DataDictionary
 
         Set Field_WebPrompt_Object Field location.ID to olocationWebLookup
         Set Field_WebPrompt_Object Field location.Name to olocationWebLookup
+        Set Field_Option Field location.Name DD_AUTOFIND to True
 
     End_Procedure
 
