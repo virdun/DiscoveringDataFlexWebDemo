@@ -6,6 +6,7 @@ Use cWebColumn.pkg
 Use cWebColumnImage.pkg
 Use cWebHtmlBox.pkg
 Use cWebButton.pkg
+Use cWebLabel.pkg
 
 //Struct tWebCell
 //    String sValue
@@ -62,14 +63,32 @@ Object oUnitTest is a cWebView
             End_Procedure
         End_Object
 
+        Object oWebButton1 is a cWebButton
+            Set piColumnSpan to 2
+            Set psCaption to "Calculate"
+            Set piColumnIndex to 7
+        
+            Procedure OnClick
+                Send ProcessDataSet of oTestList 1 // Count errors
+            End_Procedure
+        End_Object
+
+        Object oErrorCount is a cWebLabel
+            Set psCaption to "Errors found: 0"
+            Set piColumnIndex to 9
+            Set piColumnSpan to 3
+            Set peAlign to alignRight
+        End_Object
+
         Object oTestList is a cWebGrid
             Set pbDataAware to False
             
             Object oIconCol is a cWebColumnImage
                 Set psCaption to "Ok"
 //                Set psImageUrl to "Images/Order.png"
-                Set piWidth to 20
+                Set piWidth to 30
                 Set pbDynamic to True
+                Set pbFixedWidth to True
             End_Object
             Object oTitleCol is a cWebColumn
                 Set psCaption to "Title"
@@ -84,6 +103,33 @@ Object oUnitTest is a cWebView
                 Set piWidth to 0
             End_Object
             
+            Procedure OnProcessDataSet tWebRow[] aData Integer eOperation Integer iSelectedRowIndex
+                If (eOperation = 1) Send CountErrors aData
+            End_Procedure
+
+            Procedure CountErrors tWebRow[] aData
+                Integer iCnt iSize iTotal
+                Move 0 to iTotal
+                Move 0 to iCnt
+                Move (SizeOfArray(aData)) to iSize
+                
+                While (iCnt < iSize)
+                    If (aData[iCnt].aCells[0].aOptions[0] = "Images/red_light.png") Begin
+                        Increment iTotal
+                    End
+                    Increment iCnt
+                Loop
+                
+                WebSet psCaption of oErrorCount to ("Errors found: " + (String(iTotal)))
+            End_Procedure
+            
+            Procedure AppendRow tWebRow tTheRow
+                Integer iCount
+                WebGet piRowCount of oTestList to iCount
+                Move iCount to tTheRow.sRowId
+                
+                Send DataSetAppendRow of oTestList tTheRow 
+            End_Procedure
         End_Object
 
         Object oInformationBox is a cWebHtmlBox
@@ -91,14 +137,6 @@ Object oUnitTest is a cWebView
             Set psHtml to "Here is where the information goes"
         End_Object
         
-        
-        Procedure AppendRow tWebRow tTheRow
-            Integer iCount
-            WebGet piRowCount of oTestList to iCount
-            Move iCount to tTheRow.sRowId
-            
-            Send DataSetAppendRow of oTestList tTheRow 
-        End_Procedure
 
     End_Object 
 
