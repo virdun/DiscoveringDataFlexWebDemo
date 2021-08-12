@@ -34,14 +34,13 @@ Object oUnitTest is a cWebView
             Procedure OnClick
                 Integer iCount
                 tWebRow tTheRow
-
                 
                 Move "Images/green_light.png" to tTheRow.aCells[0].aOptions[0]
-                Move "Test title ok" to tTheRow.aCells[1].sValue
+                Move ("Test title ok " + (String(iCount))) to tTheRow.aCells[1].sValue
                 Move "group" to tTheRow.aCells[2].sValue
                 Move "Description of error<br>This is the issue..." to tTheRow.aCells[3].sValue
 
-                Send DataSetAppendRow of oTestList tTheRow 
+                Send AppendRow of oTestList tTheRow
             End_Procedure
         End_Object
 
@@ -53,14 +52,13 @@ Object oUnitTest is a cWebView
             Procedure OnClick
                 Integer iCount i
                 tWebRow tTheRow
-
                 
                 Move "Images/red_light.png" to tTheRow.aCells[0].aOptions[0]
                 Move "Test title error" to tTheRow.aCells[1].sValue
                 Move "group" to tTheRow.aCells[2].sValue
                 Move "Description of error<br>No error..." to tTheRow.aCells[3].sValue
 
-                Send DataSetAppendRow of oTestList tTheRow 
+                Send AppendRow of oTestList tTheRow 
             End_Procedure
         End_Object
 
@@ -93,6 +91,14 @@ Object oUnitTest is a cWebView
             Set psHtml to "Here is where the information goes"
         End_Object
         
+        
+        Procedure AppendRow tWebRow tTheRow
+            Integer iCount
+            WebGet piRowCount of oTestList to iCount
+            Move iCount to tTheRow.sRowId
+            
+            Send DataSetAppendRow of oTestList tTheRow 
+        End_Procedure
 
     End_Object 
 
