@@ -32,12 +32,12 @@ Object oUnitTest is a cWebView
             Set psCaption to "Add OK row"
         
             Procedure OnClick
-                Integer iCount i
+                Integer iCount
                 tWebRow tTheRow
 
                 
-                Move "Images/greend_light.png" to tTheRow.aCells[0].sValue
-                Move "Test title" to tTheRow.aCells[1].sValue
+                Move "Images/green_light.png" to tTheRow.aCells[0].aOptions[0]
+                Move "Test title ok" to tTheRow.aCells[1].sValue
                 Move "group" to tTheRow.aCells[2].sValue
                 Move "Description of error<br>This is the issue..." to tTheRow.aCells[3].sValue
 
@@ -55,8 +55,8 @@ Object oUnitTest is a cWebView
                 tWebRow tTheRow
 
                 
-                Move "Images/red_light.png" to tTheRow.aCells[0].sValue
-                Move "Test title" to tTheRow.aCells[1].sValue
+                Move "Images/red_light.png" to tTheRow.aCells[0].aOptions[0]
+                Move "Test title error" to tTheRow.aCells[1].sValue
                 Move "group" to tTheRow.aCells[2].sValue
                 Move "Description of error<br>No error..." to tTheRow.aCells[3].sValue
 
@@ -69,8 +69,9 @@ Object oUnitTest is a cWebView
             
             Object oIconCol is a cWebColumnImage
                 Set psCaption to "Ok"
-                Set psImageUrl to "Images/Order.png"
+//                Set psImageUrl to "Images/Order.png"
                 Set piWidth to 20
+                Set pbDynamic to True
             End_Object
             Object oTitleCol is a cWebColumn
                 Set psCaption to "Title"
