@@ -119,6 +119,16 @@ Object oWebApp is a cWebApp
                     Set psCaption to "ItemImport"
                     Set psLoadViewOnClick to "oItemImport"
                 End_Object
+
+            End_Object  
+    
+            Object oTestMenu is a cWebMenuItem
+                Set psCaption to "Tests"
+
+                Object oUnitTestItem1 is a cWebMenuItemLoadView
+                    Set psCaption to "UnitTest"
+                    Set psLoadViewOnClick to "oUnitTest"
+                End_Object
             End_Object  
         End_Object  
         
@@ -168,6 +178,7 @@ Object oWebApp is a cWebApp
     Use ItemOverview.wo
     Use LocationList.wo
     Use ItemImport.wo
+    Use UnitTest.wo
     
     Function GetDefaultView Returns Handle
         Handle hView

@@ -1,0 +1,98 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg 
+Use cWebGrid.pkg
+Use cWebColumn.pkg
+Use cWebColumnImage.pkg
+Use cWebHtmlBox.pkg
+Use cWebButton.pkg
+
+//Struct tWebCell
+//    String sValue
+//    String sTooltip
+//    String[] aOptions
+//End_Struct
+
+//Struct tWebRow
+//    String sRowID
+//    String sCssClassName
+//    tWebCell[] aCells
+//End_Struct
+
+
+Object oUnitTest is a cWebView
+    Set piWidth to 700
+    Set psCaption to "UnitTest"
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oAddOKBtn is a cWebButton
+            Set piColumnSpan to 2
+            Set psCaption to "Add OK row"
+        
+            Procedure OnClick
+                Integer iCount i
+                tWebRow tTheRow
+
+                
+                Move "Images/greend_light.png" to tTheRow.aCells[0].sValue
+                Move "Test title" to tTheRow.aCells[1].sValue
+                Move "group" to tTheRow.aCells[2].sValue
+                Move "Description of error<br>This is the issue..." to tTheRow.aCells[3].sValue
+
+                Send DataSetAppendRow of oTestList tTheRow 
+            End_Procedure
+        End_Object
+
+        Object oAddErrBtn is a cWebButton
+            Set piColumnSpan to 2
+            Set psCaption to "Add Err row"
+            Set piColumnIndex to 2
+        
+            Procedure OnClick
+                Integer iCount i
+                tWebRow tTheRow
+
+                
+                Move "Images/red_light.png" to tTheRow.aCells[0].sValue
+                Move "Test title" to tTheRow.aCells[1].sValue
+                Move "group" to tTheRow.aCells[2].sValue
+                Move "Description of error<br>No error..." to tTheRow.aCells[3].sValue
+
+                Send DataSetAppendRow of oTestList tTheRow 
+            End_Procedure
+        End_Object
+
+        Object oTestList is a cWebGrid
+            Set pbDataAware to False
+            
+            Object oIconCol is a cWebColumnImage
+                Set psCaption to "Ok"
+                Set psImageUrl to "Images/Order.png"
+                Set piWidth to 20
+            End_Object
+            Object oTitleCol is a cWebColumn
+                Set psCaption to "Title"
+                Set piWidth to 50
+            End_Object
+            Object oTypeCol is a cWebColumn
+                Set psCaption to "Type"
+                Set piWidth to 0
+            End_Object
+            Object oInformationCol is a cWebColumn
+                Set psCaption to "Information"
+                Set piWidth to 0
+            End_Object
+            
+        End_Object
+
+        Object oInformationBox is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to "Here is where the information goes"
+        End_Object
+        
+
+    End_Object 
+
+End_Object
