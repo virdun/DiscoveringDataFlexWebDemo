@@ -1,0 +1,18 @@
+﻿Use UI
+
+Class cUtils is a cObject
+    Function RemoveSuroundingApposFromString Global String sSrc Returns String
+        String sReturn
+        Integer iCharCount
+        
+        Move sSrc to sReturn
+
+        Move (SizeOfString(sSrc)) to iCharCount
+        If ((Mid(sSrc, 1, 1)) = '"' and (Mid(sSrc, 1, iCharCount)) = '"') Begin
+            Move (Mid(sSrc, (iCharCount-2), 2)) to sReturn
+        End
+        
+        Function_Return sReturn
+    End_Function
+
+End_Class
