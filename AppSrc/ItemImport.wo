@@ -33,8 +33,9 @@ Object oItemImport is a cWebView
             End_Function
             
             Procedure OnUploadFinished
-                String sBuffer sPath
+                String sBuffer sTmpBuffer sPath
                 String[] asData
+                Integer iColumns iTotalColumns
                 
                 Address aUTF8Buffer
                 Integer iBufferLength iVoid iLocationID
@@ -51,40 +52,62 @@ Object oItemImport is a cWebView
                     Direct_Input channel 9 sPath
                     If (not(SeqEof)) Begin
                         Readln channel 9 sBuffer
+                        Get Utf8FromStr of oCharTranslate sBuffer CP_ACP to aUTF8Buffer
+                        Get Utf8ToStr of oCharTranslate aUTF8Buffer CP_OEMCP to sBuffer
+                        Move (CStringLength(aUTF8Buffer)) to iBufferLength
+                        Move (StrSplitToArray(sBuffer, ";")) to asData
+                        Move (SizeOfArray(asData)) to iTotalColumns
+                        
                         While (not(SeqEof))
+                            
                             Readln channel 9 sBuffer
-                            Get Utf8FromStr of oCharTranslate sBuffer CP_ACP to aUTF8Buffer
-                            Get Utf8ToStr of oCharTranslate aUTF8Buffer CP_OEMCP to sBuffer
-                            Move (CStringLength(aUTF8Buffer)) to iBufferLength
-                            If (iBufferLength > 0) Begin
-                                If ((Trim(sBuffer)) <> "") Begin
+                            If ((trim(sBuffer)) <> "") Begin
+                                Get Utf8FromStr of oCharTranslate sBuffer CP_ACP to aUTF8Buffer
+                                Get Utf8ToStr of oCharTranslate aUTF8Buffer CP_OEMCP to sBuffer
+                                Move (CStringLength(aUTF8Buffer)) to iBufferLength
+                                
+                                Move (StrSplitToArray(sBuffer, ";")) to asData
+                                Move (SizeOfArray(asData)) to iColumns
+                                While (iColumns < iTotalColumns)
+                                    Readln channel 9 sTmpBuffer
+                                    Get Utf8FromStr of oCharTranslate sTmpBuffer CP_ACP to aUTF8Buffer
+                                    Get Utf8ToStr of oCharTranslate aUTF8Buffer CP_OEMCP to sTmpBuffer
+                                    Move (CStringLength(aUTF8Buffer)) to iBufferLength
+                                    Move (sBuffer + sTmpBuffer) to sBuffer
                                     Move (StrSplitToArray(sBuffer, ";")) to asData
-                                    
-                                    Clear location
-                                    Move asData[3] to location.Name
-                                    Find GE location by Index.2
-                                    If (asData[3] <> location.Name) Begin
+                                    Move (SizeOfArray(asData)) to iColumns
+                                Loop
+                                
+                                If (iBufferLength > 0) Begin
+                                    If ((Trim(sBuffer)) <> "") Begin
+                                        Move (StrSplitToArray(sBuffer, ";")) to asData
+                                        
                                         Clear location
-                                        Move system.location_id to location.ID
-                                        Increment system.location_id
-                                        SaveRecord system
                                         Move asData[3] to location.Name
-                                        Move 0 to location.ItemCounter
+                                        Find GE location by Index.2
+                                        If (asData[3] <> location.Name) Begin
+                                            Clear location
+                                            Move system.location_id to location.ID
+                                            Increment system.location_id
+                                            SaveRecord system
+                                            Move asData[3] to location.Name
+                                            Move 0 to location.ItemCounter
+                                        End
+                                        Increment location.ItemCounter
+                                        SaveRecord location
+                                        
+                                        Clear Item
+                                        Move system.item_id to Item.ID
+                                        Increment system.item_id
+                                        SaveRecord system
+                                        Move (RemoveSuroundingApposFromString(asData[0])) to Item.Name
+                                        Move (RemoveSuroundingApposFromString(asData[1])) to Item.Description
+                                        Move (RemoveSuroundingApposFromString(asData[2])) to Item.Category
+                                        Move location.ID to Item.Location_Id
+                                        Move (RemoveSuroundingApposFromString(asData[4])) to Item.ExpirationDate
+                                        Move (CurrentDateTime()) to Item.Created
+                                        SaveRecord Item
                                     End
-                                    Increment location.ItemCounter
-                                    SaveRecord location
-                                    
-                                    Clear Item
-                                    Move system.item_id to Item.ID
-                                    Increment system.item_id
-                                    SaveRecord system
-                                    Move asData[0] to Item.Name
-                                    Move asData[1] to Item.Description
-                                    Move asData[2] to Item.Category
-                                    Move location.ID to Item.Location_Id
-                                    Move asData[4] to Item.ExpirationDate
-                                    Move (CurrentDateTime()) to Item.Created
-                                    SaveRecord Item
                                 End
                             End
                         Loop
