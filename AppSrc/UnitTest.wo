@@ -24,52 +24,20 @@ Use cWebLabel.pkg
 Object oUnitTest is a cWebView
     Set piWidth to 700
     Set psCaption to "UnitTest"
+    
+    { WebProperty = Server }
+    Property String psRowID
 
     Object oWebMainPanel is a cWebPanel
         Set piColumnCount to 12
 
-        Object oAddOKBtn is a cWebButton
+        Object oRunTestsBtn is a cWebButton
             Set piColumnSpan to 2
-            Set psCaption to "Add OK row"
+            Set psCaption to "Run tests"
         
             Procedure OnClick
-                Integer iCount
-                tWebRow tTheRow
-                
-                Move "Images/green_light.png" to tTheRow.aCells[0].aOptions[0]
-                Move ("Test title ok " + (String(iCount))) to tTheRow.aCells[1].sValue
-                Move "group" to tTheRow.aCells[2].sValue
-                Move "Description of error<br>This is the issue..." to tTheRow.aCells[3].sValue
-
-                Send AppendRow of oTestList tTheRow
-            End_Procedure
-        End_Object
-
-        Object oAddErrBtn is a cWebButton
-            Set piColumnSpan to 2
-            Set psCaption to "Add Err row"
-            Set piColumnIndex to 2
-        
-            Procedure OnClick
-                Integer iCount i
-                tWebRow tTheRow
-                
-                Move "Images/red_light.png" to tTheRow.aCells[0].aOptions[0]
-                Move "Test title error" to tTheRow.aCells[1].sValue
-                Move "group" to tTheRow.aCells[2].sValue
-                Move "Description of error<br>No error..." to tTheRow.aCells[3].sValue
-
-                Send AppendRow of oTestList tTheRow 
-            End_Procedure
-        End_Object
-
-        Object oWebButton1 is a cWebButton
-            Set piColumnSpan to 2
-            Set psCaption to "Calculate"
-            Set piColumnIndex to 7
-        
-            Procedure OnClick
-                Send ProcessDataSet of oTestList 1 // Count errors
+                WebSet psRowID of oUnitTest to "0"
+                Send RunTests
             End_Procedure
         End_Object
 
@@ -80,8 +48,10 @@ Object oUnitTest is a cWebView
             Set peAlign to alignRight
         End_Object
 
-        Object oTestList is a cWebGrid
+        Object oTestList is a cWebList
+            Set pbFillHeight to True
             Set pbDataAware to False
+            Set pbServerOnRowClick to True
             
             Object oIconCol is a cWebColumnImage
                 Set psCaption to "Ok"
@@ -124,11 +94,19 @@ Object oUnitTest is a cWebView
             End_Procedure
             
             Procedure AppendRow tWebRow tTheRow
-                Integer iCount
-                WebGet piRowCount of oTestList to iCount
-                Move iCount to tTheRow.sRowId
+                //Integer iCount
+                //WebGet piRowCount of oTestList to iCount
+                //Move iCount to tTheRow.sRowId
                 
                 Send DataSetAppendRow of oTestList tTheRow 
+            End_Procedure
+            
+            Procedure OnRowClick String sRowID
+                String sInformation
+                
+                WebGet psValue of oInformationCol to sInformation
+                
+                WebSet psHtml of oInformationBox to sInformation
             End_Procedure
         End_Object
 
@@ -136,8 +114,50 @@ Object oUnitTest is a cWebView
             Set piColumnSpan to 0
             Set psHtml to "Here is where the information goes"
         End_Object
+    End_Object
+    
+    Procedure AddRowToGrid Integer iStatus String sLabel String sType;
+                            String sExpected String sResult
+        tWebRow tTheRow
+        String sIconPath sRowID
+        Integer iRowID
+        Move "Images/no_light.png" to sIconPath
+        If (iStatus = 0) Move "Images/red_light.png" to sIconPath
+        If (iStatus = 1) Move "Images/green_light.png" to sIconPath
         
+        WebGet psRowID of oUnitTest to sRowID
+        Move (Integer(sRowID)) to iRowID
+        Increment iRowID
+        WebSet psRowID of oUnitTest to (String(iRowID))
+        
+        Move (String(iRowID)) to tTheRow.sRowID
+        Move sIconPath to tTheRow.aCells[0].aOptions[0]
+        Move sLabel to tTheRow.aCells[1].sValue
+        Move sType to tTheRow.aCells[2].sValue
+        Move "" to tTheRow.aCells[3].sValue
+        If (iStatus = 0) Move ("Expected: " + sExpected + "<br>Found: " + sResult) to tTheRow.aCells[3].sValue
 
-    End_Object 
+        Send AppendRow of oTestList tTheRow
+    End_Procedure
+    
+    Procedure TestGroup String sLabel
+        Send AddRowToGrid -1 sLabel "group" "" ""
+    End_Procedure
+    
+    Procedure Assert String sLabel String sExpected String sResult
+        Integer iStatus
+        Move 1 to iStatus
+        If (sExpected <> sResult) Move 0 to iStatus
+        
+        Send AddRowToGrid iStatus sLabel "group" sExpected sResult
+    End_Procedure
+    
+    Procedure RunTests
+        Send TestGroup "Testing tests"
+        Send Assert "Test ok" "aaa" "aaa"
+        Send Assert "Test fail" "aaa" "bbb"
+        
+        Send ProcessDataSet of oTestList 1 // Count errors
+    End_Procedure
 
 End_Object
