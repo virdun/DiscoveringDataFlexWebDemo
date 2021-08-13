@@ -1,7 +1,8 @@
 ﻿Use AllWebAppClasses.pkg
 Use cConnection.pkg
 Use cWebMenuItemLoadView.pkg
-
+Use cUtils.pkg
+    
 Object oApplication is a cApplication
     Object oConnection is a cConnection
         Use LoginEncryption.pkg

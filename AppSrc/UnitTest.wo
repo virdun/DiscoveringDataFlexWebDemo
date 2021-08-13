@@ -49,9 +49,10 @@ Object oUnitTest is a cWebView
         End_Object
 
         Object oTestList is a cWebList
-            Set pbFillHeight to True
+            Set pbFillHeight to False
             Set pbDataAware to False
             Set pbServerOnRowClick to True
+            Set piHeight to 500
             
             Object oIconCol is a cWebColumnImage
                 Set psCaption to "Ok"
@@ -153,9 +154,17 @@ Object oUnitTest is a cWebView
     End_Procedure
     
     Procedure RunTests
-        Send TestGroup "Testing tests"
-        Send Assert "Test ok" "aaa" "aaa"
-        Send Assert "Test fail" "aaa" "bbb"
+        String sResult
+        Send TestGroup "Remove surounding appostrophs from string"
+
+        Move (RemoveSuroundingApposFromString('"Test string"')) to sResult
+        Send Assert "Check string" "Test string" sResult
+
+        Move (RemoveSuroundingApposFromString('"Other string"')) to sResult
+        Send Assert "Check other string" "Other string" sResult
+        
+        Move (RemoveSuroundingApposFromString('Regular string')) to sResult
+        Send Assert "Check none appo string" "Regular string" sResult
         
         Send ProcessDataSet of oTestList 1 // Count errors
     End_Procedure
