@@ -1,21 +1,21 @@
 -----------------------------------------------------------------------------
-  DATE: 2021-03-24      TIME: 17:08                                  PAGE:  1
+  DATE: 2021-10-01      TIME: 10:09                                  PAGE:  1
   FILE DEFINITION FOR FILE: CodeType (# 253)
 -----------------------------------------------------------------------------
-  DRIVER NAME               : DATAFLEX
-  FILE ROOT NAME            : CodeType
+  DRIVER NAME               : MSSQLDRV
+  FILE ROOT NAME            : MSSQLDRV:CodeType
   USER DISPLAY NAME         : Code Maintenance Type Table
   DATAFLEX FILE NAME        : CodeType
 -----------------------------------------------------------------------------
-  RECORD LENGTH             : 1152      ( USED: 1064 )
-  MAX NUMBER OF RECORDS     : 10000     ( USED: 0 )
+  RECORD LENGTH             : 16423     ( USED: 16423 )
+  MAX NUMBER OF RECORDS     : 2147483647  ( USED: 0 )
   FILE COMPRESSION          : NONE
   RE-USE DELETED SPACE      : YES
-  LOCKING TYPE              : FILE
-  HEADER INTEGRITY CHECKING : YES
-  TRANSACTION TYPE          : CLIENT ATOMIC
-  RECORD IDENTITY INDEX     : 0 ( 0 , 0 )
-  FILE LOGIN PARAMETER      : 
+  LOCKING TYPE              : RECORD
+  HEADER INTEGRITY CHECKING : NO 
+  TRANSACTION TYPE          : SERVER LOGGED
+  RECORD IDENTITY INDEX     : 1 ( 0 , 0 )
+  FILE LOGIN PARAMETER      : DFCONNID=DiscoveringDFDemo
   SYSTEM FILE               : NO 
 -----------------------------------------------------------------------------
 
@@ -28,5 +28,5 @@ NUM  FIELD NAME       TYPE SIZE  OFFST IX   RELATES TO FILE.FIELD
 
 INDEX# FIELDS          DES U/C    LENGTH LEVELS SEGMENTS MODE
 ------ --------------- --- ---    ------ ------ -------- -------
-  1    Type            NO  YES      10     3       1     ON-LINE
+  1    Type            NO  NO       0      0       1     ON-LINE
 

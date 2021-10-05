@@ -1,26 +1,26 @@
 -----------------------------------------------------------------------------
-  DATE: 2021-03-24      TIME: 17:08                                  PAGE:  1
+  DATE: 2021-10-01      TIME: 10:09                                  PAGE:  1
   FILE DEFINITION FOR FILE: system (# 1)
 -----------------------------------------------------------------------------
-  DRIVER NAME               : DATAFLEX
-  FILE ROOT NAME            : system
+  DRIVER NAME               : MSSQLDRV
+  FILE ROOT NAME            : MSSQLDRV:system
   USER DISPLAY NAME         : system
   DATAFLEX FILE NAME        : system
 -----------------------------------------------------------------------------
-  RECORD LENGTH             : 8         ( USED: 6 )
-  MAX NUMBER OF RECORDS     : 1         ( USED: 1 )
+  RECORD LENGTH             : 22        ( USED: 22 )
+  MAX NUMBER OF RECORDS     : 2147483647  ( USED: 1 )
   FILE COMPRESSION          : NONE
   RE-USE DELETED SPACE      : YES
-  LOCKING TYPE              : FILE
-  HEADER INTEGRITY CHECKING : YES
-  TRANSACTION TYPE          : CLIENT ATOMIC
+  LOCKING TYPE              : RECORD
+  HEADER INTEGRITY CHECKING : NO 
+  TRANSACTION TYPE          : SERVER LOGGED
   RECORD IDENTITY INDEX     : 0 ( 0 , 0 )
-  FILE LOGIN PARAMETER      : 
+  FILE LOGIN PARAMETER      : DFCONNID=DiscoveringDFDemo
   SYSTEM FILE               : YES
 -----------------------------------------------------------------------------
 
 NUM  FIELD NAME       TYPE SIZE  OFFST IX   RELATES TO FILE.FIELD
 ---  ---------------  ---- ----- ----- --   ---------------------------------
   1  item_id          NUM    6.0     1      
-  2  location_id      NUM    6.0     4      
+  2  location_id      NUM    6.0    12      
 

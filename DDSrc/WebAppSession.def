@@ -1,46 +1,46 @@
 -----------------------------------------------------------------------------
-  DATE: 2021-03-24      TIME: 17:08                                  PAGE:  1
+  DATE: 2021-10-01      TIME: 10:09                                  PAGE:  1
   FILE DEFINITION FOR FILE: WebAppSession (# 263)
 -----------------------------------------------------------------------------
-  DRIVER NAME               : DATAFLEX
-  FILE ROOT NAME            : WebAppSession
+  DRIVER NAME               : MSSQLDRV
+  FILE ROOT NAME            : MSSQLDRV:WebAppSession
   USER DISPLAY NAME         : WebApp Session
   DATAFLEX FILE NAME        : WebAppSession
 -----------------------------------------------------------------------------
-  RECORD LENGTH             : 170       ( USED: 140 )
-  MAX NUMBER OF RECORDS     : 10000000  ( USED: 4 )
+  RECORD LENGTH             : 173       ( USED: 173 )
+  MAX NUMBER OF RECORDS     : 2147483647  ( USED: 63 )
   FILE COMPRESSION          : NONE
   RE-USE DELETED SPACE      : YES
-  LOCKING TYPE              : FILE
-  HEADER INTEGRITY CHECKING : YES
-  TRANSACTION TYPE          : CLIENT ATOMIC
-  RECORD IDENTITY INDEX     : 0 ( 0 , 0 )
-  FILE LOGIN PARAMETER      : 
+  LOCKING TYPE              : RECORD
+  HEADER INTEGRITY CHECKING : NO 
+  TRANSACTION TYPE          : SERVER LOGGED
+  RECORD IDENTITY INDEX     : 1 ( 0 , 0 )
+  FILE LOGIN PARAMETER      : DFCONNID=DiscoveringDFDemo
   SYSTEM FILE               : NO 
 -----------------------------------------------------------------------------
 
 NUM  FIELD NAME       TYPE SIZE  OFFST IX   RELATES TO FILE.FIELD
 ---  ---------------  ---- ----- ----- --   ---------------------------------
   1  SessionKey       ASC     36     1  1   
-  2  CreateDate       DAT      6    37  2   
-  3  CreateTime       ASC      8    40  2   
-  4  LastAccessDate   DAT      6    48  3   
-  5  LastAccessTime   ASC      8    51  3   
-  6  UseCount         NUM    8.0    59      
-  7  RemoteAddress    ASC     57    63      
-  8  LoginName        ASC     20   120      WebAppUser.FIELD_1 (264,1)
-  9  Active           ASC      1   140      
+  2  CreateDate       DAT     10    37  2   
+  3  CreateTime       ASC      8    53  2   
+  4  LastAccessDate   DAT     10    61  3   
+  5  LastAccessTime   ASC      8    77  3   
+  6  UseCount         NUM    8.0    85      
+  7  RemoteAddress    ASC     57    96      
+  8  LoginName        ASC     20   153      WebAppUser.FIELD_1 (264,1)
+  9  Active           ASC      1   173      
 
 
 INDEX# FIELDS          DES U/C    LENGTH LEVELS SEGMENTS MODE
 ------ --------------- --- ---    ------ ------ -------- -------
-  1    SessionKey      NO  NO       36     7       1     ON-LINE
+  1    SessionKey      NO  NO       0      0       1     ON-LINE
 
-  2    CreateDate      NO  NO       47     8       3     ON-LINE
+  2    CreateDate      NO  NO       0      0       3     ON-LINE
        CreateTime      NO  NO 
        SessionKey      NO  NO 
 
-  3    LastAccessDate  NO  NO       47     8       3     ON-LINE
+  3    LastAccessDate  NO  NO       0      0       3     ON-LINE
        LastAccessTime  NO  NO 
        SessionKey      NO  NO 
 
