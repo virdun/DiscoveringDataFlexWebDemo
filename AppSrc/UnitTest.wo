@@ -51,7 +51,6 @@ Object oUnitTest is a cWebView
         Object oTestList is a cWebList
             Set pbFillHeight to False
             Set pbDataAware to False
-            Set pbServerOnRowClick to True
             Set piHeight to 500
             
             Object oIconCol is a cWebColumnImage
@@ -64,6 +63,7 @@ Object oUnitTest is a cWebView
             Object oTitleCol is a cWebColumn
                 Set psCaption to "Title"
                 Set piWidth to 50
+                Set pbAllowHtml to True
             End_Object
             Object oTypeCol is a cWebColumn
                 Set psCaption to "Type"
@@ -71,7 +71,11 @@ Object oUnitTest is a cWebView
             End_Object
             Object oInformationCol is a cWebColumn
                 Set psCaption to "Information"
-                Set piWidth to 0
+                Set piWidth to 100
+                Set pbNewLine to True
+                Set piListColSpan to 2
+                Set pbAllowHtml to True
+                
             End_Object
             
             Procedure OnProcessDataSet tWebRow[] aData Integer eOperation Integer iSelectedRowIndex
@@ -102,18 +106,6 @@ Object oUnitTest is a cWebView
                 Send DataSetAppendRow of oTestList tTheRow 
             End_Procedure
             
-            Procedure OnRowClick String sRowID
-                String sInformation
-                
-                WebGet psValue of oInformationCol to sInformation
-                
-                WebSet psHtml of oInformationBox to sInformation
-            End_Procedure
-        End_Object
-
-        Object oInformationBox is a cWebHtmlBox
-            Set piColumnSpan to 0
-            Set psHtml to "Here is where the information goes"
         End_Object
     End_Object
     
@@ -134,10 +126,15 @@ Object oUnitTest is a cWebView
         Move (String(iRowID)) to tTheRow.sRowID
         Move sIconPath to tTheRow.aCells[0].aOptions[0]
         Move sLabel to tTheRow.aCells[1].sValue
+        If (iStatus = -1) Move ("<b>" + sLabel + "</b>") to tTheRow.aCells[1].sValue
         Move sType to tTheRow.aCells[2].sValue
         Move "" to tTheRow.aCells[3].sValue
-        If (iStatus = 0) Move ("Expected: " + sExpected + "<br>Found: " + sResult) to tTheRow.aCells[3].sValue
-
+        Move "test_ok" to tTheRow.aCells[3].sCssClassName
+        If (iStatus = 0) Begin
+            Move ("Expected: " + sExpected + "<br>Found: " + sResult) to tTheRow.aCells[3].sValue
+            Move "test_fail" to tTheRow.aCells[3].sCssClassName
+        End
+        
         Send AppendRow of oTestList tTheRow
     End_Procedure
     
@@ -155,6 +152,8 @@ Object oUnitTest is a cWebView
     
     Procedure RunTests
         String sResult
+        Send ClearGrid of oTestList
+
         Send TestGroup "Remove surounding appostrophs from string"
 
         Move (RemoveSuroundingApposFromString('"Test string"')) to sResult
