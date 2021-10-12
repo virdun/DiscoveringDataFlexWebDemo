@@ -14,3 +14,11 @@
     font-weight: bold;
     background: #fcc;
 }
+
+[data-dfcol="3"] {
+    display: none;
+}
+.test_fail {
+    display: table-cell;
+    background: #ff9999;
+}
