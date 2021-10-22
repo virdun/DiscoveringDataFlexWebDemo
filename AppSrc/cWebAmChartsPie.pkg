@@ -1,0 +1,32 @@
+﻿Use UI
+Use cWebBaseControl.pkg
+
+Class cWebAmChartsPie is a cWebBaseControl
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        
+        Set psJSClass to "dfcc.WebAmChartsPie"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+        
+        WebPublishProcedure SliceClick
+    End_Procedure
+    
+    Procedure updateGraph String sJsonData
+        String[] aParams
+        Move sJsonData to aParams[0]
+        Send ClientAction "updateGraph" aParams
+    End_Procedure
+    
+    Procedure SliceClick String sCount
+        Send OnRecievedClick (Integer(sCount))
+    End_Procedure
+    
+    { MethodType = Event}
+    Procedure OnRecievedClick Integer iCount
+    End_Procedure
+
+End_Class
