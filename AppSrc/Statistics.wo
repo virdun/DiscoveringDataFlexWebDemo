@@ -1,0 +1,85 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg 
+Use cWebAmChartsPie.pkg
+
+Object oStatistics is a cWebView
+    Set piWidth to 700
+    Set psCaption to "Statistics"
+    Set pbServerOnShow to True
+
+    // Your DDO structure will go here
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oWebCategorySum is a cWebForm
+            Set piColumnSpan to 4
+            Set psLabel to "Category (SUM)"
+        End_Object
+
+        Object oWebAmChartsPie1 is a cWebAmChartsPie
+            Set piColumnSpan to 10
+            Set peLabelPosition to lpTop
+            Set psLabel to "Category PieChart"
+
+            Procedure OnRecievedClick Integer iCount
+                Integer iSum
+                WebGet psValue of oWebCategorySum to iSum
+                Move (iSum + iCount) to iSum
+                WebSet psValue of oWebCategorySum to iSum
+            End_Procedure
+        End_Object
+        
+
+        
+    End_Object 
+
+    Struct tCategory
+        String category
+        Integer count
+    End_Struct
+
+    Procedure OnShow
+        String sJson sCategory
+        Boolean bFound
+        Integer iCounter iIdx
+        Handle hoJson
+        tCategory[] categoryObj
+        
+        Move '*' to sCategory
+        Move 0 to iIdx
+        Clear Item
+        Find GE Item by Index.3
+        Move Found to bFound
+        While (bFound)
+            
+            If (sCategory <> Item.Category) Begin
+                If (sCategory <> '*') Begin
+                    Move sCategory to categoryObj[iIdx].category
+                    Move iCounter to categoryObj[iIdx].count
+                    Increment iIdx
+                End
+                Move Item.Category to sCategory
+                Move 0 to iCounter
+            End
+            
+            Increment iCounter
+            
+            Find GT Item by Index.3
+            Move Found to bFound
+        Loop
+        Move sCategory to categoryObj[iIdx].category
+        Move iCounter to categoryObj[iIdx].count
+        
+        Get Create (RefClass(cJsonObject)) to hoJson
+        
+        Send DataTypeToJson of hoJson categoryObj
+        
+        Set peWhiteSpace of hoJson to jpWhitespace_Spaced
+        Get Stringify of hoJson to sJson
+        
+        
+        Send updateGraph to oWebAmChartsPie1 sJson
+    End_Procedure
+End_Object
