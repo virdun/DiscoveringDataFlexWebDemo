@@ -135,6 +135,16 @@ Object oWebApp is a cWebApp
                     Set psCaption to "UnitTest"
                     Set psLoadViewOnClick to "oUnitTest"
                 End_Object
+
+                Object oTestMenu is a cWebMenuItem
+                    Set psCaption to "Types"
+                    
+                    Object oBooleanItem1 is a cWebMenuItemLoadView
+                        Set psCaption to "Boolean"
+                        Set psLoadViewOnClick to "oBoolean"
+                    End_Object
+                End_Object  
+
             End_Object  
         End_Object  
         
@@ -186,6 +196,7 @@ Object oWebApp is a cWebApp
     Use ItemImport.wo
     Use UnitTest.wo
     Use Statistics.wo
+    Use Boolean.wo
     
     Function GetDefaultView Returns Handle
         Handle hView
