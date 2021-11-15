@@ -1,0 +1,127 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg 
+Use cWebButton.pkg
+Use cWebHtmlBox.pkg
+
+Object oBoolean is a cWebView
+    Set piWidth to 700
+    Set psCaption to "Boolean"
+    Set pbServerOnShow to True
+
+    // Your DDO structure will go here
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oWebHtmlBox1 is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to ""
+            
+            Procedure EvaluateBoolean
+                // --- Boolean Test Code ---
+                Boolean bTest
+                String[] asTest
+                Integer iCnt iTot
+                Date dTest
+                DateTime dtTest
+                
+                Send AddLn "<b>Test unnasigned value</b>"
+                If (bTest) Send AddLn "An unassigned Boolean is <b>True</b> by default... But it is good practice to assign a value before use."
+                Else Send AddLn "An unassigned Boolean is <b>False</b> by default... <i>But it is good practice to always assign a value before use.</i>"
+                
+                Send AddLn "<br><b>Test integers assigned to Boolean</b>"
+                If (iTot) Send AddLn ("An unassigned Integer is <b>True</b>")
+                Else Send AddLn ("An unassigned Integer is <b>False</b>")
+                Move (StrSplitToArray("2 0 -1 -0", " ")) to asTest
+                Move (SizeOfArray(asTest)) to iTot
+                Move 0 to iCnt
+                While (iCnt < iTot)
+                    Move (Integer(asTest[iCnt])) to bTest
+                    If (bTest) Send AddLn (asTest[iCnt] + " is <b>True</b>")
+                    Else Send AddLn (asTest[iCnt] + " is <b>False</b>")
+                    Increment iCnt
+                Loop
+                
+                Send AddLn "<br><b>Test strings assigned to Boolean</b>"
+                Send AddLn "<i>Strings cannot be typecasted to Boolean but you can still check if they are true or false with an if-statement</i>"
+                Move "" to bTest
+                If (bTest) Send AddLn "'Empty string' is <b>True</b>"
+                Else Send AddLn "'Empty string' is <b>False</b>"
+                
+                Move (StrSplitToArray("Test NULL undefined False", " ")) to asTest
+                Move (SizeOfArray(asTest)) to iTot
+                Move 0 to iCnt
+                While (iCnt < iTot)
+                    // Move asTest[iCnt] to bTest               // Runtime error: Attempt to run uncompiled expression
+                    // Move (Boolean(asTest[iCnt])) to bTest    // Compile error: Undefined symbol in argument BOOLEAN
+                    If (asTest[iCnt]) Send AddLn ("'" + asTest[iCnt] + "' is <b>True</b>")
+                    Else Send AddLn ("'" + asTest[iCnt] + "' is <b>False</b>")
+                    Increment iCnt
+                Loop
+                
+                Send AddLn "<br><b>Test Date assigned to Boolean</b>"
+                If (dTest) Send AddLn ("An unassigned Date (" + (String(dTest)) + ") is <b>True</b>")
+                Else Send AddLn ("An unassigned Date (" + (String(dTest)) + ") is <b>False</b>")
+                // The variable data-type is not valid for logic evalation...
+                // If (dtTest) Send AddLn ("An unassigned DateTime (" + (String(dtTest)) + ") is <b>True</b>") 
+                // Else Send AddLn ("An unassigned DateTime (" + (String(dtTest)) + ") is <b>False</b>")
+                Move 0 to dTest
+                If (dTest) Send AddLn ("A zero Date (" + (String(dTest)) + ") is <b>True</b>")
+                Else Send AddLn ("A zero Date (" + (String(dTest)) + ") is <b>False</b>")
+                Move 1 to dTest
+                Move (dTest - 1) to dTest
+                If (dTest) Send AddLn ("A (1-1) Date (" + (String(dTest)) + ") is <b>True</b>")
+                Else Send AddLn ("A (1-1) Date (" + (String(dTest)) + ") is <b>False</b>")
+                
+                Move (StrSplitToArray("0000-00-00 2021-11-12 0001-01-01 1753-01-01 1970-01-01", " ")) to asTest
+                Move (SizeOfArray(asTest)) to iTot
+                Move 0 to iCnt
+                While (iCnt < iTot)
+                    // Move asTest[iCnt] to bTest               // Runtime error: Attempt to run uncompiled expression
+                    // Move (Boolean(asTest[iCnt])) to bTest    // Compile error: Undefined symbol in argument BOOLEAN
+                    If ((Date(asTest[iCnt]))) Send AddLn ("'" + asTest[iCnt] + "' is <b>True</b>")
+                    Else Send AddLn ("'" + asTest[iCnt] + "' is <b>False</b>")
+                    Increment iCnt
+                Loop
+
+                Send AddLn "<br><b>Move (not(bTest)) to bTest, is a quick and easy way to switch back and forth</b>"
+                Move 6 to iTot
+                Move 0 to iCnt
+                Move False to bTest
+                While (iCnt < iTot)
+                    Move (not(bTest)) to bTest
+                    If (bTest) Send AddLn ("<b>True</b>")
+                    Else Send AddLn ("<b>False</b>")
+                    Increment iCnt
+                Loop
+                
+                DateTime dtNullTest
+                If (IsNullDateTime(dtNullTest))  Send AddLn ("<br><b>NULL is only managed for edgecases and not part of the general language. But DateTime is initialized as NULL so we can use that to test if it is true or false</b>")
+                //If (dtNullTest) Send AddLn ("NULL is <b>True</b>")
+                //Else Send AddLn ("NULL is <b>False</b>")
+                Send AddLn ("Error: Invalid type. The variable data-type is not valid for logic evalation. Use (var <> 0)")
+
+                // --- Tests End Here ---
+            End_Procedure
+            
+            
+            Procedure AddLn String sText
+                String sFullText sNewLine
+                //Move (Character(10)) to sNewLine
+                Move "<br>" to sNewLine
+                WebGet psHtml of oWebHtmlBox1 to sFullText
+                Move (sFullText + sNewLine + sText) to sFullText
+                WebSet psHtml of oWebHtmlBox1 to sFullText
+            End_Procedure
+        End_Object
+        
+
+        
+    End_Object 
+    
+    Procedure OnShow
+        Send EvaluateBoolean of oWebHtmlBox1
+    End_Procedure
+
+End_Object
