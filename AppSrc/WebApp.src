@@ -2,6 +2,7 @@
 Use cConnection.pkg
 Use cWebMenuItemLoadView.pkg
 Use cUtils.pkg
+Use ErrorEventHandlerClass.pkg
     
 Object oApplication is a cApplication
     Object oConnection is a cConnection
@@ -143,6 +144,12 @@ Object oWebApp is a cWebApp
                         Set psCaption to "Boolean"
                         Set psLoadViewOnClick to "oBoolean"
                     End_Object
+
+                    Object oIntegerItem1 is a cWebMenuItemLoadView
+                        Set psCaption to "Integer"
+                        Set psLoadViewOnClick to "oInteger"
+                    End_Object
+    
                 End_Object  
 
             End_Object  
@@ -197,6 +204,7 @@ Object oWebApp is a cWebApp
     Use UnitTest.wo
     Use Statistics.wo
     Use Boolean.wo
+    Use Integer.wo
     
     Function GetDefaultView Returns Handle
         Handle hView
@@ -206,5 +214,6 @@ Object oWebApp is a cWebApp
     End_Function
     
 End_Object
+
 
 Send StartWebApp of oWebApp

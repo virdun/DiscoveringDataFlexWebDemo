@@ -2,3 +2,7 @@
 #REPLACE system.Recnum |FN1,0
 #REPLACE system.item_id |FN1,1
 #REPLACE system.location_id |FN1,2
+#REPLACE system.int_test_a |FN1,3
+#REPLACE system.int_test_b |FN1,4
+#REPLACE system.int_test_c |FN1,5
+#REPLACE system.int_test_d |FN1,6

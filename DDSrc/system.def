@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
-  DATE: 2021-10-01      TIME: 10:09                                  PAGE:  1
+  DATE: 2021-11-18      TIME: 21:18                                  PAGE:  1
   FILE DEFINITION FOR FILE: system (# 1)
 -----------------------------------------------------------------------------
   DRIVER NAME               : MSSQLDRV
@@ -7,7 +7,7 @@
   USER DISPLAY NAME         : system
   DATAFLEX FILE NAME        : system
 -----------------------------------------------------------------------------
-  RECORD LENGTH             : 22        ( USED: 22 )
+  RECORD LENGTH             : 66        ( USED: 66 )
   MAX NUMBER OF RECORDS     : 2147483647  ( USED: 1 )
   FILE COMPRESSION          : NONE
   RE-USE DELETED SPACE      : YES
@@ -23,4 +23,8 @@ NUM  FIELD NAME       TYPE SIZE  OFFST IX   RELATES TO FILE.FIELD
 ---  ---------------  ---- ----- ----- --   ---------------------------------
   1  item_id          NUM    6.0     1      
   2  location_id      NUM    6.0    12      
+  3  int_test_a       NUM    1.0    23      
+  4  int_test_b       NUM    2.0    34      
+  5  int_test_c       NUM    3.0    45      
+  6  int_test_d       NUM   10.0    56      
 

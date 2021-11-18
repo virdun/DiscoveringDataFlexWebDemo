@@ -1,0 +1,216 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg 
+Use cWebLabel.pkg
+Use cWebSpacer.pkg
+Use cWebHorizontalLine.pkg
+Use cWebList.pkg
+Use cWebColumn.pkg
+Use cWebDatePicker.pkg
+Use cWebEdit.pkg
+Use cWebHtmlBox.pkg
+Use cWebButton.pkg
+Use cWebImage.pkg
+
+Object oInteger is a cWebView
+    Set piWidth to 700
+    Set psCaption to "Integer"
+    Set pbServerOnShow to True
+    
+    // Your DDO structure will go here
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oWebHtmlBox1 is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to ""
+            
+            Procedure EvaluateInteger
+                // --- Integer Test Code ---
+                Integer iTest
+                String sTmp sTest sLastTest
+                String[] asTest
+                Integer iCnt iTot
+                Date dTest
+                DateTime dtTest
+                
+                Send Activate to oErrorEventHandler
+                
+//                Send AddLn "<b>Test unnasigned value</b>"
+//                If (bTest) Send AddLn "An unassigned Boolean is <b>True</b> by default... But it is good practice to assign a value before use."
+//                Else Send AddLn "An unassigned Boolean is <b>False</b> by default... <i>But it is good practice to always assign a value before use.</i>"
+                
+                Send AddLn "<br><b>Maxing out an integer</b>"
+                Move 2147483647 to iTest
+                Send AddLn ("iTest is now <b>" + String(iTest) + "</b>, the maximum size of an integer in DataFlex")
+                Move (iTest + 1) to iTest
+                Send AddLn ("If we increase iTest by 1 we get  <b>" + String(iTest) + "</b>, which is the lowest allowed integer in DataFlex")
+                
+                Send AddLn "<br><b>Turning fractions to integer</b>"
+                Send AddLn ("Integer(3.2) => " + String(Integer(3.2)) + "")
+                Send AddLn ("Integer(3.5) => " + String(Integer(3.5)) + "")
+                Send AddLn ("Integer(3.8) => " + String(Integer(3.8)) + "")
+                Send AddLn ("Integer(-3.8) => " + String(Integer(-3.8)) + "")
+
+                Send AddLn "<br><b>Turning strings to integer</b>"
+                Send AddLn ("Integer('one') => " + String(Integer('one')) + "")
+                Send AddLn ("Integer('a') => " + String(Integer('a')) + "")
+                Send AddLn ("Integer('b') => " + String(Integer('b')) + "")
+                Send AddLn ("Integer('33') => " + String(Integer('33')) + "")
+                Send AddLn ("Integer('33.4') => " + String(Integer('33.4')) + "")
+                Send AddLn ("Integer('') => " + String(Integer('')) + "")
+
+                Send AddLn "<br><b>Turning dates to integer</b>"
+                Send AddLn ("Integer(Date('2021-11-02')) => " + String(Integer(Date('2021-11-02'))) + "")
+                Send AddLn ("Integer(Date('2021-11-03')) => " + String(Integer(Date('2021-11-03'))) + "")
+                Send AddLn ("Integer(Date('2021-11-03')+2) => " + String(Integer(Date('2021-11-03')+2)) + "")
+                Send AddLn ("(Date(738479)) => " + String(Date(738479)) + "")
+                Send AddLn ("(Date(1)) => " + String(Date(1)) + "")
+                Send AddLn ("Integer(Date('2000-01-02')) => " + String(Integer(Date('2000-01-02'))) + "")
+                Send AddLn ("(Date(730501)) => " + String(Date(730501)) + "")
+                Send AddLn ("(Date(730500)) => " + String(Date(730500)) + "")
+                Send AddLn ("(Date(730499)) => " + String(Date(730499)) + "")
+                
+                Send AddLn "<br><b>Operator precedence</b>"
+                Send AddLn ("1 + 2 * 3 = " + String(1 + 2 * 3) + " seems unexpected when we expect")
+                Send AddLn ("1 + (2 * 3) = " + String(1 + (2 * 3)) + " but not when you know that DataFlex evaluate operators from left to right. That is why it is always important to use parenthesis when doing math calculations.")
+                
+                Send AddLn '<hr>In DataFlex and Smalltalk, operators are evaluated from left to right.'
+                Send AddLn 'In APL and J, operators are evaluated from right to left.'
+                Send AddLn 'Comprehensive list of languages operator precedence https://rosettacode.org/wiki/Operator_precedence (DataFlex is still missing...)'
+                Send AddLn 'Read more about DataFlex operators here https://docs.dataaccess.com/dataflexhelp/mergedProjects/LanguageGuide/Expression_Syntax.htm<hr>'
+
+                
+                Send AddLn "<br><b>Test integer of size <b>1</b> in database table</b>"
+                Move 0 to iTest
+                Reread system
+                Move 0 to system.int_test_a
+                SaveRecord system
+                Move "0" to sTmp
+                Repeat
+                    Move system.int_test_a to iTest
+                    Move (system.int_test_a + 1) to system.int_test_a
+                    If (system.int_test_a > iTest) Move (sTmp + ", " + String(system.int_test_a)) to sTmp
+                    SaveRecord system
+                Until (system.int_test_a <= iTest)
+                Send AddLn ('Saving: ' + sTmp)
+                Send AddLn ("<br>We reached <b>" + String(system.int_test_a) + "</b> before we rand out of numbers.")
+                Unlock
+                
+                
+                Send AddLn "<br><b>Test integer of size <b>1</b> in database table with negative numbers</b><br>Saving: "
+                Move 0 to iTest
+                Reread system
+                Move 0 to system.int_test_a
+                SaveRecord system
+                Move "0" to sTmp
+                Repeat
+                    Move system.int_test_a to iTest
+                    Move (system.int_test_a - 1) to system.int_test_a
+                    If (system.int_test_a < iTest) Move (sTmp + ", " + String(system.int_test_a)) to sTmp
+                    SaveRecord system
+                Until (system.int_test_a >= iTest)
+                Send AddLn ('Saving: ' + sTmp)
+                Unlock
+                Reread system
+                Send AddLn ("<br>We reached <b>" + String(system.int_test_a) + "</b> before we rand out of numbers.")
+                Unlock
+
+                Send AddLn "<br><b>Test integer of size <b>2</b> in database table</b>"
+                Move 0 to iTest
+                Reread system
+                Move 0 to system.int_test_b
+                SaveRecord system
+                Move "0" to sTmp
+                Repeat
+                    Move system.int_test_b to iTest
+                    Move (system.int_test_b + 1) to system.int_test_b
+                    If (system.int_test_b > iTest) Move (sTmp + ", " + String(system.int_test_b)) to sTmp
+                    SaveRecord system
+                Until (system.int_test_b <= iTest)
+                Send AddLn ('Saving: ' + sTmp)
+                Unlock
+                Reread system
+                Send AddLn ("<br>We reached <b>" + String(system.int_test_b) + "</b> before we rand out of numbers.")
+                Unlock                
+
+                Send AddLn "<br><b>Test integer of size <b>3</b> in database table</b>"
+                Move 0 to iTest
+                Reread system
+                Move 995 to system.int_test_c
+                SaveRecord system
+                Move "995" to sTmp
+                Repeat
+                    Move system.int_test_c to iTest
+                    Move (system.int_test_c + 1) to system.int_test_c
+                    Move (sTmp + ", " + String(system.int_test_c)) to sTmp
+                    SaveRecord system
+                Until (system.int_test_c <= iTest)
+                Send AddLn ('Saving: ...' + sTmp)
+                Unlock
+                Reread system
+                Send AddLn ("<br>We reached <b>" + String(system.int_test_c) + "</b> before we rand out of numbers.")
+                Unlock                
+
+                Send AddLn "<br><b>Test integer of size <b>10</b> in database table</b>"
+                Move 0 to iTest
+                Reread system
+                Move 2147483645 to system.int_test_d
+                //Move 9999999991 to system.int_test_d
+                SaveRecord system
+                Move (String(system.int_test_d)) to sTmp
+                Repeat
+                    Move (system.int_test_d + 1) to system.int_test_d
+                    Move sTest to sLastTest
+                    Move (String(system.int_test_d)) to sTest
+                    SaveRecord system
+                    Reread system
+                    If (system.int_test_d = 0) Begin
+                    End
+                    If ((String(system.int_test_d)) = sTest) Move (sTmp + ", " + String(system.int_test_d)) to sTmp
+                    Unlock
+                Until ((String(system.int_test_d)) <> sTest)
+                Send AddLn ('Saving: ...' + sTmp)
+                Unlock
+                Send AddLn ("<br>We reached <b>" + String(sLastTest) + "</b> before we rand out of numbers.")
+
+                Send AddLn "<br><b>Comparing with the sizes in the MSSQL database</b>"
+                Send AddLn '<table Class="table"><thead><tr><th><b>Data type</b></th><th><b>Range</b></th><th><b>Storage</b></th></tr></thead><tbody><tr><td><strong>BigInt</strong></td><td>-2^63 (-9,223,372,036,854,775,808) to 2^63-1 (9,223,372,036,854,775,807)</td><td>8 Bytes</td></tr><tr><td><strong>int</strong></td><td>-2^31 (-2,147,483,648) to 2^31-1 (<b>2,147,483,647</b>)</td><td>4 Bytes</td></tr><tr><td><strong>smallint</strong></td><td>-2^15 (-32,768) to 2^15-1 (32,767)</td><td>2 Bytes</td></tr><tr><td><strong>tinyint</strong></td><td>0 to 255</td><td>1 Byte</td></tr></tbody></table>'
+                
+
+
+                Send Deactivate to oErrorEventHandler
+                // --- Tests End Here ---
+            End_Procedure
+            
+            
+            Procedure AddLn String sText
+                String sFullText sNewLine
+                //Move (Character(10)) to sNewLine
+                Move "<br>" to sNewLine
+                WebGet psHtml of oWebHtmlBox1 to sFullText
+                Move (sFullText + sNewLine + sText) to sFullText
+                WebSet psHtml of oWebHtmlBox1 to sFullText
+            End_Procedure
+        End_Object
+        
+
+        
+    End_Object 
+    
+    Procedure OnShow
+        Send EvaluateInteger of oWebHtmlBox1
+    End_Procedure
+
+
+
+    Object oErrorEventHandler is a cErrorEventHandler
+        
+        Procedure OnError Integer iError String sErrorText Integer iErrorLine
+            Send None
+        End_Procedure
+        
+    End_Object
+
+End_Object
