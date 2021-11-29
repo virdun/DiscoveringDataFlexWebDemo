@@ -150,6 +150,10 @@ Object oWebApp is a cWebApp
                         Set psLoadViewOnClick to "oInteger"
                     End_Object
     
+                    Object oStringItem1 is a cWebMenuItemLoadView
+                        Set psCaption to "String"
+                        Set psLoadViewOnClick to "oString"
+                    End_Object
                 End_Object  
 
             End_Object  
@@ -205,6 +209,7 @@ Object oWebApp is a cWebApp
     Use Statistics.wo
     Use Boolean.wo
     Use Integer.wo
+    Use String.wo
     
     Function GetDefaultView Returns Handle
         Handle hView
