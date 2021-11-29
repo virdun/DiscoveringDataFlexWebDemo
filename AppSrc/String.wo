@@ -1,0 +1,187 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg 
+
+Object oString is a cWebView
+    Set piWidth to 700
+    Set psCaption to "String"
+    Set pbServerOnShow to True
+    
+    // Your DDO structure will go here
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oWebHtmlBox1 is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to ""
+            
+            Procedure EvaluateString
+                // --- Integer Test Code ---
+                Integer iTest
+                String sTmp sTest sLastTest
+                String[] asTest
+                Integer iCnt iTot
+                Date dTest
+                DateTime dtTest
+                
+                Send Activate to oErrorEventHandler
+                
+//                Send AddLn "<b>Test unnasigned value</b>"
+//                If (bTest) Send AddLn "An unassigned Boolean is <b>True</b> by default... But it is good practice to assign a value before use."
+//                Else Send AddLn "An unassigned Boolean is <b>False</b> by default... <i>But it is good practice to always assign a value before use.</i>"
+                Send AddLn "<b>Maxing out a string</b>"
+                Move '' to sTest
+                Move 0 to iCnt
+                While ((Length(sTest)) = iCnt)
+                    Increment iCnt
+                    Move (sTest + 'a') to sTest
+                    If (iCnt > 65530) Begin
+                        Send AddLn ("sTest is now Length: <b>" + String(Length(sTest)) + "</b>, SizeOfString: <b>" +  String(SizeOfString(sTest)) + "</b>, iCnt: <b>" + String(iCnt)  + "</b> characters long")
+                    End
+                Loop
+                Send AddLn ("sTest is now <b>" + String(Length(sTest)) + "</b> characters long")
+                
+
+                // Len vs Length vs SizeOfString vs SizeOfWString
+                Send AddLn ("<br><b>String Length functions</b>")
+                Move "München" to sTest
+                //Send AddLn ("Len: " + sTest + " is " + String(Len(sTest)) + " characters long")
+                Send AddLn ("Len: " + sTest + " is <b>'Undefined Argument'</b> characters long. It seems to be an obsolete function left in the documentation...")
+                Send AddLn ("Length: " + sTest + " is <b>" + String(Length(sTest)) + "</b> characters long")
+                Send AddLn ("SizeOfString: " + sTest + " is <b>" + String(SizeOfString(sTest)) + "</b> characters long. <b>Do not use this one if you change to UTF8 (UNICODE)</b>")
+                Send AddLn ("SizeOfWString: " + sTest + " is <b>" + String(SizeOfWString(sTest)) + "</b> characters long")
+                
+                // Trim - Especially strings that come back from the database
+                Send AddLn ("<br><b>Trim strings</b>")
+                Move "     The glove was to small     " to sTest
+                Send AddLn ("<i>Sometime strings have surounding spaces, especially if you get them from tables with a defined width.</i><br>You can fix strings like <b>'" + Replaces(' ', sTest, '&nbsp;') + "'</b> with:")
+                Send AddLn ("Removing surrounding spaces using <b>Trim</b>: '" + Replaces(' ', Trim(sTest), '&nbsp;') + "'")
+                Send AddLn ("Removing preceding spaces using <b>Ltrim</b>: '" + Replaces(' ', Ltrim(sTest), '&nbsp;') + "'")
+                Send AddLn ("Removing trailing spaces using <b>Rtrim</b>: '" + Replaces(' ', Rtrim(sTest), '&nbsp;') + "'")
+                
+                // !-operator "!s" replaces !s with what? How to store a password with !...
+                Send AddLn ("<br><b>" + Character(33) + " can cause problems if they are hardcoded. Fix it by switshing to Character(33)</b>")
+                Move "Te!st!ing! Pass!word!" to sTest
+                Send AddLn ("My password is '" + sTest)
+                Move ("Te" + Character(33) + "st" + Character(33) + "ing" + Character(33) + " Pass" + Character(33) + "word" + Character(33)) to sTest
+                Send AddLn ("My password is '" + sTest)
+                Send AddLn ("<i>This is part of the DataFlex macro language... And what I hear there is no need for macros these days.</i>")
+                
+                // ASCII values and characters
+                Send AddLn ("<br><b>ASCII values and Characters</b>")
+                Send AddLn ('ASCII("a") is ' + String(ASCII("a")))
+                Send AddLn ('Character(97) is ' + Character(97))
+                
+                // Character sets UTF8 vs Unicode
+                Send AddLn ("<br><b>Converting strings between OEM AND UTF8</b>")
+                Move "München" to sTest
+                Send AddLn ('This is the original UTF8 string: ' + sTest)
+                Send AddLn ('UTF8 to OEM: ' + Utf8ToOem(sTest))
+                Send AddLn ('UTF8 to ANSI: ' + Utf8ToAnsi(sTest))
+                Send AddLn ('OEM to UTF8: ' + OemToUtf8(sTest))
+                //Send AddLn ('OEM to ANSI: ' + OemToAnsi(sTest)) // This fail in the JSON sent to the browser
+                Send AddLn ('ANSI to UTF8: ' + AnsiToUtf8(sTest))
+                //Send AddLn ('ANSI to OEM: ' + AnsiToOem(sTest)) // This fail in the JSON sent to the browser
+
+                Send AddLn ('UTF8 to OEM and back: ' + OemToUtf8(Utf8ToOem(sTest)))
+                Send AddLn ('UTF8 to ANSI and back: ' + AnsiToUtf8(Utf8ToAnsi(sTest)))
+                Send AddLn ('OEM to UTF8 and back: ' + Utf8ToOem(OemToUtf8(sTest)))
+                Send AddLn ('ANSI to UTF8 and back: ' + Utf8ToAnsi(AnsiToUtf8(sTest)))
+                Send AddLn ('ANSI to UTF8 to OEM: ' + OemToUtf8(AnsiToUtf8(sTest)))
+                Send AddLn ('OEM to UTF8 to ANSI: ' + AnsiToUtf8(OemToUtf8(sTest)))
+                
+                // ' or " quotes?
+                Send AddLn ('<br><b>"Double quotes"</b> and ' + "<b>'Singel quotes'</b> have the same functionallity. Just don't mix them in a sentence.")
+                
+                // ; for writing multiple lines, but does it work with text?
+                Send AddLn ("<br><b>Code over multiple lines</b>")
+                Send AddLn ("If you want to write your code over multiple";
+                            + " lines you can Use ; at the End of each line";
+                            + " to indicate that it continues on the next row.")
+                
+                // Character(10) and 13? For new line.
+                Send AddLn ("<br><b>Adding new lines in text with 'CR' Character(10) and sometimes 'LF' Character(13)</b>")
+                Send AddLn ("<pre>This is a LF" + Character(10) + "new line and this is a CR" + Character(13) + "new line. Here they are" + Character(10) + Character(13) + "together</pre>")
+                Send AddLn ('Read more at <a href="https://en.wikipedia.org/wiki/Newline">https://en.wikipedia.org/wiki/Newline</a>')
+                
+                // String functions https://docs.dataaccess.com/dataflexhelp/mergedProjects/LanguageReference/String_Functions.htm
+                Send AddLn ("<br><b>String functions</b>")
+                Send AddLn ('Center("abcde", 3) "' + Center("abcde", 3) + '"')
+                Send AddLn ('Center("abcde", 10) "' + Replaces(" ", Center("abcde", 10), "&nbsp;") + '"')
+                Send AddLn ('FormatNumber(123456.789, 2) "' + FormatNumber(123456.789, 2) + '"')
+                Send AddLn ('Lowercase("ABCD") "' + Lowercase("ABCD") + '"')
+                Send AddLn ('Uppercase("abcd") "' + Uppercase("abcd") + '"')
+                Send AddLn ('Overstrike("123456", "abcdef", -4) "' + Overstrike("123456", "abcdef", -4) + '" Expected return "456def", looks like it stopped working with negative numbers')
+                Send AddLn ('Overstrike("123456", "abcdef", 4) "' + Overstrike("123456", "abcdef", 4) + '"')
+                Send AddLn ('Overstrike("123456", "abcdef", 18) "' + Replaces(" ", Overstrike("123456", "abcdef", 18), "&nbsp;") + '"')
+                
+
+                // Concatinate using + - * and /?
+                Send AddLn ("<br><b>Concatenate strings</b>")
+                Send AddLn ('"abc" + "def" => ' + ("abc" + "def") + '" - Concatenate as is')
+                Send AddLn ('"abc" - "def" => ' + ("abc" - "def") + '" - Remove spaces')
+                Send AddLn ('"abc" * "def" => ' + ("abc" * "def") + '" - Reduces spaces to one between concatinated words')
+                
+                Send AddLn ('<br>" abc " + " def " => ' + Replaces(" ", (" abc " + " def "), "&nbsp;") + '" - Concatenate as is')
+                Send AddLn ('" abc " - " def " => ' + (" abc " - " def ") + '" - Remove spaces')
+                Send AddLn ('" abc " * " def " => ' + (" abc " * " def ") + '" - Reduces spaces to one between concatinated words')
+
+                Send AddLn ('<br>"&nbsp;&nbsp;abc&nbsp;&nbsp;" * "&nbsp;&nbsp;def&nbsp;&nbsp;" => ' + Replaces(" ", ("  abc  " * "  def  "), "&nbsp;") + '" - Reduces spaces to one between concatinated words')
+                
+                // String manipulation Mid Pos Replace
+                Send AddLn ("<br><b>Manipulate strings</b>")
+                Send AddLn ('Insert("bbbb", "aaaaaaaaa", 4) "' + Insert("bbbb", "aaaaaaaaa", 4) + '"')
+                Send AddLn ('Left("abcdefgh", 4) "' + Left("abcdefgh", 4) + '"')
+                Send AddLn ('Right("abcdefgh", 4) "' + Right("abcdefgh", 4) + '"')
+                Move (Pos("cde", "abcdefgh")) to iCnt
+                Send AddLn ('Pos("cde", "abcdefgh") to iCnt "' + String(iCnt) + '"')
+                Send AddLn ('Mid("abcdefgh", 2, iCnt) "' + Mid("abcdefgh", 2, iCnt) + '"')
+                
+                // Replace functions
+                Send AddLn ("<br><b>Replace functions</b>")
+                Send AddLn ('Replace("a", "abaababaabb", "c") "' + Replace("a", "abaababaabb", "c") + '" - Replace the first occurance')
+                Send AddLn ('Replaces("a", "abaababaabb", "c") "' + Replaces("a", "abaababaabb", "c") + '" - Replace all occurances')
+
+                // Eval
+                Send AddLn ("<br><b>Run code from string with Eval</b>")
+                Send AddLn ('Eval("3 + 4") = ' + Eval("3 + 4") + '')
+                Move "abcde" to sTest
+                Send AddLn ('Eval("Center(sTest, 3)") => "' + Eval("Center(sTest, 3)") + '" - WARNING: This should be used with care, not all code will evaluate. Read the documentation.')
+                
+
+
+                Send Deactivate to oErrorEventHandler
+                // --- Tests End Here ---
+            End_Procedure
+            
+            
+            Procedure AddLn String sText
+                String sFullText sNewLine
+                //Move (Character(10)) to sNewLine
+                Move "<br>" to sNewLine
+                WebGet psHtml of oWebHtmlBox1 to sFullText
+                Move (sFullText + sNewLine + sText) to sFullText
+                WebSet psHtml of oWebHtmlBox1 to sFullText
+            End_Procedure
+        End_Object
+        
+
+        
+    End_Object 
+    
+    Procedure OnShow
+        Send EvaluateString of oWebHtmlBox1
+    End_Procedure
+
+
+
+    Object oErrorEventHandler is a cErrorEventHandler
+        
+        Procedure OnError Integer iError String sErrorText Integer iErrorLine
+            Send None
+        End_Procedure
+        
+    End_Object
+
+End_Object

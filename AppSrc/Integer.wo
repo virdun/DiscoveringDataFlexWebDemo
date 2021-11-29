@@ -41,7 +41,7 @@ Object oInteger is a cWebView
 //                If (bTest) Send AddLn "An unassigned Boolean is <b>True</b> by default... But it is good practice to assign a value before use."
 //                Else Send AddLn "An unassigned Boolean is <b>False</b> by default... <i>But it is good practice to always assign a value before use.</i>"
                 
-                Send AddLn "<br><b>Maxing out an integer</b>"
+                Send AddLn "<b>Maxing out an integer</b>"
                 Move 2147483647 to iTest
                 Send AddLn ("iTest is now <b>" + String(iTest) + "</b>, the maximum size of an integer in DataFlex")
                 Move (iTest + 1) to iTest
