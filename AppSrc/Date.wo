@@ -1,0 +1,237 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg 
+Use cWebDateForm.pkg
+
+Object oDate is a cWebView
+    Set piWidth to 700
+    Set psCaption to "Date"
+    Set pbServerOnShow to True
+
+    // Your DDO structure will go here
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oWebDateForm1 is a cWebDateForm
+            Set piColumnSpan to 3
+            Set psLabel to "9-01-01"
+            Set peLabelPosition to lpTop
+        End_Object
+
+        Object oWebDateForm2 is a cWebDateForm
+            Set piColumnSpan to 3
+            Set psLabel to "10-01-01"
+            Set piColumnIndex to 3
+            Set peLabelPosition to lpTop
+        End_Object
+
+        Object oWebDateForm3 is a cWebDateForm
+            Set piColumnSpan to 3
+            Set psLabel to "50-01-01"
+            Set piColumnIndex to 6
+            Set peLabelPosition to lpTop
+        End_Object
+        Object oWebDateForm4 is a cWebDateForm
+            Set piColumnSpan to 3
+            Set psLabel to "51-01-01"
+            Set piColumnIndex to 9
+            Set peLabelPosition to lpTop
+        End_Object
+        
+        Object oWebHtmlBox1 is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to ""
+            
+            Procedure EvaluateDate
+                // --- Integer Test Code ---
+                Integer iTest
+                String sTmp sTest sLastTest
+                String[] asTest
+                Integer iCnt iTot
+                Date dTest dLast
+                DateTime dtTest
+                
+                Send Activate to oErrorEventHandler
+                
+                // Dates range from 01/01/0001 to 01/01/2500
+                // Dates range from ? to 23/11/58794 (21474835)
+                Send AddLn "<b>Maxing out a date</b>"
+                Move (Date(21474833)) to dTest
+                While ((String(dTest)) <> '')
+                    Send AddLn ("dTest is now: <b>" + String(dTest) + "</b> " + String(Integer(dTest)))
+                    Move dTest to dLast
+                    Increment dTest
+                Loop
+                Send AddLn ("Dates over " + String(dLast) + " is converted to '' an empty string.<br><i>The documentation says <b>2500-01-01</b> is the maximum.</i>")
+                
+                Send AddLn "<br><b>Testing for lowest date by integer</b>"
+                Move (Date(0)) to dTest
+                Send AddLn ("0: <b>" + String(dTest) + "</b> " + String(Integer(dTest)))
+                Move (Date(1)) to dTest
+                Send AddLn ("1: <b>" + String(dTest) + "</b> " + String(Integer(dTest)))
+                Move (Date(730500)) to dTest
+                Send AddLn ("730500: <b>" + String(dTest) + "</b> " + String(Integer(dTest)))
+                Move (Date(730499)) to dTest
+                Send AddLn ("730499: <b>" + String(dTest) + "</b> " + String(Integer(dTest)))
+                
+                Send AddLn "<br><b>Testing for lowest date by date</b>"        
+                Move '2000-01-02' to dTest
+                Send AddLn ("2000-01-02: <b>" + String(dTest) + "</b> " + String(Integer(dTest)))
+                Move '2000-01-02' to dTest
+                Move (dTest-1) to dTest
+                Send AddLn ("2000-01-02 -1: <b>" + String(dTest) + "</b> " + String(Integer(dTest)))
+                Move (dTest-1) to dTest
+                Send AddLn ("2000-01-01 -1: <b>" + String(dTest) + "</b> " + String(Integer(dTest)))
+                
+                Send AddLn "<br><b>Trying really low dates</b>"
+                Move '543-12-28' to dTest
+                Send AddLn ("543-12-28: <b>" + String(dTest) + "</b> " + String(Integer(dTest)))
+                Move '43-01-01' to dTest
+                Send AddLn ("43-01-01: <b>" + String(dTest) + "</b> " + String(Integer(dTest)))
+                Move '3-01-01' to dTest
+                Send AddLn ("3-01-01: <b>" + String(dTest) + "</b> " + String(Integer(dTest)))
+                
+                Send AddLn "<br><b>Trying with lowest dates according to documentation</b>"
+                Move '0001-01-01' to dTest
+                Send AddLn ("0001-01-01: <b>" + String(dTest) + "</b> " + String(Integer(dTest)) + "<br><i>According to the documentation <b>0001-01-01</b> is the lowest date available</i>")
+                Move '0000-01-01' to dTest
+                Send AddLn ("0000-01-01: <b>" + String(dTest) + "</b> " + String(Integer(dTest)))
+                
+                Send AddLn "<br><b>Something is weard below the year 100</b>"                
+                Move '99-01-01' to dTest
+                Send AddLn ("99-01-01: <b>" + String(dTest) + "</b> " + String(Integer(dTest)))
+                Move (Date(730135)) to dTest
+                Send AddLn ("Date(730135): <b>" + String(dTest) + "</b> " + String(Integer(dTest)))
+                Move '100-01-01' to dTest
+                Send AddLn ("100-01-01: <b>" + String(dTest) + "</b> " + String(Integer(dTest)))
+                Move (Date(36524)) to dTest
+                Send AddLn ("Date(36524): <b>" + String(dTest) + "</b> " + String(Integer(dTest)))
+                Move '100-01-01' to dTest
+                Move (dTest-1) to dTest
+                Send AddLn ("100-01-01 -1: <b>" + String(dTest) + "</b> " + String(Integer(dTest)))
+
+                Send AddLn ('<br><b>Counting down dates</b>')
+                Move 36527 to iTest
+                While ((Integer(iTest)) > 36521)
+                    Move (Date(iTest)) to dTest
+                    Send AddLn ((String(iTest)) + " => <b>" + String(dTest) + "</b> => " + String(Integer(dTest)))
+                    Move dTest to dLast
+                    Move (iTest-1) to iTest
+                Loop
+                Send AddLn ('....')
+                Move 10960 to iTest
+                While ((Integer(iTest)) > 10955)
+                    Move (Date(iTest)) to dTest
+                    Send AddLn ((String(iTest)) + " => <b>" + String(dTest) + "</b> => " + String(Integer(dTest)))
+                    Move dTest to dLast
+                    Move (iTest-1) to iTest
+                Loop
+                Send AddLn ('...')
+                Move 5 to iTest
+                While ((Integer(iTest)) > -1)
+                    Move (Date(iTest)) to dTest
+                    Send AddLn ((String(iTest)) + " => <b>" + String(dTest) + "</b> => " + String(Integer(dTest)))
+                    Move dTest to dLast
+                    Move (iTest-1) to iTest
+                Loop
+
+                Send AddLn ('<br><b>How about negative dates...</b>')
+                Move (Date(-182625)) to dTest
+                Send AddLn ("-182625: <b>" + String(dTest) + "</b> " + String(Integer(dTest)))
+                Move '-500-01-01' to dTest
+                Send AddLn ("-500-01-01: <b>" + String(dTest) + "</b> " + String(Integer(dTest)))
+                
+                
+                Send AddLn ('<br><b>Changing date format</b>')
+                Send AddLn ('<i>Remember that the settings can differ between development environment and production and even between running in debug mode and without the debugger, depending on the settings of the user.</i>')
+                // https://docs.dataaccess.com/dataflexhelp/mergedProjects/LanguageReference/DF_DATE_FORMAT_Attribute.htm
+                //DF_DATE_USA   12/31/2005
+                //DF_DATE_EUROPEAN  31/12/2005
+                //DF_DATE_MILITARY  2005/12/31
+                Move '2021-11-28' to dTest
+                Set_Attribute DF_DATE_FORMAT to DF_DATE_USA
+                Set_Attribute DF_DATE_SEPARATOR to (Ascii('/'))
+                Send AddLn ("<b>DF_DATE_USA</b>: " + String(dTest))
+                
+                Set_Attribute DF_DATE_FORMAT to DF_DATE_EUROPEAN
+                Set_Attribute DF_DATE_SEPARATOR to (Ascii('*'))
+                Send AddLn ("<b>DF_DATE_EUROPEAN</b>: " + String(dTest))
+                
+                Set_Attribute DF_DATE_FORMAT to DF_DATE_MILITARY
+                Set_Attribute DF_DATE_SEPARATOR to (Ascii('-'))
+                Send AddLn ("<b>DF_DATE_MILITARY</b>: " + String(dTest))
+
+                // Use Left, Right and Mid to extract date information
+                Send AddLn ('<br><b>Extracting values from date</b>')
+                Move (Left(dTest, 4)) to sTest
+                Send AddLn ("<b>YEAR</b> Left('" + String(dTest) + "', 4): " + sTest)
+                Move (Mid(dTest, 2, 6)) to sTest
+                Send AddLn ("<b>MONTH</b> Mid('" + String(dTest) + "', 2, 6): " + sTest)
+                Move (Right(dTest, 2)) to sTest
+                Send AddLn ("<b>DAY</b> Right('" + String(dTest) + "', 2): " + sTest)
+                
+                // Time and Date functions https://docs.dataaccess.com/dataflexhelp/mergedProjects/LanguageReference/Time_and_Date_Functions.htm
+                Send AddLn ('<br><b>Date functions</b>')
+                Send AddLn ("DateGetDay('" + String(dTest) + "'): <b>" + String(DateGetDay(dTest)) + "</b>")
+                Send AddLn ("DateGetDayOfWeek('" + String(dTest) + "'): <b>" + String(DateGetDayOfWeek(dTest)) + "</b> 1=Sunday, 2=Monday, 3=Tuesday, 4=Wednesday, 5=Thursday, 6=Friday, 7=Saturday")
+                Send AddLn ("DateGetDayofWeekISO('" + String(dTest) + "'): <b>" + String(DateGetDayofWeekISO(dTest)) + "</b> 1=Monday, 2=Tuesday, 3=Wednesday, 4=Thursday, 5=Friday, 6=Saturday, 7=Sunday")
+                Send AddLn ("DateGetDayofWeek_WDS('" + String(dTest) + "'): <b>" + String(DateGetDayofWeek_WDS(dTest)) + "</b> Pick your own day of 1-7 to start the week")
+                Send AddLn ("DateGetDayOfYear('" + String(dTest) + "'): <b>" + String(DateGetDayOfYear(dTest)) + "</b>")
+                Send AddLn ("DateGetMonth('" + String(dTest) + "'): <b>" + String(DateGetMonth(dTest)) + "</b>")
+                Send AddLn ("DateGetWeekOfYear('" + String(dTest) + "'): <b>" + String(DateGetWeekOfYear(dTest)) + "</b> Starts with the week containing Jan 1:st")
+                Send AddLn ("DateGetWeekOfYearISO('" + String(dTest) + "'): <b>" + String(DateGetWeekOfYearISO(dTest)) + "</b> Adhers to ISO 8601 which may have Jan 1:st in the last week of the previous year")
+                Send AddLn ("DateGetWeekOfYear_WDS('" + String(dTest) + "'): <b>" + String(DateGetWeekOfYear_WDS(dTest)) + "</b> Starts counting on Jan 1:st but you can deside starting day of the week. Use this if you want to cause trouble... or you really know what you are doing")
+                Send AddLn ("DateGetYear('" + String(dTest) + "'): <b>" + String(DateGetYear(dTest)) + "</b>")
+                Send AddLn ("DateGetYearOfWeekISO('" + String(dTest) + "'): <b>" + String(DateGetYearOfWeekISO(dTest)) + "</b> Used to get year of week in combination with <b>DateGetWeekOfYearISO</b>")
+                Send AddLn ("IsDateValid('" + String(dTest) + "'): <b>" + String(IsDateValid(dTest)) + "</b>")
+                Move '2021-22-49' to dLast
+                Send AddLn ("Testing 2021-22-49 -> IsDateValid('" + String(dLast) + "'): <b>" + String(IsDateValid(dLast)) + "</b>")
+                Move '2021-11-09' to dLast
+                Move (DateSetDay(dLast, 99)) to dLast
+                Send AddLn ("Testing 2021-11-99 using DateSetDay() -> IsDateValid('" + String(dLast) + "'): <b>" + String(IsDateValid(dLast)) + "</b>")
+                DateTime dtVar
+                Move (DateSetDay(dLast, 99)) to dtVar
+                Send AddLn ("Testing 2021-11-99 using DateSetDay() on DateTime variable -> IsDateValid('" + String(dtVar) + "'): <b>" + String(IsDateValid(dtVar)) + "</b>")
+
+                // Time diff
+                Send AddLn ('<br><b>Calculating time DIFF</b>')
+                Move (Date("2021-12-18")-Date("2021-12-10")) to iCnt
+                Send AddLn ('Date("2021-12-18")-Date("2021-12-10"): <b>' + String(iCnt) + "</b>")
+                Move (Date("2021-12-18")-Date("2020-11-10")) to iCnt
+                Send AddLn ('Date("2021-12-18")-Date("2021-12-10"): <b>' + String(iCnt) + "</b>")
+
+                Send Deactivate to oErrorEventHandler
+                // --- Tests End Here ---
+            End_Procedure
+            
+            
+            Procedure AddLn String sText
+                String sFullText sNewLine
+                //Move (Character(10)) to sNewLine
+                Move "<br>" to sNewLine
+                WebGet psHtml of oWebHtmlBox1 to sFullText
+                Move (sFullText + sNewLine + sText) to sFullText
+                WebSet psHtml of oWebHtmlBox1 to sFullText
+            End_Procedure
+        End_Object
+        
+
+        
+    End_Object 
+    
+    Procedure OnShow
+        Send EvaluateDate of oWebHtmlBox1
+    End_Procedure
+
+
+
+    Object oErrorEventHandler is a cErrorEventHandler
+        
+        Procedure OnError Integer iError String sErrorText Integer iErrorLine
+            Send None
+        End_Procedure
+        
+    End_Object
+
+End_Object
