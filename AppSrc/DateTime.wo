@@ -1,0 +1,366 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg 
+Use cWebDateForm.pkg
+Use cWebButton.pkg
+
+Object oDateTime is a cWebView
+    Set piWidth to 700
+    Set psCaption to "Date and Time"
+    Set pbServerOnShow to True
+
+    // Your DDO structure will go here
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oWebHtmlBox1 is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to ""
+            
+            Procedure EvaluateDateTime
+                // --- DateTime Test Code ---
+                Integer iTest
+                String sTmp sTest sLastTest
+                String[] asTest
+                Integer iCnt iTot
+                DateTime dtTest dtLast
+                Time tmTest
+                TimeSpan tsTest tsLast tsIncrement
+                
+                Send Activate to oErrorEventHandler
+                
+                Send AddLn "<b>Maxing out DateTime</b>"
+                Move ("32765-12-31 11:59:59.998") to dtTest
+                Move dtTest to dtLast
+                While (dtTest >= dtLast)
+                    Send AddLn ("dtTest is now: <b>" + String(dtTest) + "</b> ")
+                    Move dtTest to dtLast
+                    Move (DateAddYear(dtTest, 1)) to dtTest
+                Loop
+                Send AddLn ("Years over " + String(dtLast) + " becomes " + String(dtTest) + ".<br><i>The documentation says <b>Valid range for the DateTime type is 1/1/-32768 12:00:00.000 AM to 12/31/32767 11:59:59.999 PM.</b></i>")
+                
+                // TimeSpan can store a span of time of up to 65,535 days.
+                Send AddLn "<br>w<b>Maxing out TimeSpan</b>"
+                Move (DateSetDay(tsTest, 65533)) to tsTest
+                Move (DateSetDay(tsIncrement, 1)) to tsIncrement
+                Move tsTest to tsLast
+                While (tsTest >= tsLast)
+                    Send AddLn ("tsTest is now: <b>" + String(tsTest) + "</b> ")
+                    Move tsTest to tsLast
+                    Move (tsTest + tsIncrement) to tsTest
+                Loop
+                Send AddLn ("Days over " + String(tsLast) + " becomes " + String(tsTest) + ".<br>")
+
+                Move (DateSetDay(tsTest, 0)) to tsTest
+                Move (DateSetDay(tsIncrement, 0)) to tsIncrement
+                Move (DateSetHour(tsTest, 21)) to tsTest
+                Move (DateSetHour(tsIncrement, 1)) to tsIncrement
+                Move (DateSetDay(tsLast, 1)) to tsLast
+                While (tsTest < tsLast)
+                    Send AddLn ("tsTest is now: <b>" + String(tsTest) + "</b> ")
+                    Move tsTest to sTest
+                    Move (tsTest + tsIncrement) to tsTest
+                Loop
+                Send AddLn ("Hours over " + String(sTest) + " becomes " + String(tsTest) + ".<br>")
+
+                
+                Send AddLn "<br><b>Milliseconds</b>"
+                Send AddLn ("How many milliseconds does it take to count to 10 000 000?")
+                Move (CurrentDateTime()) to dtTest
+                Move 0 to iTest
+                While (iTest < 10000000)
+                    Move (iTest + 1) to iTest
+                Loop
+                Move (CurrentDateTime()) to dtLast
+                Move (dtLast - dtTest) to tsTest
+                Send AddLn ("DateGetMilliseconds: " + String(DateGetMillisecond(tsTest)) + " ms</b>.")
+                Send AddLn ("The answer is <b>" + String(SpanTotalMilliseconds(tsTest)) + " ms</b>.")
+
+                Send AddLn ("<br>Can we get 1 day in milliseconds?")
+                Move (DateSetDay(tsTest, 1)) to tsTest
+                Send AddLn ("DateGetMilliseconds: " + String(DateGetMillisecond(tsTest)) + "</b>.")
+                Send AddLn ("<i>It only returns the millisecond part of " + String(tsTest) + "</i>.")
+                                
+                Send AddLn ("<br>There is no DateGetTotalMilliseconds that does this...")
+                Move 0 to iTot
+                Move ((DateGetMillisecond(tsTest)) + iTot) to iTot
+                Move ((DateGetSecond(tsTest) * 1000) + iTot) to iTot
+                Move ((DateGetMinute(tsTest) * 60 * 1000) + iTot) to iTot
+                Move ((DateGetHour(tsTest) * 60 * 60 * 1000) + iTot) to iTot
+                Move ((DateGetDay(tsTest) * 24 * 60 * 60 * 1000) + iTot) to iTot
+                Send AddLn ("Sum of milliseconds: " + String(iTot) + "</b>.")
+                
+                Send AddLn ("<br>...but there is a <b>SpanTotalMilliseconds</b> instead")
+                Move (DateSetDay(tsTest, 1)) to tsTest
+                Send AddLn ("SpanTotalMilliseconds: " + String(SpanTotalMilliseconds(tsTest)) + "</b>.")
+                Send AddLn ("<i>These functions also exist for all items (seconds, minutes, hours and days)</i>.")
+                
+                Send AddLn ("<br>Can we get the total of months or years from a TimeSpan through the DateGet-functions?")
+                Move (DateSetDay(tsTest, 90)) to tsTest
+                Send AddLn ("DateGetMonth(90): " + String(DateGetMonth(tsTest)) + "</b>. (Nope, but it make sense since there is no fixed days in a month)")
+                Move (DateSetDay(tsTest, 582)) to tsTest
+                Send AddLn ("DateGetYear(582): " + String(DateGetYear(tsTest)) + "</b>. (Nope, but it make sense since there is no fixed days in a year")
+                Move (DateSetDay(tsTest, 25)) to tsTest
+                Send AddLn ("DateGetDay(25): " + String(DateGetDay(tsTest)) + "</b>. (This work fine as expected)")
+                
+                Send AddLn ("<br>But what about the DateGetDayOfYear?")
+                Move (DateSetDay(tsTest, 90)) to tsTest
+                Send AddLn ("DateGetDayOfYear(90): " + String(DateGetDayOfYear(tsTest)) + "</b>. (Nope, probably since it is a mess to handle uncomplete weeks like this...)")
+                
+                
+                Send AddLn ("<br><b>Null-values usually comes from the database</b>, but can we get them if we do not assign any data to a variable?")
+                DateTime dtEmpty
+                If (IsNullDateTime(dtEmpty)) Begin
+                    Send AddLn ("Yes, it is initiated as NULL.")
+                End
+                Else Begin
+                   Send AddLn ("No, it is initiated as " + String(dtEmpty) + ".") 
+                End
+                
+                Send AddLn ("<br>Can we change a DateTime variable to NULL?")
+                Move (DateSetDay(dtEmpty, 90)) to dtEmpty
+                Send AddLn ("DateSetDay(90): " + String(dtEmpty) + "</b>")
+                Move (NullDateTime()) to dtEmpty
+                Send AddLn ("NullDateTime(): " + String(dtEmpty) + "</b>")
+                If (IsNullDateTime(dtEmpty)) Begin
+                    Send AddLn ("Yes, it is initiated as NULL.")
+                End
+                Else Begin
+                   Send AddLn ("No, it is initiated as " + String(dtEmpty) + ".") 
+                End
+                
+                
+                Send AddLn ('<br><b>Changing date format is not effecting the format in the code</b>')
+                // https://docs.dataaccess.com/dataflexhelp/mergedProjects/LanguageReference/DF_DATE_FORMAT_Attribute.htm
+                //DF_DATE_USA   12/31/2005
+                //DF_DATE_EUROPEAN  31/12/2005
+                //DF_DATE_MILITARY  2005/12/31
+                Move '2021-11-28' to dtTest
+                Set_Attribute DF_DATE_FORMAT to DF_DATE_USA
+                Set_Attribute DF_DATE_SEPARATOR to (Ascii('/'))
+                Send AddLn ("<b>DF_DATE_USA</b>: " + String(dtTest))
+                
+                Set_Attribute DF_DATE_FORMAT to DF_DATE_EUROPEAN
+                Set_Attribute DF_DATE_SEPARATOR to (Ascii('*'))
+                Send AddLn ("<b>DF_DATE_EUROPEAN</b>: " + String(dtTest))
+                
+                Set_Attribute DF_DATE_FORMAT to DF_DATE_MILITARY
+                Set_Attribute DF_DATE_SEPARATOR to (Ascii('-'))
+                Send AddLn ("<b>DF_DATE_MILITARY</b>: " + String(dtTest))
+                
+
+
+
+                // Use Left, Right and Mid to extract date information
+                Send AddLn ('<br><b>Extracting values from date</b>')
+                Move (Left(dtTest, 4)) to sTest
+                Send AddLn ("<b>YEAR</b> Left('" + String(dtTest) + "', 4): " + sTest)
+                Move (Mid(dtTest, 2, 6)) to sTest
+                Send AddLn ("<b>MONTH</b> Mid('" + String(dtTest) + "', 2, 6): " + sTest)
+                Move (Right(dtTest, 2)) to sTest
+                Send AddLn ("<b>DAY</b> Right('" + String(dtTest) + "', 2): " + sTest)
+                
+                // Time and Date functions https://docs.dataaccess.com/dataflexhelp/mergedProjects/LanguageReference/Time_and_Date_Functions.htm
+                Send AddLn ('<br><b>Date functions</b>')
+                Send AddLn ("<b>DateGetDay</b>('" + String(dtTest) + "'): <b>" + String(DateGetDay(dtTest)) + "</b>")
+                Send AddLn ("<b>DateGetDayOfWeek</b>('" + String(dtTest) + "'): <b>" + String(DateGetDayOfWeek(dtTest)) + "</b> 1=Sunday, 2=Monday, 3=Tuesday, 4=Wednesday, 5=Thursday, 6=Friday, 7=Saturday")
+                Send AddLn ("<b>DateGetDayofWeekISO</b>('" + String(dtTest) + "'): <b>" + String(DateGetDayofWeekISO(dtTest)) + "</b> 1=Monday, 2=Tuesday, 3=Wednesday, 4=Thursday, 5=Friday, 6=Saturday, 7=Sunday")
+                Send AddLn ("<b>DateGetDayofWeek_WDS</b>('" + String(dtTest) + "'): <b>" + String(DateGetDayofWeek_WDS(dtTest)) + "</b> Pick your own day of 1-7 to start the week")
+                Send AddLn ("<b>DateGetDayOfYear</b>('" + String(dtTest) + "'): <b>" + String(DateGetDayOfYear(dtTest)) + "</b>")
+                Send AddLn ("<b>DateGetMonth</b>('" + String(dtTest) + "'): <b>" + String(DateGetMonth(dtTest)) + "</b>")
+                Send AddLn ("<b>DateGetWeekOfYear</b>('" + String(dtTest) + "'): <b>" + String(DateGetWeekOfYear(dtTest)) + "</b> Starts with the week containing Jan 1:st")
+                Send AddLn ("<b>DateGetWeekOfYearISO</b>('" + String(dtTest) + "'): <b>" + String(DateGetWeekOfYearISO(dtTest)) + "</b> Adhers to ISO 8601 which may have Jan 1:st in the last week of the previous year")
+                Send AddLn ("<b>DateGetWeekOfYear_WDS</b>('" + String(dtTest) + "'): <b>" + String(DateGetWeekOfYear_WDS(dtTest)) + "</b> Starts counting on Jan 1:st but you can deside starting day of the week. Use this if you want to cause trouble... or you really know what you are doing")
+                Send AddLn ("<b>DateGetYear</b>('" + String(dtTest) + "'): <b>" + String(DateGetYear(dtTest)) + "</b>")
+                Send AddLn ("DateGet<b>YearOfWeek</b>ISO('" + String(dtTest) + "'): <b>" + String(DateGetYearOfWeekISO(dtTest)) + "</b> Used to get year of week in combination with DateGet<b>WeekOfYear</b>ISO")
+                Send AddLn ("")
+                Send AddLn ("IsDateValid('" + String(dtTest) + "'): <b>" + String(IsDateValid(dtTest)) + "</b>")
+                DateTime dtVar
+                Move (DateSetDay(dtTest, 99)) to dtVar
+                Send AddLn ("Testing 2021-11-99 using DateSetDay() on DateTime variable -> IsDateValid('" + String(dtVar) + "'): <b>" + String(IsDateValid(dtVar)) + "</b>")
+
+                // Time diff
+                Send AddLn ('<br><b>Calculating time DIFF as TimeSpan</b>')
+                Move "2021-12-18" to dtTest
+                Move "2021-11-10" to dtLast
+                Move (dtTest-dtLast) to tsTest
+                Send AddLn ('(dtTest-dtLast): <b>' + String(tsTest) + "</b>")
+                Move "2021-12-18" to dtTest
+                Move "2021-11-10" to dtLast
+                Move (dtLast-dtTest) to tsTest
+                Send AddLn ('(dtLast-dtTest): <b>' + String(tsTest) + "</b>")
+                
+                Send AddLn ("<br><b>Time</b>")
+                Time tmVar
+                Move (DateSetHour  (tmVar, 18)) to tmVar
+                Move (DateSetMinute(tmVar, 10)) to tmVar
+                Move (DateSetSecond(tmVar, 30)) to tmVar
+                Send AddLn ('Time created by DateSet[<i>Hour, Minute, Second</i>]: <b>' + String(tmVar) + "</b>")
+                
+                Move ("15:30:46") to tmTest
+                Send AddLn ('Time created using a string: <b>' + String(tmTest) + "</b>")
+                
+                Send AddLn ("<br>Does the <b>Time</b> work the same as <b>DateTime</b> with <b>TimeSpan</b>?")
+                Move (DateSetHour(tsTest, 1)) to tsTest
+                Move (DateSetMinute(tsTest, 50)) to tsTest
+                Move (DateSetSecond(tsTest, 28)) to tsTest
+                Send AddLn ("<br><b>TM:</b> " + String(tmTest) + " + <b>TS:</b> " + String(tsTest))
+                Move (tmTest + tsTest) to tmTest
+                Send AddLn ('Adding a Time to a TimeSpan gives: <span style="color: #c00;"><b>' + String(tmTest) + "</b></span>")
+
+                Send AddLn ("<br><b>TM:</b> " + String(tmTest) + " + <b>I:</b> " + String(15))
+                Move (tmTest + 15) to tmTest
+                Send AddLn ('Adding 15 to Time gives: <span style="color: #c00;"><b>' + String(tmTest) + "</b></span>")
+
+                Send AddLn ("<br><b>TM:</b> " + String(tmTest) + " + <b>TM:</b> " + String(tmVar))
+                Move (tmTest + tmVar) to tmTest
+                Send AddLn ('Adding <b>Time</b> + <b>Time</b> gives: <span style="color: #c00;"><b>' + String(tmTest) + "</b></span>")
+
+
+                Move ("15:30:46") to tmTest
+                
+                Move (DateSetDay(tsLast, 0)) to tsLast
+                Move (DateSetHour(tsLast, 0)) to tsLast
+                Move (DateSetMinute(tsLast, 0)) to tsLast
+                Move (DateSetSecond(tsLast, 0)) to tsLast
+
+                Move (DateSetDay(tsTest, 0)) to tsTest
+                Move (DateSetHour(tsTest, 1)) to tsTest
+                Move (DateSetMinute(tsTest, 50)) to tsTest
+                Move (DateSetSecond(tsTest, 28)) to tsTest
+
+                Send AddLn ("<br>Initial values <b>TM:</b> " + String(tmTest) + " and <b>TS:</b> " + String(tsLast) + "")
+                Move tmTest to tsLast
+                Send AddLn ("<b>TM:</b> " + String(tmTest) + ' => <span style="color: #c00;"><b>TS:</b> ' + String(tsLast) + "</span>")
+                Send AddLn ("<b>TS:</b> " + String(tsLast) + " + <b>TS:</b> " + String(tsTest) + "")
+                Move (tsLast + tsTest) to tsTest
+                Send AddLn ("=> <b>TS:</b> " + String(tsTest) + "")
+                Move tsTest to tmTest
+                Send AddLn ("<b>TS:</b> " + String(tsTest) + " => <b>TM:</b> " + String(tmTest) + "")
+                Send AddLn ('Adding <b>TimeSpan</b> to a <b>TimeSpan</b> and converting to <b>Time</b> gives: <span style="color: #c00;"><b>TM: ' + String(tmTest) + "</b></span>")
+                
+
+                Move (DateSetDay(tsTest, 0)) to tsTest
+                Move (DateSetHour(tsTest, 1)) to tsTest
+                Move (DateSetMinute(tsTest, 50)) to tsTest
+                Move (DateSetSecond(tsTest, 28)) to tsTest
+
+                Move tmTest to dtLast
+                Send AddLn ("<br><b>TM:</b> " + String(tmTest) + " => <b>DT:</b> " + String(dtLast) + "")
+                Send AddLn ("<b>DT:</b> " + String(dtLast) + " + <b>TS:</b> " + String(tsTest) + "")
+                Move (dtLast + tsTest) to dtTest
+                Send AddLn ("=> <b>DT:</b> " + String(dtTest) + "")
+                Move dtTest to tmTest
+                Send AddLn ('Adding <b>DateTime</b> to a <b>TimeSpan</b> and converting to <b>Time</b> gives: <span style="color: #0c0;"><b>TM: ' + String(tmTest) + "</b></span>")
+
+                Move (DateGetMinute(tmTest)) to iTest
+                Send AddLn ('<br>Can I get the minute part using DateGetMinute(Time("17:21:14")): <span style="color: #0c0;"><b>' + String(iTest) + "</b></span>")
+
+                
+                Send Deactivate to oErrorEventHandler
+                // --- Tests End Here ---
+            End_Procedure
+            
+            
+            Procedure AddLn String sText
+                String sFullText sNewLine
+                //Move (Character(10)) to sNewLine
+                Move "<br>" to sNewLine
+                WebGet psHtml of oWebHtmlBox1 to sFullText
+                Move (sFullText + sNewLine + sText) to sFullText
+                WebSet psHtml of oWebHtmlBox1 to sFullText
+            End_Procedure
+        End_Object
+
+        Object oWebDateForm1 is a cWebForm
+            Set piColumnSpan to 9
+            Set psLabel to "DateForm"
+        End_Object
+
+        Object oWebButton1 is a cWebButton
+            Set piColumnSpan to 3
+            Set psCaption to "DF_DATE_USA"
+        
+            Procedure OnClick
+                Set_Attribute DF_DATE_FORMAT to DF_DATE_USA
+                Set_Attribute DF_DATE_SEPARATOR to (Ascii('/'))
+            End_Procedure
+        End_Object
+
+        Object oWebButton2 is a cWebButton
+            Set piColumnSpan to 3
+            Set psCaption to "DF_DATE_EUROPEAN"
+            Set piColumnIndex to 3
+        
+            Procedure OnClick
+                Set_Attribute DF_DATE_FORMAT to DF_DATE_EUROPEAN
+                Set_Attribute DF_DATE_SEPARATOR to (Ascii('/'))
+            End_Procedure
+        End_Object
+
+        Object oWebButton3 is a cWebButton
+            Set piColumnSpan to 3
+            Set psCaption to "DF_DATE_MILITARY"
+            Set piColumnIndex to 6
+        
+            Procedure OnClick
+                Set_Attribute DF_DATE_FORMAT to DF_DATE_MILITARY
+                Set_Attribute DF_DATE_SEPARATOR to (Ascii('-'))
+            End_Procedure
+        End_Object
+        
+                
+        Object oWebButton4 is a cWebButton
+            Set piColumnSpan to 3
+            Set psCaption to "12/31/2005"
+        
+            Procedure OnClick
+                DateTime dtTest
+                Move '12/31/2005' to dtTest
+                WebSet psValue of oWebDateForm1 to dtTest
+            End_Procedure
+        End_Object
+
+        Object oWebButton5 is a cWebButton
+            Set piColumnSpan to 3
+            Set psCaption to "31/12/2005"
+            Set piColumnIndex to 3
+        
+            Procedure OnClick
+                DateTime dtTest
+                Move '31/12/2005' to dtTest
+                WebSet psValue of oWebDateForm1 to dtTest
+            End_Procedure
+        End_Object
+
+        Object oWebButton6 is a cWebButton
+            Set piColumnSpan to 3
+            Set psCaption to "2005-12-31"
+            Set piColumnIndex to 6
+        
+            Procedure OnClick
+                DateTime dtTest
+                Move '2005-12-31' to dtTest
+                WebSet psValue of oWebDateForm1 to dtTest
+            End_Procedure
+        End_Object
+                
+        
+    End_Object 
+    
+    Procedure OnShow
+        Send EvaluateDateTime of oWebHtmlBox1
+    End_Procedure
+
+
+
+    Object oErrorEventHandler is a cErrorEventHandler
+        
+        Procedure OnError Integer iError String sErrorText Integer iErrorLine
+            Send None
+        End_Procedure
+        
+    End_Object
+
+End_Object
