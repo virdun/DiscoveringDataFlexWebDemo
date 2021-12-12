@@ -160,6 +160,11 @@ Object oWebApp is a cWebApp
                         Set psLoadViewOnClick to "oDate"
                     End_Object
 
+                    Object oDateTimeItem1 is a cWebMenuItemLoadView
+                        Set psCaption to "Date and Time"
+                        Set psLoadViewOnClick to "oDateTime"
+                    End_Object
+    
                 End_Object  
 
             End_Object  
@@ -217,6 +222,7 @@ Object oWebApp is a cWebApp
     Use Integer.wo
     Use String.wo
     Use Date.wo
+    Use DateTime.wo
     
     Function GetDefaultView Returns Handle
         Handle hView
