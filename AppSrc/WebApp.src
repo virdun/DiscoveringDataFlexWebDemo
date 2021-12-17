@@ -165,6 +165,11 @@ Object oWebApp is a cWebApp
                         Set psLoadViewOnClick to "oDateTime"
                     End_Object
     
+                    Object oRealItem1 is a cWebMenuItemLoadView
+                        Set psCaption to "Real and Number"
+                        Set psLoadViewOnClick to "oReal"
+                    End_Object
+    
                 End_Object  
 
             End_Object  
@@ -223,6 +228,7 @@ Object oWebApp is a cWebApp
     Use String.wo
     Use Date.wo
     Use DateTime.wo
+    Use Real.wo
     
     Function GetDefaultView Returns Handle
         Handle hView
