@@ -1,0 +1,161 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg 
+Use cWebLabel.pkg
+Use cWebSpacer.pkg
+Use cWebHorizontalLine.pkg
+Use cWebList.pkg
+Use cWebColumn.pkg
+Use cWebDatePicker.pkg
+Use cWebEdit.pkg
+Use cWebHtmlBox.pkg
+Use cWebButton.pkg
+Use cWebImage.pkg
+
+Object oReal is a cWebView
+    Set piWidth to 700
+    Set psCaption to "Real"
+    Set pbServerOnShow to True
+    
+    // Your DDO structure will go here
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oWebHtmlBox1 is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to ""
+            
+            Procedure EvaluateReal
+                // --- Real Test Code ---
+                Integer iTest
+                String sTmp sTest sLastTest
+                String[] asTest
+                Real rCnt rTot
+                Real rTest
+                Number nTest
+                Date dTest
+                DateTime dtTest
+                
+                Send Activate to oErrorEventHandler
+                
+//                Send AddLn "<b>Test unnasigned value</b>"
+//                If (bTest) Send AddLn "An unassigned Boolean is <b>True</b> by default... But it is good practice to assign a value before use."
+//                Else Send AddLn "An unassigned Boolean is <b>False</b> by default... <i>But it is good practice to always assign a value before use.</i>"
+                
+                Send AddLn "<b>Maxing out an real</b> (+/-1.0 e +/-306)"
+                Move 1e308 to rTest
+                Send AddLn ("rTest is now <b>" + String(rTest) + "</b>")
+                While (rTest <> 'inf')
+                    Move (rTest + 1e307) to rTest
+                    Send AddLn ("If we increase rTest by 1e307 we get  <b>" + String(rTest) + "</b>")
+                Loop
+                Send AddLn ("Breaking the loop we get  <b>" + String(rTest) + "</b> in the rTest")
+                
+                
+                Send AddLn "<br><b>Maxing out an number</b> (-99999999999999.99999999 to 99999999999999.99999999)"
+                Move 99999999999999.99999997 to nTest
+                Send AddLn ("nTest is now <b>" + String(nTest) + "</b>, the maximum size of an real in DataFlex")
+                While (nTest <> 0)
+                    Move (nTest + 0.00000001) to nTest
+                    Send AddLn ("If we increase nTest by 0.00000001 we get  <b>" + String(nTest) + "</b>")
+                Loop
+                Send AddLn ("Breaking the loop we get  <b>" + String(nTest) + "</b>")
+                Move (nTest + 0.00000001) to nTest
+                Send AddLn ("If we increase nTest by 0.00000001 again we get  <b>" + String(nTest) + "</b>")
+
+
+                Send AddLn "<br><b>Conversions to Real</b>"
+                Send AddLn ("Real(123456789123.456789) => " + String(Real(123456789123.456789)) + "")
+                Send AddLn ("Real(1234567891234.56789) => " + String(Real(1234567891234.56789)) + "")
+                Send AddLn ("Real(12345678912345.6789) => " + String(Real(12345678912345.6789)) + "")
+                Send AddLn ("Real(123456789123456.789) => Unhandled exeption error")
+                Send AddLn ("Real(1234567891234567.89) => Unhandled exeption error")
+                Send AddLn ("")
+                Send AddLn ("Real(12345678912345) => " + String(Real(12345678912345)) + "")
+                Send AddLn ("Real(123456789123456) => " + String(Real(123456789123456)) + "")
+                Send AddLn ("Real(1234567891234567) => " + String(Real(1234567891234567)) + "")
+                Send AddLn ("Real(12345678912345678) => " + String(Real(12345678912345678)) + "")
+                Send AddLn ("")
+                Send AddLn ("Real(123456789.123456789e20) => " + String(Real(123456789.123456789e20)) + "")
+                Send AddLn ("Real(123456789.1234e20) => " + String(Real(123456789.1234e20)) + "")
+                Send AddLn ("Real(4,8e44) using comma => Compile error")
+                Send AddLn ("Real(Real(4.8e44)) => " + String(Real(Real(4.8e44))) + "")
+                Send AddLn ("Real(String(Real(4.8e44))) => " + String(Real(String(Real(4.8e44)))) + "")
+                Send AddLn ('Real("4,8e44")) => ' + String(Real("4,8e44")) + "")
+
+                Send AddLn "<br><b>Conversions to Number</b>"
+                Send AddLn ("Number(123456789.123456789e20) => " + String(Number(123456789.123456789e20)) + "")
+                Send AddLn ("Number(123456789.1234e20) => " + String(Number(123456789.1234e20)) + "")
+                Send AddLn ("Number(4.8e4) => " + String(Number(4.8e4)) + "")
+                Send AddLn ("Integer(4.8e4) => " + String(Integer(4.8e4)) + "")
+                Send AddLn ("String(4.8e4) => " + String(4.8e4) + "")
+                
+                Send AddLn "<br><b>Math functions</b>"
+                Send AddLn ("Abs(8.37) => " + String(Abs(8.37)) + "")
+                Send AddLn ("Abs(-8.37) => " + String(Abs(-8.37)) + "")
+                Send AddLn ("Round(8.37) => " + String(Round(8.37)) + "")
+                Send AddLn ("Round(8.57) => " + String(Round(8.57)) + "")
+                Send AddLn ("Exp(10) => " + String(Exp(10)) + "")
+                Send AddLn ("Exp(1) => " + String(Exp(1)) + "")
+                Send AddLn ("Log(10) => " + String(Log(10)) + "")
+                Send AddLn ("Log(1) => " + String(Log(1)) + "")
+                Send AddLn ("(Exp(5 * Log(10))) => " + String((Exp(5 * Log(10)))) + " - 10.0e5")
+                Send AddLn ("(Exp(5 * Log(1.0))) => " + String((Exp(5 * Log(1.0)))) + " - 1.0e5")
+                Send AddLn ("(Exp(5 * Log(2.0))) => " + String((Exp(5 * Log(2.0)))) + " - 2.0e5")
+                
+                Send AddLn ("Sqrt(81) => " + String(Sqrt(81)) + "")
+                Send AddLn ("Mod(90, 60) => " + String(Mod(90, 60)) + "")
+                Send AddLn ("Mod(120, 60) => " + String(Mod(120, 60)) + "")
+                Send AddLn ("<b>Mod(130, 60) => " + String(Mod(130, 60)) + "</b>")
+                Send AddLn ("<b>Mod(-130, 60) => " + String(Mod(-130, 60)) + "</b>")
+                Send AddLn ("Mod(-90, 60) => " + String(Mod(-90, 60)) + "")
+                Send AddLn ("ModAlt(-20, 60) => " + String(ModAlt(-20, 60)) + "")
+                Send AddLn ("<b>ModAlt(130, 60) => " + String(ModAlt(130, 60)) + "</b>")
+                Send AddLn ("<b>ModAlt(-130, 60) => " + String(ModAlt(-130, 60)) + "</b>")
+                Send AddLn ("Random(2) => " + String(Random(2)) + " => (0-1)")
+                Send AddLn ("Random(2) => " + String(Random(2)) + " => (0-1)")
+                Send AddLn ("Random(2) => " + String(Random(2)) + " => (0-1)")
+                Send AddLn ("Random(100) => " + String(Random(100)) + " => (0-99)")
+                Send AddLn ("Acos(0.5) => " + String(Acos(0.5)) + "")
+                Send AddLn ("Asin(0.5) => " + String(Asin(0.5)) + "")
+                Send AddLn ("Atan(0.5) => " + String(Atan(0.5)) + "")
+                Send AddLn ("Cos(0.5) => " + String(Cos(0.5)) + "")
+                Send AddLn ("Sin(0.5) => " + String(Sin(0.5)) + "")
+                Send AddLn ("Tan(0.5) => " + String(Tan(0.5)) + "")
+
+
+                Send Deactivate to oErrorEventHandler
+                // --- Tests End Here ---
+            End_Procedure
+            
+            
+            Procedure AddLn String sText
+                String sFullText sNewLine
+                //Move (Character(10)) to sNewLine
+                Move "<br>" to sNewLine
+                WebGet psHtml of oWebHtmlBox1 to sFullText
+                Move (sFullText + sNewLine + sText) to sFullText
+                WebSet psHtml of oWebHtmlBox1 to sFullText
+            End_Procedure
+        End_Object
+        
+
+        
+    End_Object 
+    
+    Procedure OnShow
+        Send EvaluateReal of oWebHtmlBox1
+    End_Procedure
+
+
+
+    Object oErrorEventHandler is a cErrorEventHandler
+        
+        Procedure OnError Integer iError String sErrorText Integer iErrorLine
+            Send None
+        End_Procedure
+        
+    End_Object
+
+End_Object
