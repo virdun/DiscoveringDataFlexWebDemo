@@ -172,6 +172,16 @@ Object oWebApp is a cWebApp
     
                 End_Object  
 
+                Object oTestMenu is a cWebMenuItem
+                    Set psCaption to "Language Guide"
+
+                    Object oExecutionControlsItem1 is a cWebMenuItemLoadView
+                        Set psCaption to "ExecutionControls"
+                        Set psLoadViewOnClick to "oExecutionControls"
+                    End_Object
+
+                End_Object
+
             End_Object  
         End_Object  
         
@@ -229,6 +239,7 @@ Object oWebApp is a cWebApp
     Use Date.wo
     Use DateTime.wo
     Use Real.wo
+    Use ExecutionControls.wo
     
     Function GetDefaultView Returns Handle
         Handle hView

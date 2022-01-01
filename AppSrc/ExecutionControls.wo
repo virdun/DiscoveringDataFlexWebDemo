@@ -1,0 +1,196 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebHtmlBox.pkg
+
+Object oExecutionControls is a cWebView
+    Set piWidth to 700
+    Set psCaption to "ExecutionControls"
+    Set pbServerOnShow to True
+    
+    // Your DDO structure will go here
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oWebHtmlBox1 is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to ""
+            
+            Procedure EvaluateExecutionControls
+                // --- Real Test Code ---
+                Integer iTest
+
+                Send Activate to oErrorEventHandler
+                
+                
+                Send AddLn "<h1>If-cases</h1>"
+                
+                Send AddLn ('<b>If</b> (9 > 3) ShowLn "Yes"')
+                Send AddLn ('<b>Else</b> Send ShowLn "No"')
+                If (9 > 3) Send AddLn ("Returns: <b>Yes</b>")
+                Else Send AddLn ("Returns: <b>No</b>")
+
+                Send AddLn ('<br><b>If</b> (9 < 3) ShowLn "Yes"')
+                Send AddLn ('<b>Else</b> Send ShowLn "No"')
+                If (9 < 3) Send AddLn ("Returns: <b>Yes</b>")
+                Else Send AddLn ("Returns: <b>No</b>")
+                
+                
+                Send AddLn ('<br>If ("a" = "a") <b>Begin</b>')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;ShowLn "Yes"')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;...')
+                Send AddLn ('<b>End</b>')
+                Send AddLn ('Else <b>Begin</b>')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;ShowLn "No"')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;...')
+                Send AddLn ('<b>End</b>')
+                If ("a" = "a") Begin
+                    Send AddLn ("Returns: <b>Yes</b>")
+                End
+                Else Begin
+                    Send AddLn ("Returns: <b>No</b>")
+                End
+                
+                Send AddLn "<br><h1>Case - for multiple options</h1>"
+                Send AddLn ('Move 2 to iTest')
+                Send AddLn ('<b>Case Begin</b>')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;<b>Case</b> <i>(iTest = 1)</i>')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ShowLn "1:st"')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Case Break</b>')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;<b>Case</b> <i>(iTest = 2)</i>')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ShowLn "2:nd"')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;<b>Case</b> <i>(iTest <> 3)</i> ShowLn "As expected"')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Break</b>')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;<b>Case</b> <i>(iTest = 3)</i>')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ShowLn "3:d"')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Case Break</b>')
+                Send AddLn ('<b>Case End</b>')
+                Move 2 to iTest
+                Case Begin
+                    Case (iTest = 1)
+                        Send AddLn ('Returns: <b>1:st</b>')
+                        Case Break
+                    Case (iTest = 2)
+                        Send AddLn ('Returns: <b>2:nd</b>')
+                    Case (iTest <> 3) Send AddLn ('<b>As expected</b>')
+                        Break
+                    Case (iTest = 3)
+                        Send AddLn ('Returns: <b>3:d</b>')
+                        Case Break
+                Case End
+                
+
+                Send AddLn "<br><h1>For</h1>"
+                Send AddLn ('<b>For iTest From 4 To 6</b>')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;ShowLn iTest')
+                Send AddLn ('<b>Loop</b>')
+                For iTest from 4 to 6
+                   Send AddLn (String(iTest)) 
+                Loop
+                
+                //Send AddLn "<br><h1>For All</h1>" // This is a bit of a special feature that reqires use for_all.pkg
+                
+                Send AddLn "<br><h1>While</h1>"
+                Send AddLn ('Move 4 to iTest')
+                Send AddLn ('<b>While</b> <i>(iTest <= 6)</i>')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;ShowLn iTest')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;Increment iTest')
+                Send AddLn ('<b>Loop</b>')
+                Move 4 to iTest
+                While (iTest <= 6)
+                   Send AddLn (String(iTest))
+                   Increment iTest
+                Loop
+                
+                Send AddLn "<br><h1>Repeat</h1>"
+                Send AddLn ('Move 4 to iTest')
+                Send AddLn ('<b>Repeat</b>')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;ShowLn iTest')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;Increment iTest')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;<b>If</b> <i>(iTest > 6)</i> <b>Break</b>')
+                Send AddLn ('<b>Loop</b>')
+                Move 4 to iTest
+                Repeat
+                   Send AddLn (String(iTest))
+                   Increment iTest
+                   If (iTest > 6) Break
+                Loop
+                
+                Send AddLn ('<br>Move 4 to iTest')
+                Send AddLn ('<b>Repeat</b>')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;ShowLn iTest')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;Increment iTest')
+                Send AddLn ('<b>Until</b> <i>(iTest > 6)</i>')
+                Move 4 to iTest
+                Repeat
+                   Send AddLn (String(iTest))
+                   Increment iTest
+                Until (iTest > 6)
+                
+                Send AddLn "<br><h1>WARNING! - Do not try this at home...</h1>"
+                
+                Send AddLn ('Move 4 to iTest')
+                Send AddLn ('<b>While</b> <i>(iTest <= 6)</i>')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;ShowLn iTest')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;Increment iTest')
+                Send AddLn ('<b>Until</b> <i>(iTest > 7)</i>')
+                Move 4 to iTest
+                While (iTest <= 6)
+                   Send AddLn (String(iTest))
+                   Increment iTest
+                Until (iTest > 7)
+
+                Send AddLn ('<br>Move 4 to iTest')
+                Send AddLn ('<b>While</b> <i>(iTest <= 7)</i>')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;ShowLn iTest')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;Increment iTest')
+                Send AddLn ('<b>Until</b> <i>(iTest > 6)</i>')
+                Move 4 to iTest
+                While (iTest <= 7)
+                   Send AddLn (String(iTest))
+                   Increment iTest
+                Until (iTest > 6)
+
+                Send AddLn ('<br>Move 4 to iTest')
+                Send AddLn ('<b>For</b> iTest from 4 to 10')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;ShowLn iTest')
+                Send AddLn ('<b>Until</b> <i>(iTest > 6)</i>')
+                For iTest from 4 to 10
+                   Send AddLn (String(iTest))
+                Until (iTest > 6)
+
+
+                Send Deactivate to oErrorEventHandler
+                // --- Tests End Here ---
+            End_Procedure
+            
+            
+            Procedure AddLn String sText
+                String sFullText sNewLine
+                //Move (Character(10)) to sNewLine
+                Move "<br>" to sNewLine
+                WebGet psHtml of oWebHtmlBox1 to sFullText
+                Move (sFullText + sNewLine + sText) to sFullText
+                WebSet psHtml of oWebHtmlBox1 to sFullText
+            End_Procedure
+        End_Object
+        
+
+        
+    End_Object 
+    
+    Procedure OnShow
+        Send EvaluateExecutionControls of oWebHtmlBox1
+    End_Procedure
+
+
+
+    Object oErrorEventHandler is a cErrorEventHandler
+        
+        Procedure OnError Integer iError String sErrorText Integer iErrorLine
+            Send None
+        End_Procedure
+        
+    End_Object
+
+End_Object
