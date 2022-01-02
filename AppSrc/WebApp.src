@@ -184,6 +184,12 @@ Object oWebApp is a cWebApp
                         Set psCaption to "Array"
                         Set psLoadViewOnClick to "oArray"
                     End_Object
+
+                    Object oStructItem1 is a cWebMenuItemLoadView
+                        Set psCaption to "Struct"
+                        Set psLoadViewOnClick to "oStruct"
+                    End_Object
+    
                 End_Object
 
             End_Object  
@@ -245,6 +251,7 @@ Object oWebApp is a cWebApp
     Use Real.wo
     Use ExecutionControls.wo
     Use Array.wo
+    Use Struct.wo
     
     Function GetDefaultView Returns Handle
         Handle hView

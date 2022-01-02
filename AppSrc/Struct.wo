@@ -1,0 +1,132 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebHtmlBox.pkg
+Use cWebForm.pkg 
+
+Object oStruct is a cWebView
+    Set piWidth to 700
+    Set psCaption to "Struct"
+    Set pbServerOnShow to True
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oWebHtmlBox1 is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to ""
+
+            
+            Procedure EvaluateStruct
+                // --- Test Code ---
+                Integer iTest iCheck iMaxIndex
+                String sTest
+                String[] asTest
+                Integer[5] aiTest aiTest2
+                Send Activate to oErrorEventHandler
+
+                Send AddLn "<h1>Creating a Struct</h1>"
+                Send AddLn "<b>Struct</b> tBikeType"
+                Send AddLn "&nbsp;&nbsp;Integer iPedals"
+                Send AddLn "&nbsp;&nbsp;Integer iTires"
+                Send AddLn "<b>End_Struct</b>"
+                
+                Struct tBikeType
+                    String  sType
+                    Integer iPedals
+                    Integer iTires
+                End_Struct
+                
+                Send AddLn "<br>We can also use a struct as a variable in another struct"
+                Send AddLn "<b>Struct</b> tBikeOwner"
+                Send AddLn "&nbsp;&nbsp;String sCountry"
+                Send AddLn "&nbsp;&nbsp;tBikeType[] Bikes"
+                Send AddLn "<b>End_Struct</b>"
+                
+                Struct tBikeOwner
+                    String sCountry
+                    tBikeType[] Bikes
+                End_Struct
+                
+                Send AddLn "<br><b>Let's create some variables and fill them with values</b>"
+                Send AddLn "tBikeType btTrike btTandem btRegular"
+                Send AddLn "tBikeOwner boJohan"
+                tBikeType btTrike btTandem btRegular
+                tBikeOwner boJohan
+                
+                Send AddLn '<br>Move "Trike" to btTrike.sType'
+                Send AddLn 'Move 2 to btTrike.iPedals'
+                Send AddLn 'Move 3 to btTrike.iTires'
+                
+                Send AddLn '<br>Move "Tandem" to btTandem.sType'
+                Send AddLn 'Move 4 to btTandem.iPedals'
+                Send AddLn 'Move 4 to btTandem.iTires'
+                
+                Send AddLn '<br>Move "Regular" to btRegular.sType'
+                Send AddLn 'Move 2 to btRegular.iPedals'
+                Send AddLn 'Move 2 to btRegular.iTires'
+
+                Move "Trike" to btTrike.sType
+                Move 2 to btTrike.iPedals
+                Move 3 to btTrike.iTires
+                
+                Move "Tandem" to btTandem.sType
+                Move 4 to btTandem.iPedals
+                Move 2 to btTandem.iTires
+                
+                Move "Regular" to btRegular.sType
+                Move 2 to btRegular.iPedals
+                Move 2 to btRegular.iTires
+                
+                Send AddLn '<br>Move "Sweden"  to boJohan.sCountry'
+                Send AddLn 'Move btTrike   to boJohan.Bikes[0]'
+                Send AddLn 'Move btTandem  to boJohan.Bikes[1]'
+                Send AddLn 'Move btRegular to boJohan.Bikes[2]'
+                
+                Move "Sweden"  to boJohan.sCountry
+                Move btTrike   to boJohan.Bikes[0]
+                Move btTandem  to boJohan.Bikes[1]
+                Move btRegular to boJohan.Bikes[2]
+                
+                Send AddLn ('<br>"Johan lives in " + boJohan.sCountry + " and he has " + String(SizeOfArray(boJohan.bikes)) + " bikes."')
+                Send AddLn ("<b>Johan lives in <i>" + ;
+                        boJohan.sCountry + "</i> and he has <i>" + String(SizeOfArray(boJohan.bikes)) + "</i> bikes.</b>")
+                
+                Send AddLn ('<br>"The last one in the list is a " + boJohan.Bikes[(SizeOfArray(boJohan.Bikes)-1)].sType + " and it has " + String(boJohan.Bikes[(SizeOfArray(boJohan.Bikes)-1)].iPedals) + " pedals."')
+                Send AddLn ("<b>The last one in the list is a <i>" + boJohan.Bikes[(SizeOfArray(boJohan.Bikes)-1)].sType + "</i> and it has <i>" + String(boJohan.Bikes[(SizeOfArray(boJohan.Bikes)-1)].iPedals) + "</i> pedals.</b>")
+                
+                
+
+                Send Deactivate to oErrorEventHandler
+                // --- Tests End Here ---
+            End_Procedure
+            
+            Procedure AddLn String sText
+                String sFullText sNewLine
+                //Move (Character(10)) to sNewLine
+                Move "<br>" to sNewLine
+                WebGet psHtml of oWebHtmlBox1 to sFullText
+                Move (sFullText + sNewLine + sText) to sFullText
+                WebSet psHtml of oWebHtmlBox1 to sFullText
+            End_Procedure
+            
+        End_Object
+        
+
+        
+    End_Object 
+    
+    Procedure OnShow
+        Send EvaluateStruct of oWebHtmlBox1
+    End_Procedure
+
+
+
+    Object oErrorEventHandler is a cErrorEventHandler
+        
+        Procedure OnError Integer iError String sErrorText Integer iErrorLine
+            Send None
+        End_Procedure
+        
+    End_Object
+
+End_Object
