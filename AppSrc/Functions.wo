@@ -1,0 +1,245 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebHtmlBox.pkg
+Use cWebForm.pkg
+
+Object oFunctions is a cWebView
+    Set piWidth to 700
+    Set psCaption to "Functions"
+    Set pbServerOnShow to True
+    
+    // Your DDO structure will go here
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oProcedureTest is a cWebForm
+            Set piColumnSpan to 0
+            Set psLabel to "Procedure Test"
+            
+            Procedure UpdateValue String sNewText
+                WebSet psValue to sNewText
+            End_Procedure
+            
+            Function GetValue Returns String
+                String sValue
+                WebGet psValue to sValue
+                Function_Return sValue
+            End_Function
+            
+        End_Object
+
+        Object oWebHtmlBox1 is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to ""
+            
+            // IMPORTANT! Without this you cannot call Move (Func(Self, "test")) to iTest inside the EvaluateFunctions Procedure
+            // OPTION: Move the entire Function Func to this position
+            Register_Function Func String sInput Returns Integer
+            
+            Procedure EvaluateFunctions
+                // --- Real Test Code ---
+                Integer iTest
+                String sTest
+                Send Activate to oErrorEventHandler
+
+                Send AddLn "<h1>Procedure</h1>"
+                
+                Send AddLn ("<b>Procedure</b> Test <b>String</b> sInput")
+                Send AddLn ("&nbsp;&nbsp;&nbsp;&nbsp;Showln (' - You called Test with ' + sInput)")
+                Send AddLn ("<b>End_Procedure</b>")
+                Send AddLn ("")
+                Send AddLn ('<b>Send Test</b> "My test string"')
+                Send Test "My test string"
+                
+                Send AddLn ("<br><b>Call procedure in another object</b>")
+                Send AddLn ('<b>Send UpdateValue of oProcedureTest</b> "My test string"')
+                Send UpdateValue of oProcedureTest "My test string"
+                
+                Send AddLn ("<br><b>Call procedure with ByRef variable</b>")
+                Send AddLn ('Procedure <b>IncrementWithFive</b> Integer <b>ByRef</b> iNumber')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;Move (5 + iNumber) to iNumber')
+                Send AddLn ('End_Procedure')
+                Send AddLn ('')
+                Send AddLn ('Integer iCounter')
+                Send AddLn ('Move 3 to iCounter')
+                Send AddLn ('Send <b>IncrementWithFive</b> <b>(&</b>iCounter<b>)</b>')
+                Send AddLn ('Showln iCounter')
+
+                Integer iCounter
+                Move 3 to iCounter
+                Send IncrementWithFive (&iCounter)
+                Send AddLn (iCounter)
+                
+                
+                Send AddLn "<h1>Function</h1>"
+                
+                Send AddLn ("<b>Function</b> Func <b>String</b> sInput Returns Integer")
+                Send AddLn ("&nbsp;&nbsp;&nbsp;&nbsp;Showln (' - You called Test with ' + sInput)")
+                Send AddLn ("&nbsp;&nbsp;&nbsp;&nbsp;Function_Return 7")
+                Send AddLn ("<b>End_Function</b>")
+                Send AddLn ("")
+                Send AddLn ('<b>Get Func</b> "My test string" to iTest')
+                Get Func "My test string" to iTest
+                Send AddLn ("Returned: " + String(iTest))
+                
+                Send AddLn ("<br><b>Call function in another object</b>")
+                Send AddLn ('<b>Get GetValue of oProcedureTest</b> to sTest')
+                Get GetValue of oProcedureTest to sTest
+                Send AddLn ("Returned: " + sTest)
+                
+                Send AddLn ("<br><b>Call function with ByRef variable</b>")
+                Send AddLn ('Function <b>IncrementWithFive</b> Integer <b>ByRef</b> iNumber Returns Integer')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;Move (5 + iNumber) to iNumber')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;Function_Return iNumber')
+                Send AddLn ('End_Function')
+                Send AddLn ('')
+                Send AddLn ('Integer iCounter')
+                Send AddLn ('Move 3 to iCounter')
+                Send AddLn ('Get <b>IncrementWithFive</b> <b>(&</b>iCounter<b>)</b> to iTest')
+                Send AddLn ('Showln ("iCounter: " + String(iCounter))')
+                Send AddLn ('Showln ("iTest: " + String(iTest))')
+
+                //Integer iCounter
+                Move 3 to iCounter
+                Get IncrementWithFive (&iCounter) to iTest
+                Send AddLn ("iCounter: " + String(iCounter))
+                Send AddLn ("iTest: " + String(iTest))
+                
+                
+                Send AddLn ("<h1>What about default inputs</h1>")
+                
+                Send AddLn ("Function DefaultTest String <b>sFirst</b> String <b>sSecond</b> String <b>sThird</b> Returns Integer")
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;If (num_arguments<1) Function_Return 0')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;If (num_arguments<2) Function_Return 1')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;If (num_arguments<3) Function_Return 2')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;Function_Return 3')
+                Send AddLn ("End_Function")
+                Send AddLn ('<br>Get DefaultTest to iTest')
+                Get DefaultTest to iTest
+                Send AddLn ("Returned: " + String(iTest))
+                Send AddLn ('<br>Get DefaultTest <b>"one"</b> to iTest')
+                Get DefaultTest "one" to iTest
+                Send AddLn ("Returned: " + String(iTest))
+                Send AddLn ('<br>Get DefaultTest <b>"one" "two"</b> to iTest')
+                Get DefaultTest "one" "two" to iTest
+                Send AddLn ("Returned: " + String(iTest))
+                Send AddLn ('<br>Get DefaultTest <b>"one" "two" "three"</b> to iTest')
+                Get DefaultTest "one" "two" "three" to iTest
+                Send AddLn ("Returned: " + String(iTest))
+                
+                
+                Send AddLn ("<h1>Global functions</h1>")
+                Send AddLn ("Function PadChar <b>Global</b> String sSrc Integer iLength String sChar Returns String")
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;... <b>Look in cUtils.pkg for the code</b> ...')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;Function_Return sSrc')
+                Send AddLn ("End_Function")
+                Send AddLn ('<br>Get PadChar "ABC" 10 "I" to sTest')
+                Get PadChar "ABC" 10 "I" to sTest
+                Send AddLn ("Returned: " + String(sTest))
+                
+                Send AddLn ("<h1>Calling functions using expressions</h1>")
+                
+                // From Self (same object)
+                Send AddLn ('IMPORTANT! Only works if the function is registered before the procedure/function calling it.')
+                Send AddLn ('Either by moving it above or using the Register_Function.')
+                Send AddLn ('There is also a Register_Procedure for procedures')
+                Send AddLn ('<br>Move (<b>Func</b>(<b>Self</b>, "First")) to iTest')
+                Move (Func(Self, "First")) to iTest
+                Send AddLn ("iTest: " + String(iTest))
+
+                // Other Object
+                Send AddLn ("<br>If (<b>(GetValue(oProcedureTest))</b> = 'My test String') Begin")
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;Send AddLn ("sTest: " + String(<b>(GetValue(oProcedureTest))</b>))')
+                Send AddLn ('End')
+                If ((GetValue(oProcedureTest)) = 'My test string') Begin
+                    Send AddLn ("sTest: " + String((GetValue(oProcedureTest))))
+                End
+                
+                
+                // Globally
+                Send AddLn ('<br>Move (<b>PadChar</b>("ABC", 10, "I")) to sTest')
+                Move (PadChar("ABC", 10, "I")) to sTest
+                Send AddLn ("sTest: " + String(sTest))
+
+
+                
+//                Set GetValue of oProcedureTest to (RefFunc(Func))
+//                Get GetValue of oProcedureTest "Testing" to iTest
+//                Send AddLn ("Returned: " + iTest)
+//                Get ExecFunc (RefFunc(Func)) to iTest
+//                Send AddLn ("Returned: " + String(iTest))
+
+                Send Deactivate to oErrorEventHandler
+                // --- Tests End Here ---
+            End_Procedure
+            
+            Procedure Test String sInput
+                Send AddLn (' - You called Test with ' + sInput)
+            End_Procedure
+            
+            Procedure IncrementWithFive Integer ByRef iNumber
+                Move (5 + iNumber) to iNumber
+            End_Procedure
+
+            Function IncrementWithFive Integer ByRef iNumber Returns Integer
+                Move (5 + iNumber) to iNumber
+                Function_Return iNumber
+            End_Function
+            
+            Function Func String sInput Returns Integer
+                Send AddLn (' - You called Test with ' + sInput)
+                Function_Return 7
+            End_Function
+
+            Function FuncNoSend String sInput Returns Integer
+                //Send AddLn (' - You called Test with ' + sInput)
+                Function_Return 8
+            End_Function
+            
+            Function DefaultTest String sFirst String sSecond String sThird Returns Integer
+                If (num_arguments<1) Function_Return 0
+                If (num_arguments<2) Function_Return 1
+                If (num_arguments<3) Function_Return 2
+                Function_Return 3
+            End_Function
+            
+            Function ExecFunc String sFunctionName Returns Integer
+                Integer iRet
+                Get sFunctionName "Could this work" to iRet
+                Function_Return iRet
+            End_Function
+            
+            
+            Procedure AddLn String sText
+                String sFullText sNewLine
+                //Move (Character(10)) to sNewLine
+                Move "<br>" to sNewLine
+                WebGet psHtml of oWebHtmlBox1 to sFullText
+                Move (sFullText + sNewLine + sText) to sFullText
+                WebSet psHtml of oWebHtmlBox1 to sFullText
+            End_Procedure
+            
+        End_Object
+        
+
+        
+    End_Object 
+    
+    Procedure OnShow
+        Send EvaluateFunctions of oWebHtmlBox1
+    End_Procedure
+
+
+
+    Object oErrorEventHandler is a cErrorEventHandler
+        
+        Procedure OnError Integer iError String sErrorText Integer iErrorLine
+            Send None
+        End_Procedure
+        
+    End_Object
+
+End_Object
+
+
