@@ -190,6 +190,11 @@ Object oWebApp is a cWebApp
                         Set psLoadViewOnClick to "oStruct"
                     End_Object
     
+                    Object oFunctionsItem1 is a cWebMenuItemLoadView
+                        Set psCaption to "Functions"
+                        Set psLoadViewOnClick to "oFunctions"
+                    End_Object
+    
                 End_Object
 
             End_Object  
@@ -250,6 +255,7 @@ Object oWebApp is a cWebApp
     Use DateTime.wo
     Use Real.wo
     Use ExecutionControls.wo
+    Use Functions.wo
     Use Array.wo
     Use Struct.wo
     
