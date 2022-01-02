@@ -1,0 +1,138 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebHtmlBox.pkg
+Use cWebForm.pkg
+
+
+Class cls1 is a cObject
+    Procedure Test
+        Send None
+    End_Procedure
+End_Class
+
+Class cls2 is a cls1
+    Procedure Test
+        Forward Send Test
+        Send None
+    End_Procedure
+End_Class
+
+Object obj1 is a cls1
+    Procedure Test
+        Send None
+        Send Test of obj2
+    End_Procedure
+
+    Object obj2 is a cls2
+        Property Integer piMyInt 99
+        Procedure Test
+            Integer iMyInt
+            Forward Send Test
+            Get piMyInt to iMyInt
+            Send None
+        End_Procedure
+    End_Object
+End_Object
+
+Send Test of obj1
+Send Test of (obj2(obj1))
+
+
+Handle oCls1
+Get Create (RefClass(cls1)) to oCls1
+Send Test of oCls1
+
+
+
+Class cMyLimitedForm is a cWebForm
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Set pbServerOnBlur to True
+        
+    End_Procedure
+            
+    Procedure OnBlur
+        String sValue
+        
+        WebGet psValue of oComment to sValue
+        Get PadChar2 sValue 10 "_" to sValue
+        WebSet psValue of oComment to sValue
+    End_Procedure
+    
+End_Class
+
+
+Object oClassesObjects is a cWebView
+    Set piWidth to 700
+    Set psCaption to "Classes and Objects"
+    Set pbServerOnShow to True
+    
+    // Your DDO structure will go here
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oWebHtmlBox1 is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to ""
+            
+            // IMPORTANT! Without this you cannot call Move (Func(Self, "test")) to iTest inside the EvaluateFunctions Procedure
+            // OPTION: Move the entire Function Func to this position
+            Register_Function Func String sInput Returns Integer
+            
+            Procedure EvaluateClassesObjects
+                // --- Real Test Code ---
+                Integer iTest
+                String sTest
+                Send Activate to oErrorEventHandler
+
+                Send AddLn "<h1>Classes and Objects</h1>"
+
+
+                Send Deactivate to oErrorEventHandler
+                // --- Tests End Here ---
+            End_Procedure
+            
+            Procedure AddLn String sText
+                String sFullText sNewLine
+                //Move (Character(10)) to sNewLine
+                Move "<br>" to sNewLine
+                WebGet psHtml of oWebHtmlBox1 to sFullText
+                Move (sFullText + sNewLine + sText) to sFullText
+                WebSet psHtml of oWebHtmlBox1 to sFullText
+            End_Procedure
+        End_Object
+        
+//        Object oUtils is a cUtils
+//        End_Object
+
+
+
+
+        Object oComment is a cMyLimitedForm
+            Set piColumnSpan to 6
+            Set psLabel to "My comment"
+            
+            
+        End_Object
+
+        
+        
+        
+    End_Object 
+    
+    Procedure OnShow
+        Send EvaluateClassesObjects of oWebHtmlBox1
+    End_Procedure
+
+
+    Object oErrorEventHandler is a cErrorEventHandler
+        
+        Procedure OnError Integer iError String sErrorText Integer iErrorLine
+            Send None
+        End_Procedure
+        
+    End_Object
+
+End_Object

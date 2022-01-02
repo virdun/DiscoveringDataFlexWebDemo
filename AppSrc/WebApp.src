@@ -195,6 +195,11 @@ Object oWebApp is a cWebApp
                         Set psLoadViewOnClick to "oFunctions"
                     End_Object
     
+                    Object oClassesObjectsItem1 is a cWebMenuItemLoadView
+                        Set psCaption to "ClassesObjects"
+                        Set psLoadViewOnClick to "oClassesObjects"
+                    End_Object
+    
                 End_Object
 
             End_Object  
@@ -257,6 +262,7 @@ Object oWebApp is a cWebApp
     Use ExecutionControls.wo
     Use Functions.wo
     Use Array.wo
+    Use ClassesObjects.wo
     Use Struct.wo
     
     Function GetDefaultView Returns Handle
