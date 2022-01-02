@@ -1,0 +1,286 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebHtmlBox.pkg
+Use cWebForm.pkg
+
+Object oArray is a cWebView
+    Set piWidth to 700
+    Set psCaption to "Array"
+    Set pbServerOnShow to True
+    
+    // Your DDO structure will go here
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oWebHtmlBox1 is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to ""
+
+            Function StrArrayToInt String[] asInput Returns Integer[]
+                Integer iItm 
+                Integer[] aiOutput
+                Move 0 to iItm
+                While (iItm < (SizeOfArray(asInput)))
+                    Move asInput[iItm] to aiOutput[iItm]
+                    Increment iItm
+                Loop
+                Function_Return aiOutput
+            End_Function
+            
+            Function ClosestToFour Integer iA Integer iB Returns Integer
+                If ((Abs(iA-4)) < (Abs(iB-4))) Function_Return (GT)
+                If ((Abs(iA-4)) > (Abs(iB-4))) Function_Return (LT)
+                Function_Return (EQ)
+            End_Function
+            
+            Procedure EvaluateArray
+                // --- Test Code ---
+                Integer iTest iCheck iMaxIndex
+                String sTest
+                String[] asTest
+                Integer[5] aiTest aiTest2
+                Send Activate to oErrorEventHandler
+
+                Send AddLn "<h1>Creating an array</h1>"
+                Send AddLn "<b>String[]</b> asTest"
+                Send AddLn "<b>Integer[5]</b> aiTest aiTest2// Primarily for compatibility with integrations with packages coded in C<br>"
+                
+                Send AddLn "<b>Overflowing a static array</b>"
+                Move 0 to iTest
+                Repeat
+                    Move (iTest + 10) to aiTest[iTest]
+                    Increment iTest
+                    Move aiTest[(iTest-1)] to iCheck
+                    Send AddLn ("aiTest[" + String(iTest-1) + "]: " + String(iCheck))
+                Until (iCheck = (iTest-1)) // Error#: 4509 - Referenced Array Index Out of Bounds
+                Send AddLn ("<b>Error#: 4509 - Referenced Array Index Out of Bounds</b>")
+                Move (iTest + 10) to aiTest[(iTest)]
+                Increment iTest
+                Move aiTest[(iTest-1)] to iCheck
+                Send AddLn ("aiTest[" + String(iTest-1) + "]: " + String(iCheck))
+                
+                
+                Send AddLn ("<br>The default way to add items to an array is as follows:")
+                Send AddLn ("Move 3 to aiTest[0]")
+                Send AddLn ("Move 8 to aiTest[1]")
+                Send AddLn ("Move 1 to aiTest[2]")
+                Send AddLn ("Move 5 to aiTest[3]")
+                Send AddLn ("Move 7 to aiTest[4]")
+                Move 3 to aiTest[0]
+                Move 8 to aiTest[1]
+                Move 1 to aiTest[2]
+                Move 5 to aiTest[3]
+                Move 7 to aiTest[4]
+                
+                Send AddLn ("<br>But this is the way I prefere to do it:")
+                Send AddLn ('Move (StrSplitToArray("3,8,1,5,7", ",")) to asTest')
+                Move (StrSplitToArray ("3,8,1,5,7", ",")) to asTest
+                Send AddLn ('<b>Only this function return the values as strings...</b>')
+                Send AddLn ('Get StrArrayToInt asTest to aiTest2 <i>// A small function I created to convert the string elements to integers</i>')
+                Get StrArrayToInt asTest to aiTest2
+                
+                Send AddLn ("<br>Now we can compare and see if they are the same:")
+                Send AddLn ('If (<b>aiTest = aiTest2</b>) Send AddLn ("<b>They are identical</b>")')
+                Send AddLn ('Else Send AddLn ("<b>There is a difference</b>")')
+                If (aiTest = aiTest2) Send AddLn ("<b>They are identical</b>")
+                Else Send AddLn ("<b>There is a difference</b>")
+                Send AddLn ('<br>If (<b>IsSameArray</b>(aiTest, aiTest2)) Send AddLn ("<b>They are the same</b>")')
+                Send AddLn ('Else Send AddLn ("<b>There is a difference</b>")')
+                If (IsSameArray(aiTest, aiTest2)) Send AddLn ("<b>They are the same</b>")
+                Else Send AddLn ("<b>There is a difference</b><br><i>(The reason is that my function StrArrayToInt returns a none static array to aiTest2 while aiTest is still static)</i>")
+
+                Send AddLn ('<br>aiTest: ' + StrJoinFromArray(aiTest, ",") + " = aiTest2: " + StrJoinFromArray(aiTest2, ","))
+                
+                Send AddLn ('<br>Move 10 to aiTest[5]')
+                Move 10 to aiTest[5]
+                Send AddLn ('Move aiTest[5] to iCheck')
+                Move aiTest[5] to iCheck
+                Send AddLn ('Move 10 to aiTest2[5]')
+                Move 10 to aiTest2[5]
+                Send AddLn ('<b>aiTest[5] => ' + String(iCheck) + ' and aiTest2[5] => ' + String(aiTest2[5]) + '</b>')
+
+
+                Send AddLn ('<br>Move (<b>MaxArray</b>(aiTest)) to iMaxIndex')
+                Move (MaxArray(aiTest)) to iMaxIndex
+                Send AddLn ('Max item is: aiTest[' + String(iMaxIndex) + '] => ' + String(aiTest[iMaxIndex]))
+                
+                Send AddLn ('<br>Function <b>ClosestToFour</b> Integer iA Integer iB Returns Integer')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;If ((Abs(iA-4)) < (Abs(iB-4))) Function_Return (GT)')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;If ((Abs(iA-4)) > (Abs(iB-4))) Function_Return (LT)')
+                Send AddLn ('&nbsp;&nbsp;&nbsp;&nbsp;Function_Return (EQ)')
+                Send AddLn ('End_Function')
+                
+                Send AddLn ('<br>Move (<b>MaxArray</b>(aiTest, Self, (RefFunc(<b>ClosestToFour</b>)))) to iCheck')
+                Move (MaxArray(aiTest, Self, (RefFunc(ClosestToFour)))) to iCheck
+                Send AddLn ('Item closest to 4 is: aiTest[' + String(iCheck) + '] => ' + String(aiTest[iCheck]))
+                
+                Send AddLn ('<br>MinArray works the same, just the other way around...')
+
+                Send AddLn ('<br>What if we want to count the number of b:s in the following array?')
+                Send AddLn ('Move (StrSplitToArray("a,a,b,b,b,c,d,d,e", ",") to asTest')
+                Move (StrSplitToArray("a,a,b,b,b,c,d,d,e", ",")) to asTest
+                Send AddLn ('Move (<b>CountArray</b>(asTest, "b")) to iTest')
+                Move (CountArray("b", asTest)) to iTest
+                Send AddLn ('The counter found <b>' + String(iTest) + ' b:s</b> in the array')
+
+
+                Send AddLn ('<br>How so you sort an array?')
+                Send AddLn ('Move (<b>SortArray</b>(aiTest)) to aiTest')
+                Move (SortArray(aiTest)) to aiTest
+                Send AddLn ('aiTest: ' + StrJoinFromArray(aiTest, ","))
+                Send AddLn ('<br><i>As with most array functions there are a RefFunc you can add for special behaviours<br>Check the documentation using F1</i>')
+                
+                // SearchArray, SortArray
+                Send AddLn ('<br>In order to find an item in an array you use SearchArray?')
+                Send AddLn ('Move (<b>SearchArray</b>(7, aiTest)) to iTest')
+                Move (SearchArray(7, aiTest)) to iTest
+                Send AddLn ('aiTest[' + String(iTest) + ']: ' + String(aiTest[iTest]))
+                
+                // BinarySearchArray, BinarySearchInsertPos
+                Send AddLn ('<br>There are also <b>BinarySearchArray</b> and <b>BinarySearchInsertPos</b>, look them up in the documentation...')
+                
+                
+                Send AddLn ('<br>How about Push, Pop, Shift, Unshift, Concat and so on?')
+                Send AddLn (' - They are here but under slightly different names.')
+                Send AddLn ('<span style="color: #900;">WARNING! These functions cannot change the number of items in a static array.</span>')
+                
+                Send AddLn ('<br><b>SizeOfArray</b>(asTest): ' + String(SizeOfArray(asTest)))
+                Send AddLn ('asTest: ' + StrJoinFromArray(asTest, ","))
+                Send AddLn ('<br>You can pop any element using the RemoveFromArray function:')
+                Send AddLn ('Move (<b>RemoveFromArray</b>(asTest, 2) to asTest')
+                Move (RemoveFromArray(asTest, 2)) to asTest
+                Send AddLn ('<b>SizeOfArray</b>(asTest): ' + String(SizeOfArray(asTest)))
+                Send AddLn ('asTest: ' + StrJoinFromArray(asTest, ","))
+
+                Send AddLn ('<br>Then you can restore the element using the InsertInArray function:')
+                Send AddLn ('Move (<b>InsertInArray</b>(asTest, 2, "b") to asTest')
+                Move (InsertInArray(asTest, 2, "b")) to asTest
+                Send AddLn ('<b>SizeOfArray</b>(asTest): ' + String(SizeOfArray(asTest)))
+                Send AddLn ('asTest: ' + StrJoinFromArray(asTest, ","))
+
+
+                Send AddLn ('<br>You can also reverse the array using ReverseArray:')
+                Send AddLn ('Move (<b>ReverseArray</b>(asTest) to asTest')
+                Move (ReverseArray(asTest)) to asTest
+                Send AddLn ('asTest: ' + StrJoinFromArray(asTest, ","))
+                
+                Send AddLn ('<br>Or just shuffle it using ShuffleArray:')
+                Send AddLn ('Move (<b>ShuffleArray</b>(asTest) to asTest')
+                Move (ShuffleArray(asTest)) to asTest
+                Send AddLn ('asTest: ' + StrJoinFromArray(asTest, ","))
+
+                Send AddLn ('<br>There are a few more functions you may lookup in the documentation:')
+                Send AddLn ('AppendArray, CopyArray, FillArray and ResizeArray')
+
+                Send AddLn ('<br><br><i>If you are working with really large strings in UChar arrays<br>you should check out <b>StringToUCharArray</b> and <b>UCharArraytoString</b></i>')
+
+                Send AddLn ('<br><b>Jagged arrays</b>')
+                Send AddLn ('String[][] asMulti')
+                Send AddLn ('String[] asSingle asDim1 asDim2')
+                Send AddLn ('Integer[] aiDim3')
+                String[][] asMulti
+                String[] asSingle asDim1 asDim2
+                Integer[] aiDim3
+                
+                Send AddLn ('Move (StrSplitToArray("a,b,c,d,e,f,g", ",") to asDim1')
+                Move (StrSplitToArray("a,b,c,d,e,f,g", ",")) to asDim1
+                Send AddLn ('Move (StrSplitToArray("h,i,j,k,l", ",") to asDim2')
+                Move (StrSplitToArray("h,i,j,k,l", ",")) to asDim2
+                Send AddLn ('Move (StrSplitToArray("1,2,3,4,5", ",") to asSingle')
+                Move (StrSplitToArray("1,2,3,4,5", ",")) to asSingle
+                Send AddLn ('Get StrArrayToInt asSingle to aiDim3')
+                Get StrArrayToInt asSingle to aiDim3
+
+                
+                Send AddLn ('Move asDim1 to asMulti[0]')
+                Send AddLn ('Move asDim2 to asMulti[1]')
+                Send AddLn ('Move aiDim3 to asMulti[2]')
+                Move asDim1 to asMulti[0]
+                Move asDim2 to asMulti[1]
+                Move aiDim3 to asMulti[2]
+                
+                Send AddLn ('asMulti: ' + StrJoinFromArray(asMulti, ","))
+                Send AddLn ('asMulti[0]: ' + StrJoinFromArray(asMulti[0], ","))
+                Send AddLn ('asMulti[1]: ' + StrJoinFromArray(asMulti[1], ","))
+                Send AddLn ('asMulti[2]: ' + StrJoinFromArray(asMulti[2], ","))
+
+                Send AddLn ('')
+                Send AddLn ('Variant[][] avMulti')
+                Send AddLn ('Variant[] avTest1 avTest2')
+                Send AddLn ('Integer[] aiTestInt')
+                Variant[][] avMulti
+                Variant[] avTest1 avTest2
+                Integer[] aiTestInt
+                Send AddLn ('Move (StrSplitToArray("a,b,c,d,e,f,g", ",") to avTest1 does not work as it returns a string array')
+                Send AddLn ('Instead use Move "a" to avTest1[0]....')
+                //Move (StrSplitToArray("a,b,c,d,e,f,g", ",")) to avTest1
+                Move "a" to avTest1[0]
+                Move "b" to avTest1[1]
+                Move "c" to avTest1[2]
+                Send AddLn ('Move (StrSplitToArray("1,2,3,4,5", ",") to avTest2 to avTest1 does not work as it returns a string array')
+                Send AddLn ('Instead use Move 1 to avTest2[0]....')
+                //Move (StrSplitToArray("1,2,3,4,5", ",")) to asSingle
+                Move 1 to avTest2[0]
+                Move 2 to avTest2[1]
+                Move 3 to avTest2[2]
+
+                //Send AddLn ('Get StrArrayToInt asSingle to avTest2')
+                //Get StrArrayToInt asSingle to avTest2
+                Send AddLn ('Move (StrSplitToArray("1,2,3,4,5", ",") to asSingle to avTest1')
+                //Move (StrSplitToArray("1,2,3,4,5", ",")) to asSingle
+                Send AddLn ('Get StrArrayToInt asSingle to aiTestInt does not work as it returns a integer array')
+                //Get StrArrayToInt asSingle to aiTestInt
+                Send AddLn ('And even if we use Move 1 to aiTestInt[0].... it is stille store in an integer array which failes')
+                Move 1 to aiTestInt[0]
+                Move 2 to aiTestInt[1]
+                Move 3 to aiTestInt[2]
+                
+                Send AddLn ('Move avTest1 to asMulti[0]')
+                Send AddLn ('Move avTest2 to asMulti[1]')
+                Send AddLn ('Move aiTestInt to asMulti[2]')
+                Move avTest1 to avMulti[0]
+                Move avTest2 to avMulti[1]
+                Move aiTestInt to avMulti[2]
+                
+
+                Send AddLn ('avMulti: ' + StrJoinFromArray(avMulti, ","))
+                Send AddLn ('avMulti[0]: ' + StrJoinFromArray(avMulti[0], ","))
+                Send AddLn ('avMulti[1]: ' + StrJoinFromArray(avMulti[1], ","))
+                Send AddLn ('avMulti[2]: ' + StrJoinFromArray(avMulti[2], ","))
+
+
+                Send Deactivate to oErrorEventHandler
+                // --- Tests End Here ---
+            End_Procedure
+            
+            Procedure AddLn String sText
+                String sFullText sNewLine
+                //Move (Character(10)) to sNewLine
+                Move "<br>" to sNewLine
+                WebGet psHtml of oWebHtmlBox1 to sFullText
+                Move (sFullText + sNewLine + sText) to sFullText
+                WebSet psHtml of oWebHtmlBox1 to sFullText
+            End_Procedure
+            
+        End_Object
+        
+
+        
+    End_Object 
+    
+    Procedure OnShow
+        Send EvaluateArray of oWebHtmlBox1
+    End_Procedure
+
+
+
+    Object oErrorEventHandler is a cErrorEventHandler
+        
+        Procedure OnError Integer iError String sErrorText Integer iErrorLine
+            Send None
+        End_Procedure
+        
+    End_Object
+
+End_Object
