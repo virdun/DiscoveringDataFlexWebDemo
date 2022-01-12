@@ -175,7 +175,7 @@ Object oFunctions is a cWebView
             End_Procedure
             
             Procedure Test String sInput
-                Send AddLn (' - You called Test with ' + sInput)
+                Send Addln (' - You called Test with ' + sInput)
             End_Procedure
             
             Procedure IncrementWithFive Integer ByRef iNumber
