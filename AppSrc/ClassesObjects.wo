@@ -22,7 +22,7 @@ Object obj1 is a cls1
         Send None
         Send Test of obj2
     End_Procedure
-
+ 
     Object obj2 is a cls2
         Property Integer piMyInt 99
         Procedure Test
@@ -56,7 +56,7 @@ Class cMyLimitedForm is a cWebForm
         String sValue
         
         WebGet psValue of oComment to sValue
-        Get PadChar2 sValue 10 "_" to sValue
+        //Get PadChar2 sValue 10 "_" to sValue
         WebSet psValue of oComment to sValue
     End_Procedure
     
