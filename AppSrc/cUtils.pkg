@@ -1,6 +1,32 @@
 ﻿Use UI
 
 Class cUtils is a cObject
+    
+    // sType: W (creating a new file and write), A (create if not exist and append)
+    Procedure WriteFile Global String sFilePath String sText String sType
+        String sHomeDir sFullFilePath
+        Integer iChannel
+        Handle hoWorkSpace
+        
+        Move (Seq_New_Channel()) to iChannel
+        If (iChannel=DF_SEQ_CHANNEL_NOT_AVAILABLE) Procedure_Return False
+        
+        Get phoWorkspace of ghoApplication to hoWorkSpace
+        Get psHome of hoWorkSpace to sFullFilePath
+        Move (sFullFilePath - sFilePath) to sFullFilePath
+        
+        If (num_arguments = 2) Move 'A' to sType
+        If (sType = 'W') Direct_Output channel iChannel sFullFilePath
+        If (sType = 'A') Append_Output channel iChannel sFullFilePath
+        
+        Writeln channel iChannel sText
+        
+        Close_Output channel iChannel
+        Send Seq_Release_Channel iChannel
+        
+        Procedure_Return True
+    End_Procedure
+    
     Function RemoveSuroundingApposFromString Global String sSrc Returns String
         String sReturn
         Integer iCharCount

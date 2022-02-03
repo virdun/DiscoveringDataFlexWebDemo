@@ -201,6 +201,13 @@ Object oWebApp is a cWebApp
                     End_Object
     
                 End_Object
+                
+                Object oFileManagementItem1 is a cWebMenuItemLoadView
+                    Set psCaption to "FileManagement"
+                    Set psLoadViewOnClick to "oFileManagement"
+                End_Object
+
+
 
             End_Object  
         End_Object  
@@ -264,6 +271,7 @@ Object oWebApp is a cWebApp
     Use Array.wo
     Use ClassesObjects.wo
     Use Struct.wo
+    Use FileManagement.wo
     
     Function GetDefaultView Returns Handle
         Handle hView
