@@ -1,7 +1,6 @@
 ﻿Use AllWebAppClasses.pkg
 Use cConnection.pkg
 Use cWebMenuItemLoadView.pkg
-Use cUtils.pkg
 Use ErrorEventHandlerClass.pkg
     
 Object oApplication is a cApplication
@@ -250,6 +249,7 @@ Object oWebApp is a cWebApp
     End_Object
 
     Use SessionManager.wo
+    Use cUtils.pkg
     Use LoginDialog.wo
     Use WebResourceManager.wo
     Use Location.wo
