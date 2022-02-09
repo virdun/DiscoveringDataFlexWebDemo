@@ -27,6 +27,60 @@ Class cUtils is a cObject
         Procedure_Return True
     End_Procedure
     
+    
+    // sType: 
+    //   - MSG, log and send message to admin
+    //   - INFO, log with no mail
+    //   - WARN, send warning to admin
+    //   - ERR, send error message to admin
+    //
+    // Usage:
+    // Send DebugLog 'INFO' ('Data to monitor ' + sRelevantVariable)
+    
+    Procedure DebugLog Global String sType String sMessage
+        String sCr sIP sUserAgent sUsername sMailBody sLoginName
+        Move (Character(10)) to sCr
+        
+        Move (sType + ': ' + sMessage) to sMailBody
+        
+        // Debug Trace???
+        
+        Move (sMailBody + sCr + sCr + 'Date: ' + String(CurrentDateTime())) to sMailBody
+        
+        #IFDEF IS$WEBAPP
+            Get psUsername of oSessionManager to sUsername
+            Get psLoginName of oSessionManager to sLoginName
+            Move (sMailBody + sCr + 'User: ' + sLoginName + ' (' + sUsername + ')') to sMailBody
+            
+            Get ServerVariable of ghoWebServiceDispatcher "HTTP_USER_AGENT" to sUserAgent
+            Move (sMailBody + sCr + 'Browser: ' +  sUserAgent) to sMailBody
+            
+            Get ServerVariable of ghoWebServiceDispatcher "HTTP_X_FORWARDER_FOR" to sIP
+            If (sIP = "" or Lowercase(sIP) = "unknown") Begin
+                Get ServerVariable of ghoWebServiceDispatcher "REMOTE_ADDR" to sIP
+            End
+            Move (sMailBody + sCr + 'IP: ' +  sIP) to sMailBody
+            
+        #ELSE
+            //Get psUsername of oSessionManager to sUsername
+            Move (sMailBody + sCr + 'User: Server') to sMailBody
+            
+            Get ServerVariable of ghoWebServiceDispatcher "HTTP_USER_AGENT" to sUserAgent
+            Move (sMailBody + sCr + 'Browser: DataFlex') to sMailBody
+            
+            Move (sMailBody + sCr + 'IP: 127.0.0.1') to sMailBody
+            
+        #ENDIF
+        
+        Send WriteFile 'debug.log' (sMailBody + sCr + '----------------------------------------------') 'A'
+        
+        If (sType <> 'INFO') Begin
+            // Send mail here
+        End
+        
+    End_Procedure
+    
+    
     Function RemoveSuroundingApposFromString Global String sSrc Returns String
         String sReturn
         Integer iCharCount
