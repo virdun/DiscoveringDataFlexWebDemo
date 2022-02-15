@@ -7,6 +7,7 @@ Class cUtils is a cObject
         String sHomeDir sFullFilePath
         Integer iChannel
         Handle hoWorkSpace
+        Boolean bOk
         
         Move (Seq_New_Channel()) to iChannel
         If (iChannel=DF_SEQ_CHANNEL_NOT_AVAILABLE) Procedure_Return False
@@ -14,6 +15,8 @@ Class cUtils is a cObject
         Get phoWorkspace of ghoApplication to hoWorkSpace
         Get psHome of hoWorkSpace to sFullFilePath
         Move (sFullFilePath - sFilePath) to sFullFilePath
+        
+        Get FolderManager sFullFilePath "C" to bOk
         
         If (num_arguments = 2) Move 'A' to sType
         If (sType = 'W') Direct_Output channel iChannel sFullFilePath
@@ -43,7 +46,6 @@ Class cUtils is a cObject
         
         Move (sType + ': ' + sMessage) to sMailBody
         
-        // Debug Trace???
         CallStackDump sStack
         Move (sMailBody + sCr + sCr + 'Trace: ' + sStack) to sMailBody
         
@@ -82,6 +84,40 @@ Class cUtils is a cObject
         
     End_Procedure
     
+    // sCmd - V: verify, C: create
+    Function FolderManager Global String sPath String sCmd Returns Boolean
+        String[] sFolderArr
+        String sTestPath
+        Integer iDepth
+        Boolean bExists
+
+        //Move (StrSplitToArray(sPath, '/')) to sFolderArr
+        //If (SizeOfArray(sFolderArr) < 2) 
+        Move (StrSplitToArray(sPath, '\')) to sFolderArr
+        
+        Move 1 to iDepth
+        Move sFolderArr[0] to sTestPath
+
+        File_Exist (sTestPath)  bExists
+        If (not(bExists)) Make_Directory (sTestPath)
+
+        While (iDepth < (SizeOfArray(sFolderArr)-1))
+            Move (sTestPath + "\" + sFolderArr[iDepth]) to sTestPath
+            
+            File_Exist (sTestPath)  bExists
+            If (not(bExists)) Begin
+                If (sCmd = "C") Begin
+                    Make_Directory (sTestPath)
+                End
+                If (sCmd = "V") Begin
+                    Function_Return False
+                End
+            End
+            Increment iDepth
+        Loop
+
+        Function_Return True
+    End_Function
     
     Function RemoveSuroundingApposFromString Global String sSrc Returns String
         String sReturn
