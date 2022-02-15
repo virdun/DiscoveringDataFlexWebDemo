@@ -38,12 +38,14 @@ Class cUtils is a cObject
     // Send DebugLog 'INFO' ('Data to monitor ' + sRelevantVariable)
     
     Procedure DebugLog Global String sType String sMessage
-        String sCr sIP sUserAgent sUsername sMailBody sLoginName
+        String sCr sIP sUserAgent sUsername sMailBody sLoginName sStack
         Move (Character(10)) to sCr
         
         Move (sType + ': ' + sMessage) to sMailBody
         
         // Debug Trace???
+        CallStackDump sStack
+        Move (sMailBody + sCr + sCr + 'Trace: ' + sStack) to sMailBody
         
         Move (sMailBody + sCr + sCr + 'Date: ' + String(CurrentDateTime())) to sMailBody
         
