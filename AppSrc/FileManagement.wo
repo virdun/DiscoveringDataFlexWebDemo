@@ -3,6 +3,7 @@ Use cWebPanel.pkg
 Use cWebForm.pkg 
 Use cWebEdit.pkg
 Use cWebButton.pkg
+Use cWebLabel.pkg
 
 Object oFileManagement is a cWebView
     Set piWidth to 700
@@ -17,14 +18,14 @@ Object oFileManagement is a cWebView
         // Your view will grow as controls are added
         
         Object oFileName is a cWebForm
-            Set piColumnSpan to 8
+            Set piColumnSpan to 6
             Set psLabel to "FileName:"
         End_Object
 
         Object oWebAppendBtn is a cWebButton
             Set piColumnSpan to 2
             Set psCaption to "Append"
-            Set piColumnIndex to 8
+            Set piColumnIndex to 6
         
             Procedure OnClick
                 String sPath sText
@@ -43,11 +44,11 @@ Object oFileManagement is a cWebView
                 Procedure_Return 123
             End_Procedure
         End_Object
-
+        
         Object oWebWriteBtn is a cWebButton
             Set piColumnSpan to 2
             Set psCaption to "Write"
-            Set piColumnIndex to 10
+            Set piColumnIndex to 8
         
             Procedure OnClick
                 String sPath sText
@@ -57,6 +58,26 @@ Object oFileManagement is a cWebView
                 
                 Send WriteFile sPath sText 'W'
             End_Procedure
+        End_Object
+
+        Object oWebReadBtn is a cWebButton
+            Set piColumnSpan to 2
+            Set psCaption to "Read"
+            Set piColumnIndex to 10
+        
+            Procedure OnClick
+                String sPath sText
+
+                WebGet psValue of oFileName to sPath
+                Get ReadFile sPath to sText
+                WebSet psValue of oWebEdit1 to sText
+            End_Procedure
+        End_Object
+        
+        Object oWebLabel1 is a cWebLabel
+            Set psCaption to "WARNING! Enabeling the user to add any path from the workspace root folder is a security risk and is only used here for showcase and testing purpouses."
+            Set piColumnSpan to 12
+            Set psTextColor to "#cc0000"
         End_Object
 
         Object oWebEdit1 is a cWebEdit
