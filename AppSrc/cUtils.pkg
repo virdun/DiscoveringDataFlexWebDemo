@@ -2,6 +2,33 @@
 
 Class cUtils is a cObject
     
+    Function ReadFile Global String sFilePath Returns String
+        Integer iChannel
+        String sHomeDir sData sBuffer sFullFilePath sCr
+        Handle hoWorkSpace
+
+        Get phoWorkspace of ghoApplication to hoWorkspace
+        Get psHome of hoWorkspace to sHomeDir
+        Move (sHomeDir - sFilePath) to sFullFilePath
+
+        Move (Seq_New_Channel()) to iChannel
+        If (iChannel=DF_SEQ_CHANNEL_NOT_AVAILABLE) Procedure_Return False
+
+        Direct_Input channel iChannel sFullFilePath
+        If (not(SeqEof)) Begin
+            Repeat
+                Readln channel iChannel sBuffer
+                Move (sData+sCr+sBuffer) to sData
+                Move (Character(10)) to sCr
+            Until (SeqEof)
+        End
+        Else Move ("File not found: " + sFilePath) to sData
+        
+        Close_Input channel iChannel
+
+        Function_Return sData
+    End_Function
+    
     // sType: W (creating a new file and write), A (create if not exist and append)
     Procedure WriteFile Global String sFilePath String sText String sType
         String sHomeDir sFullFilePath
