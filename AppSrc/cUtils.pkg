@@ -12,7 +12,7 @@ Class cUtils is a cObject
         Move (sHomeDir - sFilePath) to sFullFilePath
 
         Move (Seq_New_Channel()) to iChannel
-        If (iChannel=DF_SEQ_CHANNEL_NOT_AVAILABLE) Procedure_Return False
+        If (iChannel=DF_SEQ_CHANNEL_NOT_AVAILABLE) Function_Return ""
 
         Direct_Input channel iChannel sFullFilePath
         If (not(SeqEof)) Begin
