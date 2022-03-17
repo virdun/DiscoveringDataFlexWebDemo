@@ -41,6 +41,66 @@ Object oItem is a cWebView
                 Set ParentNullAllowed DefaultLocation.File_Number to False
             End
         End_Procedure
+        
+        Procedure Backout
+                String sTest
+                
+                Move "" to sTest
+                Get DD_Value oitem_DD (RefTable(Item.Name)) to sTest
+                Move "" to sTest
+                Get DD_Value olocation_DD (RefTable(Location.Name)) to sTest
+            
+                Move "" to sTest
+                Get File_Field_Current_Value File_Field Item.Name to sTest
+                Move "" to sTest
+                Get File_Field_Current_Value File_Field Location.Name to sTest
+                Move "" to sTest
+                
+                Get Field_Current_Value Field Item.Name to sTest
+                Move "" to sTest
+                Get Field_Current_Value Field Location.Name to sTest
+                Move "" to sTest
+
+                Get Field_Current_Value (RefTable(Item.Name)) to sTest
+                Move "" to sTest
+                Get Field_Current_Value (RefTable(Location.Name)) to sTest
+                Move "" to sTest
+                
+
+                Move "" to sTest
+                Get File_Field_Current_Value of oitem_DD File_Field Item.Name to sTest
+                Move "" to sTest
+                Get File_Field_Current_Value of oitem_DD File_Field Location.Name to sTest
+                Move "" to sTest
+                
+                Get Field_Current_Value of oitem_DD Field Item.Name to sTest
+                Move "" to sTest
+                Get Field_Current_Value of oitem_DD Field Location.Name to sTest
+                Move "" to sTest
+
+                Get Field_Current_Value of oitem_DD (RefTable(Item.Name)) to sTest
+                Move "" to sTest
+                Get Field_Current_Value of oitem_DD (RefTable(Location.Name)) to sTest
+                Move "" to sTest
+                
+//                Get File_Field_Current_Value of olocation_DD File_Field Location.Name to sTest
+                Move "" to sTest
+//                Get File_Field_Current_Value of olocation_DD File_Field Item.Name to sTest
+                Move "" to sTest
+                
+//                Get Field_Current_Value of olocation_DD Field Location.Name to sTest
+                Move "" to sTest
+//                Get Field_Current_Value of olocation_DD Field Item.Name to sTest
+                Move "" to sTest
+
+                Get Field_Current_Value of olocation_DD (RefTable(Location.Name)) to sTest
+                Move "" to sTest
+                Get Field_Current_Value of olocation_DD (RefTable(Item.Description)) to sTest
+                Move "" to sTest
+                
+                
+                Send None
+        End_Procedure
     End_Object 
 
     Set Main_DD To oitem_DD
@@ -147,6 +207,74 @@ Object oItem is a cWebView
         
             Procedure OnClick
                 Send Request_ClearBindingTable of oDefaultLocation_Name
+            End_Procedure
+        End_Object
+
+        Object oWebButton2 is a cWebButton
+            Set piColumnSpan to 0
+            Set psCaption to "DDO Test File_Field_"
+        
+            Procedure OnClick
+                String sTest
+                
+                
+                Move "" to sTest
+                Get DD_Value oitem_DD (RefTable(Item.Name)) to sTest
+                Move "" to sTest
+                Get DD_Value olocation_DD (RefTable(Location.Name)) to sTest
+
+                
+                Move "" to sTest
+//                Get File_Field_Current_Value File_Field Item.Name to sTest
+                Move "" to sTest
+//                Get File_Field_Current_Value File_Field Location.Name to sTest
+                Move "" to sTest
+                
+//                Get Field_Current_Value Field Item.Name to sTest
+                Move "" to sTest
+//                Get Field_Current_Value Field Location.Name to sTest
+                Move "" to sTest
+
+//                Get Field_Current_Value (RefTable(Item.Name)) to sTest
+                Move "" to sTest
+//                Get Field_Current_Value (RefTable(Location.Name)) to sTest
+                Move "" to sTest
+                
+
+                Move "" to sTest
+                Get File_Field_Current_Value of oitem_DD File_Field Item.Name to sTest
+                Move "" to sTest
+                Get File_Field_Current_Value of oitem_DD File_Field Location.Name to sTest
+                Move "" to sTest
+                
+                Get Field_Current_Value of oitem_DD Field Item.Name to sTest
+                Move "" to sTest
+                Get Field_Current_Value of oitem_DD Field Location.Name to sTest
+                Move "" to sTest
+
+                Get Field_Current_Value of oitem_DD (RefTable(Item.Name)) to sTest
+                Move "" to sTest
+                Get Field_Current_Value of oitem_DD (RefTable(Location.Name)) to sTest
+                Move "" to sTest
+                
+                Get File_Field_Current_Value of olocation_DD File_Field Location.Name to sTest
+                Move "" to sTest
+                Get File_Field_Current_Value of olocation_DD File_Field Item.Name to sTest
+                Move "" to sTest
+                
+                Get Field_Current_Value of olocation_DD Field Location.Name to sTest
+                Move "" to sTest
+                Get Field_Current_Value of olocation_DD Field Item.Name to sTest
+                Move "" to sTest
+
+                Get Field_Current_Value of olocation_DD (RefTable(Location.Name)) to sTest
+                Move "" to sTest
+                Get Field_Current_Value of olocation_DD (RefTable(Item.Description)) to sTest
+                Move "" to sTest
+                
+                
+                Send None
+                
             End_Procedure
         End_Object
     End_Object 
