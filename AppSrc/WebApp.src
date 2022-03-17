@@ -206,7 +206,16 @@ Object oWebApp is a cWebApp
                     Set psLoadViewOnClick to "oFileManagement"
                 End_Object
 
+                Object oDDMenu is a cWebMenuItem
+                    Set psCaption to "Data Dictionaries"
 
+                    Object oBuffersItem1 is a cWebMenuItemLoadView
+                        Set psCaption to "Buffers"
+                        Set psLoadViewOnClick to "oBuffers"
+                    End_Object
+        
+
+                End_Object
 
             End_Object  
         End_Object  
@@ -271,6 +280,7 @@ Object oWebApp is a cWebApp
     Use Array.wo
     Use ClassesObjects.wo
     Use Struct.wo
+    Use Buffers.wo
     Use FileManagement.wo
     
     Function GetDefaultView Returns Handle
