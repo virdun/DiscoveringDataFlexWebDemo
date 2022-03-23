@@ -14,11 +14,13 @@ Use cWebRadio.pkg
 Use cWebCardContainer.pkg
 Use cWebCard.pkg
 Use cWebButton.pkg
+Use cWebLabel.pkg
 
 Object oItem is a cWebView
     Set piColumnCount to 12
     Set psCaption to "Item"
     Set piWidth to 700
+    Set pbClearAfterSave to False // We do not want to search for the same product again after we have done a save
 
     Object oDefaultLocation_DD is a cDefaultLocationDataDictionary
     End_Object
@@ -30,6 +32,8 @@ Object oItem is a cWebView
     Object oitem_DD is a citemDataDictionary
         Set DDO_Server to oDefaultLocation_DD
         Set DDO_Server to olocation_DD
+        Set Ordering to 2 // Define what index this view should use to find items
+
         
         //Send Remove_Server_File DefaultLocation.File_Number
         
@@ -183,7 +187,7 @@ Object oItem is a cWebView
 
         Object oitemExpirationDate is a cWebDateForm
             Entry_Item item.ExpirationDate
-            Set piColumnSpan to 2
+            Set piColumnSpan to 4
             Set piColumnIndex to 0
             Set peLabelPosition to lpTop
             Set psLabel to "ExpirationDate"
@@ -211,7 +215,7 @@ Object oItem is a cWebView
         End_Object
 
         Object oWebButton2 is a cWebButton
-            Set piColumnSpan to 0
+            Set piColumnSpan to 4
             Set psCaption to "DDO Test File_Field_"
         
             Procedure OnClick
@@ -274,6 +278,104 @@ Object oItem is a cWebView
                 
                 
                 Send None
+                
+            End_Procedure
+        End_Object
+
+        Object oUpdateNameLbl is a cWebLabel
+            Set psCaption to "Update name..."
+            Set piColumnSpan to 2
+        End_Object
+
+        Object oBadBtn is a cWebButton
+            Set piColumnSpan to 2
+            Set psCaption to "BAD"
+            Set piColumnIndex to 2
+            Set psBackgroundColor to "#b5a710"
+        
+            Procedure OnClick
+                String sName
+                
+                // Using the global buffer to update information
+                
+                Clear Item
+                WebGet psValue of oitemName to sName
+                Move sName to Item.Name
+                //Find EQ Item by Index.2 is not working becaus index 2 is not unique on Name
+                Find GE Item by Index.2
+                
+                Move (sName + ' (UPDATED)') to Item.Name
+                //Move "" to Item.Name
+                SaveRecord Item // - This is not doing any validation
+                
+                // We also need to make sure the information is updated in the DEO (Data Entry Object)
+                WebSet psValue of oitemName to Item.Name
+                
+            End_Procedure
+        End_Object
+
+        Object oWorseBtn is a cWebButton
+            Set piColumnSpan to 2
+            Set psCaption to "WORSE"
+            Set piColumnIndex to 4
+            Set psBackgroundColor to "#c6361f"
+        
+            Procedure OnClick
+                Boolean bErr
+                String sName
+                
+                // Trying to use Data Dictionaries "for real"
+                
+                WebGet psValue of oitemName to sName // Make sure to get this value befor you clear. Because it clears the DEO as well
+                
+                // WARNING! Neglecting to write "of" here will not throw an error. It will just not do anything!
+                Send Request_Clear of oitem_DD
+                
+                //Set Field_Current_Value of oitem_DD Field item.name to sName // - Should not be used with Request_Find
+                Move sName to Item.Name
+                Send Request_Find of oitem_DD GE Item.File_Number 2
+                
+                //Set Field_Current_Value of oitem_DD Field item.name to (sName + ' (UPDATED)') // - Current value won't trigger a Save event when Request_Save is called
+                //Set Field_Changed_State of oitem_DD Field item.name to True // - We also need to indicate that it has been changed
+                // But why when we can do both in one go...
+                Set Field_Changed_Value of oitem_DD Field Item.name to (sName + ' (UPDATED)')
+                
+                Get Request_Validate of oitem_DD to bErr
+                If (not(bErr)) Begin
+                   Send Request_Save of oitem_DD
+                   Move (Err) to bErr
+                End
+
+                // Since we added the new value to the Field_Changed_Value, it will update the DEO automatically
+                //WebSet psValue of oitemName to Item.Name
+
+            End_Procedure
+        End_Object
+
+        Object oBestBtn is a cWebButton
+            Set piColumnSpan to 2
+            Set psCaption to "BEST"
+            Set piColumnIndex to 6
+        
+            Procedure OnClick
+                Boolean bErr
+                String sName
+                Integer iItemID
+                
+                // The right way to work with DDO's when updating active data
+
+                // We already have the current value stored in our local buffer, the DDO (Data Dictionary Object)
+                Get Field_Current_Value of oitem_DD Field Item.name to sName
+                Get Field_Current_Value of oitem_DD Field Item.ID to iItemID
+                
+                Set Field_Changed_Value of oitem_DD Field Item.name to (sName + ' (UPDATED ' + String(iItemID) + ')')
+                // Set Field_Changed_Value of oitem_DD Field Item.name to "" // - Try to see the Request_Validate in action
+                
+                Get Request_Validate of oitem_DD to bErr
+                If (not(bErr)) Begin
+                   Send Request_Save of oitem_DD
+                   Move (Err) to bErr
+                End
                 
             End_Procedure
         End_Object
