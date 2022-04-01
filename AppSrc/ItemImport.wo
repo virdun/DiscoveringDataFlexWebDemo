@@ -3,11 +3,28 @@ Use cWebPanel.pkg
 Use cWebForm.pkg 
 Use cWebFileUploadButton.pkg
 Use cCharTranslate.pkg
+Use clocationDataDictionary.dd
+Use cDefaultLocationDataDictionary.dd
+Use citemDataDictionary.dd
 
 Object oCharTranslate is a cCharTranslate
 End_Object
 
 Object oItemImport is a cWebView
+    Object oDefaultLocation_DD is a cDefaultLocationDataDictionary
+    End_Object
+
+    Object olocation_DD is a clocationDataDictionary
+    End_Object
+
+    Object oitem_DD is a citemDataDictionary
+        Set DDO_Server to oDefaultLocation_DD
+        Set DDO_Server to olocation_DD
+    End_Object
+
+    Set Main_DD to oitem_DD
+    Set Server to oitem_DD
+
     Set piWidth to 700
     Set psCaption to "ItemImport"
 
@@ -17,7 +34,7 @@ Object oItemImport is a cWebView
         Set piColumnCount to 12
 
         Object oWebFileUploadButton1 is a cWebFileUploadButton
-            Set piColumnSpan to 0
+            Set piColumnSpan to 5
             Set psCaption to "Upload File(s)"
         
             // Called for each file upload to generate the local path where the file is stored.
@@ -36,6 +53,7 @@ Object oItemImport is a cWebView
                 String sBuffer sTmpBuffer sPath
                 String[] asData
                 Integer iColumns iTotalColumns
+                Boolean bErr
                 
                 Address aUTF8Buffer
                 Integer iBufferLength iVoid iLocationID
@@ -82,31 +100,32 @@ Object oItemImport is a cWebView
                                     If ((Trim(sBuffer)) <> "") Begin
                                         Move (StrSplitToArray(sBuffer, ";")) to asData
                                         
-                                        Clear location
+                                        Send Request_Clear of oitem_DD
+                                        Send Request_Clear of olocation_DD
                                         Move asData[3] to location.Name
-                                        Find GE location by Index.2
+                                        Send Request_Find of olocation_DD GE location.File_Number 2
                                         If (asData[3] <> location.Name) Begin
-                                            Clear location
-                                            Move system.location_id to location.ID
-                                            Increment system.location_id
-                                            SaveRecord system
-                                            Move asData[3] to location.Name
-                                            Move 0 to location.ItemCounter
+                                            Set Field_Changed_Value of olocation_DD (RefTable(location.Name)) to (RemoveSuroundingApposFromString(asData[3]))
+                                            Set Field_Changed_Value of olocation_DD (RefTable(location.ItemCounter)) to 0
                                         End
-                                        Increment location.ItemCounter
-                                        SaveRecord location
+                                        Set Field_Changed_Value of olocation_DD (RefTable(location.ItemCounter)) to (location.ItemCounter + 1)
+                                        Get Request_Validate of olocation_DD to bErr
+                                        If not bErr Begin
+                                            Send Request_Save of olocation_DD
+                                            Move (Err) to bErr
+                                        End
                                         
-                                        Clear Item
-                                        Move system.item_id to Item.ID
-                                        Increment system.item_id
-                                        SaveRecord system
-                                        Move (RemoveSuroundingApposFromString(asData[0])) to Item.Name
-                                        Move (RemoveSuroundingApposFromString(asData[1])) to Item.Description
-                                        Move (RemoveSuroundingApposFromString(asData[2])) to Item.Category
-                                        Move location.ID to Item.Location_Id
-                                        Move (RemoveSuroundingApposFromString(asData[4])) to Item.ExpirationDate
-                                        Move (CurrentDateTime()) to Item.Created
-                                        SaveRecord Item
+                                        Set Field_Changed_Value of oitem_DD (RefTable(Item.Name)) to (RemoveSuroundingApposFromString(asData[0]))
+                                        Set Field_Changed_Value of oitem_DD (RefTable(Item.Description)) to (RemoveSuroundingApposFromString(asData[1]))
+                                        Set Field_Changed_Value of oitem_DD (RefTable(Item.Category)) to (RemoveSuroundingApposFromString(asData[2]))
+                                        Set Field_Changed_Value of oitem_DD (RefTable(Item.Location_Id)) to location.ID
+                                        Set Field_Changed_Value of oitem_DD (RefTable(Item.ExpirationDate)) to (RemoveSuroundingApposFromString(asData[4]))
+                                        Set Field_Changed_Value of oitem_DD (RefTable(Item.Created)) to (CurrentDateTime())
+                                        Get Request_Validate of oitem_DD to bErr
+                                        If not bErr Begin
+                                            Send Request_Save of oitem_DD
+                                            Move (Err) to bErr
+                                        End
                                     End
                                 End
                             End
