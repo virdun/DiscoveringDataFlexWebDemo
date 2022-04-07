@@ -1,14 +1,14 @@
 -----------------------------------------------------------------------------
-  DATE: 2021-10-01      TIME: 10:09                                  PAGE:  1
-  FILE DEFINITION FOR FILE: DefaultLocation (# 4)
+  DATE: 2022-04-06      TIME: 23:29                                  PAGE:  1
+  FILE DEFINITION FOR FILE: location (# 3)
 -----------------------------------------------------------------------------
   DRIVER NAME               : MSSQLDRV
   FILE ROOT NAME            : MSSQLDRV:location
-  USER DISPLAY NAME         : DefaultLocation
-  DATAFLEX FILE NAME        : DefaultLocation
+  USER DISPLAY NAME         : location
+  DATAFLEX FILE NAME        : location
 -----------------------------------------------------------------------------
-  RECORD LENGTH             : 52        ( USED: 52 )
-  MAX NUMBER OF RECORDS     : 2147483647  ( USED: 9 )
+  RECORD LENGTH             : 58        ( USED: 58 )
+  MAX NUMBER OF RECORDS     : 2147483647  ( USED: 14 )
   FILE COMPRESSION          : NONE
   RE-USE DELETED SPACE      : YES
   LOCKING TYPE              : RECORD
@@ -24,6 +24,7 @@ NUM  FIELD NAME       TYPE SIZE  OFFST IX   RELATES TO FILE.FIELD
   1  ID               NUM    6.0     1  1   
   2  Name             ASC     30    12  2   
   3  ItemCounter      NUM   10.0    42      
+  4  is_deleted       NUM    2.0    53      
 
 
 INDEX# FIELDS          DES U/C    LENGTH LEVELS SEGMENTS MODE

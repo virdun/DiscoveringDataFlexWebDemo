@@ -29,6 +29,16 @@ Class clocationDataDictionary is a DataDictionary
 
     End_Procedure
 
+    Procedure OnConstrain
+        Constrain location.is_deleted eq 0
+    End_Procedure
+    
+    Procedure Delete_Main_File
+        //Forward Send Delete_Main_File
+        Move 1 to location.is_deleted
+        SaveRecord location
+    End_Procedure
+
 End_Class
 
 #IFDEF Is$WebApp
