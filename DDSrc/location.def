@@ -1,14 +1,14 @@
 -----------------------------------------------------------------------------
-  DATE: 2021-03-24      TIME: 17:08                                  PAGE:  1
+  DATE: 2022-04-06      TIME: 23:29                                  PAGE:  1
   FILE DEFINITION FOR FILE: location (# 3)
 -----------------------------------------------------------------------------
-  DRIVER NAME               : DATAFLEX
-  FILE ROOT NAME            : location
+  DRIVER NAME               : MSSQLDRV
+  FILE ROOT NAME            : MSSQLDRV:location
   USER DISPLAY NAME         : location
   DATAFLEX FILE NAME        : location
 -----------------------------------------------------------------------------
-  RECORD LENGTH             : 34        ( USED: 33 )
-  MAX NUMBER OF RECORDS     : 10000     ( USED: 5 )
+  RECORD LENGTH             : 58        ( USED: 58 )
+  MAX NUMBER OF RECORDS     : 2147483647  ( USED: 14 )
   FILE COMPRESSION          : NONE
   RE-USE DELETED SPACE      : YES
   LOCKING TYPE              : FILE
@@ -22,7 +22,9 @@
 NUM  FIELD NAME       TYPE SIZE  OFFST IX   RELATES TO FILE.FIELD
 ---  ---------------  ---- ----- ----- --   ---------------------------------
   1  ID               NUM    6.0     1  1   
-  2  Name             ASC     30     4  2   
+  2  Name             ASC     30    12  2   
+  3  ItemCounter      NUM   10.0    42      
+  4  is_deleted       NUM    2.0    53      
 
 
 INDEX# FIELDS          DES U/C    LENGTH LEVELS SEGMENTS MODE

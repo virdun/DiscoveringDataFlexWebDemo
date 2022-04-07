@@ -3,3 +3,4 @@
 #REPLACE location.ID |FN3,1
 #REPLACE location.Name |FS3,2
 #REPLACE location.ItemCounter |FN3,3
+#REPLACE location.is_deleted |FN3,4

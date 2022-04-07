@@ -7,14 +7,36 @@ Use cWebPanel.pkg
 Use cWebForm.pkg
 
 Use clocationDataDictionary.dd
+Use cDefaultLocationDataDictionary.dd
+Use citemDataDictionary.dd
 
 Object oLocation is a cWebView
     Set piColumnCount to 12
     Set psCaption to "Location"
     Set piWidth to 700
 
+    Object oDefaultLocation_DD is a cDefaultLocationDataDictionary
+    End_Object
+
     Object olocation_DD is a clocationDataDictionary
+        Set Cascade_Delete_State to True
+        
     End_Object 
+
+    Object oitem_DD is a citemDataDictionary
+        Set DDO_Server to oDefaultLocation_DD
+        Set Constrain_file to location.File_number
+        Set DDO_Server to olocation_DD
+        
+        Set CascadeDeleteAllowed location.File_Number to True
+        
+        Set ParentNullAllowed location.File_Number to True
+        Set CascadeDeleteNull location.File_Number to True
+        
+        Procedure Save_Main_File
+            //Forward Send Save_Main_File
+        End_Procedure
+    End_Object
 
     Set Main_DD To olocation_DD
     Set Server  To olocation_DD

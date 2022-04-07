@@ -18,6 +18,8 @@ Object oitemWebLookup is a cWebModalDialog
     Set piHeight to 400
 
     Object olocation_DD is a clocationDataDictionary
+        Procedure OnConstrain
+        End_Procedure
     End_Object 
 
     Object oitem_DD is a citemDataDictionary
