@@ -44,6 +44,8 @@ Class citemDataDictionary is a DataDictionary
         Set Field_WebPrompt_Object Field Item.ExpirationDate to oitemWebLookup
         
         Set ParentNullAllowed DefaultLocation.File_Number to True
+        
+        Set pbInheritConstraints to False
 
 
     End_Procedure
