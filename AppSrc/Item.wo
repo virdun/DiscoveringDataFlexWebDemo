@@ -28,8 +28,6 @@ Object oItem is a cWebView
     Object olocation_DD is a clocationDataDictionary
         Set Allow_Foreign_New_Save_State to True
 
-        Procedure OnConstrain
-        End_Procedure
     End_Object 
 
     Object oitem_DD is a citemDataDictionary
@@ -37,7 +35,6 @@ Object oItem is a cWebView
         Set DDO_Server to olocation_DD
         Set Ordering to 2 // Define what index this view should use to find items
 
-        
         //Send Remove_Server_File DefaultLocation.File_Number
         
         Procedure OnConstrain
