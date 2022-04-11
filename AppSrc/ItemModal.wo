@@ -151,11 +151,11 @@ Object oItemModal is a cWebModalDialog
     Procedure Popup Handle hoReturnObject Integer iItemID
         Forward Send Popup hoReturnObject Self
         
-        Send Request_Clear oitem_DD
+        Send Request_Clear of oitem_DD
         Move iItemID to Item.ID
         Send Find of oitem_DD EQ 1
         
-        String sPath sFileName
+        String sPath sFileName sValue
         Boolean bFileExists
         
         If (iItemID > 0) Begin
@@ -168,16 +168,22 @@ Object oItemModal is a cWebModalDialog
             If (not(bFileExists)) Make_Directory (sPath + "\" + String(iItemID))
             Move (sPath + "\" + String(iItemID)) to sPath
             
-            Send RegisterDownloadFolder of oItemResourceManager sPath
+            Send RegisterDownloadFolder of ghoWebResourceManager sPath
             
+            Move False to bFileExists
             Direct_Input ("dir: " + sPath)
             Repeat
                 Readln sFileName
                 If (sFileName <> "" and sFileName <> "[.]" and sFileName <> "[..]") Begin
-                    Send UpdateLocalImage of oWebImage1 (sPath + "\" + sFileName)
+                  Move (sPath + "\" + sFileName) to sValue
+                    Move True to bFileExists
+                    //Get DownloadURL of ghoWebResourceManager (sPath + "\" + sFileName) to sValue
                 End
             Until (SeqEof)
             Close_Input ("dir: " + sPath)
+            
+            If (not(bFileExists)) Move ('https://source.unsplash.com/random/800x800/?img=' + String(iItemID)) to sValue
+            Send UpdateLocalImage of oWebImage1 (sValue)
         End
         
     End_Procedure
