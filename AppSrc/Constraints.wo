@@ -1,0 +1,251 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg 
+Use cWebHtmlList.pkg
+Use cWebColumn.pkg
+Use clocationDataDictionary.dd
+Use cDefaultLocationDataDictionary.dd
+Use citemDataDictionary.dd
+Use cWebColumnCombo.pkg
+Use cWebList.pkg
+
+Object oConstraints is a cWebView
+    Object oDefaultLocation_DD is a cDefaultLocationDataDictionary
+    End_Object
+
+    Property Integer piLocations0
+    Property Integer piLocations1
+    Property Integer piLocations2
+    Property Integer piLocations3
+    Object olocation_DD is a clocationDataDictionary
+        Procedure OnConstrain
+            Integer[] aiFilterLocations
+            Integer iLocation
+
+//            Constrain Location.ItemCounter ge 5
+
+//            Set psSQLFilter to (' location.ItemCounter >= 5 ')
+//            Set pbUseDDSQLFilters to True
+
+//            Constrain location as ( (location.Name contains "Wardr") or ;
+//                                (location.ItemCounter > 40) )
+            
+//            Constrain location as ( (location.ID = 3) or ;
+//                                    (location.ID = 4) or ;
+//                                    (location.ID = 17))
+
+            Move 3 to aiFilterLocations[0]
+            Move 4 to aiFilterLocations[1]
+            Move 17 to aiFilterLocations[2]
+            
+            If (SizeOfArray(aiFilterLocations) = 1) Begin
+//                Constrain location as ( (location.ID = Integer(aiFilterLocations[0])) )
+//                Constrain location as ( (location.ID EQ 3) )
+//                Constrain location as ( (location.ID EQ piLocations(Self)) )
+//                Constrain location as ( (location.ID EQ paiLocations(Self)[0]) )
+//                Constrain location as ( (location.ID EQ (getLocationValue(0))) )
+                Set piLocations0 to aiFilterLocations[0]
+                Constrain location as ( (location.ID EQ piLocations0(Self)) )
+            End
+            If (SizeOfArray(aiFilterLocations) = 2) Begin
+//                Constrain location as ( (location.ID = aiFilterLocations[0]) or ;
+//                                        (location.ID = aiFilterLocations[1]) )
+                Set piLocations0 to aiFilterLocations[0]
+                Set piLocations1 to aiFilterLocations[1]
+                Constrain location as ( (location.ID EQ piLocations0(Self)) or ;
+                                        (location.ID EQ piLocations1(Self)) )
+            End
+            If (SizeOfArray(aiFilterLocations) = 3) Begin
+//                Constrain location as ( (location.ID = aiFilterLocations[0]) or ;
+//                                        (location.ID = aiFilterLocations[1]) or ;
+//                                        (location.ID = aiFilterLocations[2]) )
+                Set piLocations0 to aiFilterLocations[0]
+                Set piLocations1 to aiFilterLocations[1]
+                Set piLocations2 to aiFilterLocations[2]
+                Constrain location as ( (location.ID EQ piLocations0(Self)) or ;
+                                        (location.ID EQ piLocations1(Self)) or ;
+                                        (location.ID EQ piLocations2(Self)) )
+            End
+            If (SizeOfArray(aiFilterLocations) = 4) Begin
+//                Constrain location as ( (location.ID = aiFilterLocations[0]) or ;
+//                                        (location.ID = aiFilterLocations[1]) or ;
+//                                        (location.ID = aiFilterLocations[2]) )
+                Set piLocations0 to aiFilterLocations[0]
+                Set piLocations1 to aiFilterLocations[1]
+                Set piLocations2 to aiFilterLocations[2]
+                Set piLocations3 to aiFilterLocations[3]
+                Constrain location as ( (location.ID EQ piLocations0(Self)) or ;
+                                        (location.ID EQ piLocations1(Self)) or ;
+                                        (location.ID EQ piLocations2(Self)) or ;
+                                        (location.ID EQ piLocations3(Self)) )
+            End
+
+        End_Procedure
+        
+    End_Object
+
+    Object oitem_DD is a citemDataDictionary
+        Set DDO_Server to oDefaultLocation_DD
+        Set DDO_Server to olocation_DD
+//        Set Constrain_File to location.File_Number
+        Set pbInheritConstraints to True
+
+
+        Procedure OnConstrain
+//            Constrain Item.Location_Id Eq 3
+
+//            Set psSQLFilter to (' Exists(SELECT id FROM location WHERE location.id=item.location_id AND location.ItemCounter >= 5) ')
+//            Set pbUseDDSQLFilters to True
+
+//            String sFilterLocations
+//            Move "3, 4, 17" to sFilterLocations
+//            Set psSQLFilter to (' Exists(SELECT id FROM location WHERE location.id=item.location_id AND location.id IN (' + sFilterLocations + ')) ')
+//            Set pbUseDDSQLFilters to True
+
+
+        End_Procedure
+        
+
+    End_Object
+
+    Set Main_DD to oitem_DD
+    Set Server to oitem_DD
+    
+    Object oItemResourceManager is a cWebResourceManager
+    End_Object
+
+    Set piWidth to 1200
+    Set psCaption to "Constraints"
+
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oWebList1 is a cWebList
+            Set Server to olocation_DD
+            Set piColumnSpan to 6
+
+            Object olocation_ID is a cWebColumn
+                Entry_Item location.ID
+                Set psCaption to "ID"
+                Set piWidth to 30
+            End_Object
+
+            Object olocation_Name is a cWebColumn
+                Entry_Item location.Name
+                Set psCaption to "Location"
+                Set piWidth to 400
+            End_Object
+
+            Object olocation_ItemCounter is a cWebColumn
+                Entry_Item location.ItemCounter
+                Set psCaption to "Count"
+                Set piWidth to 50
+            End_Object
+
+            Object olocation_is_deleted is a cWebColumn
+                Entry_Item location.is_deleted
+                Set psCaption to "Deleted"
+                Set piWidth to 50
+            End_Object
+            
+
+        End_Object
+
+        Object oWebHtmlList1 is a cWebHtmlList
+            Set Server to oitem_DD
+            Set psHtmlBefore to '<div class="card-list">'
+            Set psHtmlTemplate to ('<div class="card-item">';
+                                      + '<div class="card-img-container"><div class="card-img" style="background-image: url({{oItemImage}});"></div></div>';
+                                      + '<div class="card-title">{{oItemTitle}} ({{oLocationID}})</div>';
+                                      + '<div class="card-text">{{oItemCategory}} in the {{oLocationName}}<br><i>(containing <b>{{oLocationItemCounter}}</b> items)</i></div>';
+                                  +'</div>')
+            Set psHtmlAfter to '</div>'
+
+            Object oItemImage is a cWebColumn
+                Set psCaption to "column"
+                Set piWidth to 50
+    
+                Procedure OnSetCalculatedValue String ByRef sValue
+                    Forward Send OnSetCalculatedValue (&sValue)
+                    
+                    String sPath sFileName
+                    Boolean bFileExists
+                    Integer iItemID
+                    
+                    //Get Field_Current_Value of oitem_DD (RefTable(Item.ID)) to iItemID
+                    Move Item.ID to iItemID
+                    
+                    Get psDataPath of (phoWorkspace(ghoApplication)) to sPath
+                    File_Exist (sPath + "\Uploads") bFileExists
+                    If (not(bFileExists)) Make_Directory (sPath + "\Uploads")
+                    Move (sPath + "\Uploads") to sPath
+                    
+                    File_Exist (sPath + "\" + String(iItemID)) bFileExists
+                    If (not(bFileExists)) Make_Directory (sPath + "\" + String(iItemID))
+                    Move (sPath + "\" + String(iItemID)) to sPath
+                    
+                    Send RegisterDownloadFolder of oItemResourceManager sPath
+                    
+                    Move False to bFileExists
+                    Direct_Input ("dir: " + sPath)
+                    Repeat
+                        Readln sFileName
+                        If (sFileName <> "" and sFileName <> "[.]" and sFileName <> "[..]") Begin
+//                            Move (sPath + "\" + sFileName) to sValue
+                            Move True to bFileExists
+                            Get DownloadURL of ghoWebResourceManager (sPath + "\" + sFileName) to sValue
+                        End
+                    Until (SeqEof)
+                    Close_Input ("dir: " + sPath)
+                    
+                    If (not(bFileExists)) Move ('https://source.unsplash.com/random/800x800/?img=' + String(iItemID)) to sValue
+
+                End_Procedure
+            End_Object
+            
+            Object oItemTitle is a cWebColumn
+                Entry_Item Item.Name
+            End_Object
+
+            Object oItemCategory is a cWebColumn
+                Entry_Item Item.Category
+                Set psCaption to "Category"
+                Set piWidth to 50
+            End_Object
+
+
+            Object oLocationID is a cWebColumn
+                Entry_Item location.ID
+                Set psCaption to "LocationID"
+                Set piWidth to 50
+            End_Object
+
+            Object oLocationName is a cWebColumn
+                Entry_Item location.Name
+                Set psCaption to "Name"
+                Set piWidth to 50
+            End_Object
+
+            Object oLocationItemCounter is a cWebColumn
+                Entry_Item location.ItemCounter
+                Set psCaption to "ItemCounter"
+                Set piWidth to 50
+            End_Object
+            
+            
+            
+        End_Object
+        
+
+    End_Object
+    
+    Set pbServerOnShow to True
+    Procedure OnShow
+        Forward Send OnShow
+        
+        Send FindFromTop of oWebHtmlList1
+        Send FindFromTop of oWebList1
+    End_Procedure
+
+End_Object
