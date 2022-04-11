@@ -22,3 +22,37 @@
     display: table-cell;
     background: #ff9999;
 }
+
+.card-list {
+    display: flex;
+    flex-wrap: wrap;
+    /*flex-flow: row;*/
+    /*grid-template-columns: 120px; *//*repeat(auto-fit, minmax(120px, 1fr));*/
+}
+.card-item {
+    width: 140px;
+    margin: 5px;
+    background-color: #e1eac9;
+    border: 1px solid #cad8a4;
+}
+.card-img-container {
+    width: 100px;
+    padding: 20px;
+    padding-bottom: 10px;
+}
+.card-img {
+    height: 100px;
+    width: 100px;
+    border-radius: 50px;
+    background-size: cover;
+    background-position: center;
+}
+.card-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1rem;
+}
+.card-text {
+    padding: 10px;
+    margin-bottom: 0rem;
+}

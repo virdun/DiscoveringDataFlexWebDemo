@@ -214,6 +214,10 @@ Object oWebApp is a cWebApp
                         Set psLoadViewOnClick to "oBuffers"
                     End_Object
         
+                    Object oConstraintsItem1 is a cWebMenuItemLoadView
+                        Set psCaption to "Constraints"
+                        Set psLoadViewOnClick to "oConstraints"
+                    End_Object
 
                 End_Object
 
@@ -282,6 +286,7 @@ Object oWebApp is a cWebApp
     Use Struct.wo
     Use Buffers.wo
     Use FileManagement.wo
+    Use Constraints.wo
     
     Function GetDefaultView Returns Handle
         Handle hView
