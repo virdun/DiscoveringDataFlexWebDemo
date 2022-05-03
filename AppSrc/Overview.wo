@@ -58,19 +58,19 @@ Object oOverview is a cWebView
             Set piColumnSpan to 12
 
             Object oitemName is a cWebColumn
-                Entry_Item item.Name
+                Entry_Item Item.Name
                 Set psCaption to "Name"
                 Set piWidth to 500
             End_Object 
 
             Object oitemCategory is a cWebColumnCombo
-                Entry_Item item.Category
+                Entry_Item Item.Category
                 Set psCaption to "Category"
                 Set piWidth to 200
             End_Object 
 
             Object oitemExpirationDate is a cWebColumnDate
-                Entry_Item item.ExpirationDate
+                Entry_Item Item.ExpirationDate
                 Set psCaption to "ExpirationDate"
                 Set piWidth to 100
             End_Object 

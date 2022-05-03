@@ -153,7 +153,7 @@ Object oConstraints is a cWebView
         End_Object
 
         Object oWebHtmlList1 is a cWebHtmlList
-            Set Server to oitem_DD
+            Set Server to olocation_DD
             Set psHtmlBefore to '<div class="card-list">'
             Set psHtmlTemplate to ('<div class="card-item">';
                                       + '<div class="card-img-container"><div class="card-img" style="background-image: url({{oItemImage}});"></div></div>';

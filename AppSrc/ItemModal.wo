@@ -153,8 +153,14 @@ Object oItemModal is a cWebModalDialog
         
         Send Request_Clear of oitem_DD
         Move iItemID to Item.ID
-        Send Find of oitem_DD EQ 1
+        Send Request_Find of oitem_DD EQ Item.File_Number 1
+
+// or
         
+//        Send Clear of oitem_DD
+//        Move iItemID to Item.ID
+//        Send Find of oitem_DD EQ 1
+
         String sPath sFileName sValue
         Boolean bFileExists
         
