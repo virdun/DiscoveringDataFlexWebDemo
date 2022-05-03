@@ -1,0 +1,121 @@
+﻿Use DataDict.pkg
+
+Class LoggingDataDictionary is a DataDictionary
+
+    // DataDict Methods
+    Procedure Field_Defaults
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' Field_Defaults of ' + (Name(Self))) 'A'
+
+        Forward Send Field_Defaults
+    End_Procedure
+
+    Procedure Save_Main_File
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' Save_Main_File of ' + (Name(Self))) 'A'
+        Forward Send Save_Main_File
+    End_Procedure
+    
+    Procedure Clear_Main_File
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' Clear_Main_File of ' + (Name(Self))) 'A'
+        Forward Send Clear_main_file
+    End_Procedure
+    
+    Procedure OnPreFind Integer eMessage
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' OnPreFind of ' + (Name(Self))) 'A'
+        Forward Send OnPreFind eMessage
+    End_Procedure
+    
+    Procedure OnPostFind Integer eMessage Boolean bFound
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' OnPostFind of ' + (Name(Self))) 'A'
+        Forward Send OnPostFind eMessage bFound
+    End_Procedure
+    
+    Procedure OnSaveRecord
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' OnSaveRecord of ' + (Name(Self))) 'A'
+        Forward Send OnSaveRecord
+    End_Procedure
+    
+    
+    // Data_Set Methods
+    Procedure OnConstrain
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' OnConstrain of ' + (Name(Self))) 'A'
+        Forward Send OnConstrain
+    End_Procedure
+    
+    // BaseData_Set Methods
+    Procedure Creating
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' Creating of ' + (Name(Self))) 'A'
+        Forward Send Creating
+    End_Procedure
+
+    Procedure Deleting
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' Deleting of ' + (Name(Self))) 'A'
+        Forward Send Deleting
+    End_Procedure
+
+    Function Validate_Delete  Returns Integer
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' Validate_Delete of ' + (Name(Self))) 'A'
+        //Function_Return (Validate_Delete())
+    End_Function
+
+    Function Validate_Delete_No_Cascade  Returns Integer
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' Validate_Delete_No_Cascade of ' + (Name(Self))) 'A'
+        //Function_Return (Validate_Delete_No_Cascade())
+    End_Function
+
+    Function Validate_Save  Returns Integer
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' Validate_Save of ' + (Name(Self))) 'A'
+//        Function_Return (Validate_Save())
+    End_Function
+
+    Procedure Backout
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' Backout of ' + (Name(Self))) 'A'
+        Forward Send Backout
+    End_Procedure
+    
+    Procedure Update
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' Update of ' + (Name(Self))) 'A'
+        Forward Send Update
+    End_Procedure
+
+    Procedure Save_Main_File
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' Save_Main_File of ' + (Name(Self))) 'A'
+        Forward Send Save_Main_File
+    End_Procedure
+    
+    Procedure Delete_Main_File
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' Delete_Main_File of ' + (Name(Self))) 'A'
+        Forward Send Delete_Main_File
+    End_Procedure
+    
+    Procedure Attach_Main_File
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' Attach_Main_File of ' + (Name(Self))) 'A'
+        Forward Send Attach_Main_File
+    End_Procedure
+    
+    Procedure Relate_Main_File
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' Relate_Main_File of ' + (Name(Self))) 'A'
+        Forward Send Relate_Main_File
+    End_Procedure
+
+    Procedure Clear_Main_File
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' Clear_Main_File of ' + (Name(Self))) 'A'
+        Forward Send Clear_Main_File
+    End_Procedure
+
+    Procedure Reset_Filemodes_For_Lock
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' Reset_Filemodes_For_Lock of ' + (Name(Self))) 'A'
+        Forward Send Reset_Filemodes_For_Lock
+    End_Procedure
+
+    Procedure OnNewCurrentRecord RowID riOldRowId RowID riNewRowId
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' OnNewCurrentRecord of ' + (Name(Self))) 'A'
+        Forward Send OnNewCurrentRecord riOldRowId riNewRowId
+    End_Procedure
+
+    Function Validate_Cascade_Delete Returns Boolean
+        Send WriteFile 'dd_logging.txt' (String(CurrentDateTime()) + ' Validate_Cascade_Delete of ' + (Name(Self))) 'A'
+        //Function_Return (Validate_Cascade_Delete())
+    End_Function
+
+
+End_Class

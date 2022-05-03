@@ -1,4 +1,5 @@
 ﻿Use DataDict.pkg
+Use LoggingDataDictionary.pkg
 
 Open Item
 Open location
@@ -18,7 +19,7 @@ End_Object
 
 Register_Object oitemWebLookup
 
-Class citemDataDictionary is a DataDictionary
+Class citemDataDictionary is a LoggingDataDictionary
     
     Procedure Construct_Object
         Forward Send Construct_Object
