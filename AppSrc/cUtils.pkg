@@ -25,6 +25,7 @@ Class cUtils is a cObject
         Else Move ("File not found: " + sFilePath) to sData
         
         Close_Input channel iChannel
+        Send Seq_Release_Channel iChannel
 
         Function_Return sData
     End_Function
