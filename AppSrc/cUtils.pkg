@@ -58,6 +58,21 @@ Class cUtils is a cObject
         Procedure_Return True
     End_Procedure
     
+    Function PadChar Global String sSrc Integer iLength String sChar Returns String
+        Integer iCurrentLength
+        
+        Move (SizeOfString(sSrc)) to iCurrentLength
+        If ((SizeOfString(sChar)) <> 1) Function_Return sSrc //"Error: sChar requires only one character"
+        
+        While (iCurrentLength < iLength)
+            Move (Insert(sChar, sSrc, 0)) to sSrc
+            Move (SizeOfString(sSrc)) to iCurrentLength
+        Loop
+        
+        Move (Right(sSrc, iLength)) to sSrc
+        
+        Function_Return sSrc
+    End_Function
     
     // sType: 
     //   - MSG, log and send message to admin
