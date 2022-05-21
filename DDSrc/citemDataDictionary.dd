@@ -46,7 +46,7 @@ Class citemDataDictionary is a LoggingDataDictionary
         
         Set ParentNullAllowed DefaultLocation.File_Number to True
         
-        Set pbInheritConstraints to False
+//        Set pbInheritConstraints to False
 
 
     End_Procedure

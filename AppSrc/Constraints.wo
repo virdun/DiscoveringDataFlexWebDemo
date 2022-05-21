@@ -13,75 +13,24 @@ Object oConstraints is a cWebView
     Object oDefaultLocation_DD is a cDefaultLocationDataDictionary
     End_Object
 
-    Property Integer piLocations0
-    Property Integer piLocations1
-    Property Integer piLocations2
-    Property Integer piLocations3
     Object olocation_DD is a clocationDataDictionary
-        Procedure OnConstrain
-            Integer[] aiFilterLocations
-            Integer iLocation
+//        Procedure OnConstrain
+//            Integer[] aiFilterLocations
+//            Integer iLocation
+//
+////            Constrain Location.ItemCounter ge 5
+//
+////            Set psSQLFilter to (' location.ItemCounter >= 5 ')
+////            Set pbUseDDSQLFilters to True
+//
+////            Constrain location as ( (location.Name contains "Wardr") or ;
+////                                (location.ItemCounter > 40) )
+//            
+////            Constrain location as ( (location.ID = 3) or ;
+////                                    (location.ID = 4) or ;
+////                                    (location.ID = 17))
+//          End _Procedure
 
-//            Constrain Location.ItemCounter ge 5
-
-//            Set psSQLFilter to (' location.ItemCounter >= 5 ')
-//            Set pbUseDDSQLFilters to True
-
-//            Constrain location as ( (location.Name contains "Wardr") or ;
-//                                (location.ItemCounter > 40) )
-            
-//            Constrain location as ( (location.ID = 3) or ;
-//                                    (location.ID = 4) or ;
-//                                    (location.ID = 17))
-
-            Move 3 to aiFilterLocations[0]
-            Move 4 to aiFilterLocations[1]
-            Move 17 to aiFilterLocations[2]
-            
-            If (SizeOfArray(aiFilterLocations) = 1) Begin
-//                Constrain location as ( (location.ID = Integer(aiFilterLocations[0])) )
-//                Constrain location as ( (location.ID EQ 3) )
-//                Constrain location as ( (location.ID EQ piLocations(Self)) )
-//                Constrain location as ( (location.ID EQ paiLocations(Self)[0]) )
-//                Constrain location as ( (location.ID EQ (getLocationValue(0))) )
-                Set piLocations0 to aiFilterLocations[0]
-                Constrain location as ( (location.ID EQ piLocations0(Self)) )
-            End
-            If (SizeOfArray(aiFilterLocations) = 2) Begin
-//                Constrain location as ( (location.ID = aiFilterLocations[0]) or ;
-//                                        (location.ID = aiFilterLocations[1]) )
-                Set piLocations0 to aiFilterLocations[0]
-                Set piLocations1 to aiFilterLocations[1]
-                Constrain location as ( (location.ID EQ piLocations0(Self)) or ;
-                                        (location.ID EQ piLocations1(Self)) )
-            End
-            If (SizeOfArray(aiFilterLocations) = 3) Begin
-//                Constrain location as ( (location.ID = aiFilterLocations[0]) or ;
-//                                        (location.ID = aiFilterLocations[1]) or ;
-//                                        (location.ID = aiFilterLocations[2]) )
-                Set piLocations0 to aiFilterLocations[0]
-                Set piLocations1 to aiFilterLocations[1]
-                Set piLocations2 to aiFilterLocations[2]
-                Constrain location as ( (location.ID EQ piLocations0(Self)) or ;
-                                        (location.ID EQ piLocations1(Self)) or ;
-                                        (location.ID EQ piLocations2(Self)) )
-            End
-            If (SizeOfArray(aiFilterLocations) = 4) Begin
-//                Constrain location as ( (location.ID = aiFilterLocations[0]) or ;
-//                                        (location.ID = aiFilterLocations[1]) or ;
-//                                        (location.ID = aiFilterLocations[2]) )
-                Set piLocations0 to aiFilterLocations[0]
-                Set piLocations1 to aiFilterLocations[1]
-                Set piLocations2 to aiFilterLocations[2]
-                Set piLocations3 to aiFilterLocations[3]
-                Constrain location as ( (location.ID EQ piLocations0(Self)) or ;
-                                        (location.ID EQ piLocations1(Self)) or ;
-                                        (location.ID EQ piLocations2(Self)) or ;
-                                        (location.ID EQ piLocations3(Self)) )
-            End
-
-        End_Procedure
-        
     End_Object
 
     Object oitem_DD is a citemDataDictionary
@@ -153,7 +102,7 @@ Object oConstraints is a cWebView
         End_Object
 
         Object oWebHtmlList1 is a cWebHtmlList
-            Set Server to olocation_DD
+            Set Server to oitem_DD
             Set psHtmlBefore to '<div class="card-list">'
             Set psHtmlTemplate to ('<div class="card-item">';
                                       + '<div class="card-img-container"><div class="card-img" style="background-image: url({{oItemImage}});"></div></div>';

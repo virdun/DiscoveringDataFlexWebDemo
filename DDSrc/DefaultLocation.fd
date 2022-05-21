@@ -3,3 +3,4 @@
 #REPLACE DefaultLocation.ID |FN4,1
 #REPLACE DefaultLocation.Name |FS4,2
 #REPLACE DefaultLocation.ItemCounter |FN4,3
+#REPLACE DefaultLocation.is_deleted |FN4,4

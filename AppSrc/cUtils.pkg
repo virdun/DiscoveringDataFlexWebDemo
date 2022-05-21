@@ -175,5 +175,16 @@ Class cUtils is a cObject
         
         Function_Return sReturn
     End_Function
+    
+    Function activeLocations Global Integer iLocID Returns Boolean
+        Integer[] aiFilterLocations
+        Integer iIn
+        Move 3 to aiFilterLocations[0]
+        Move 4 to aiFilterLocations[1]
+        Move 17 to aiFilterLocations[2]
+
+        Move (SearchArray(iLocID, aiFilterLocations)) to iIn
+        Function_Return (iIn <> -1)
+    End_Function
 
 End_Class

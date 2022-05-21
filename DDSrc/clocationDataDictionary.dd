@@ -32,6 +32,7 @@ Class clocationDataDictionary is a LoggingDataDictionary
 
     Procedure OnConstrain
         Constrain location.is_deleted eq 0
+        Constrain location as (activeLocations(location.id))
         Forward Send OnConstrain
     End_Procedure
     
