@@ -273,21 +273,22 @@ Object oWebApp is a cWebApp
     Use ItemImport.wo
     Use UnitTest.wo
     Use Statistics.wo
-    Use Boolean.wo
-    Use Integer.wo
-    Use String.wo
-    Use Date.wo
-    Use DateTime.wo
-    Use Real.wo
-    Use ExecutionControls.wo
-    Use Functions.wo
-    Use Array.wo
-    Use ClassesObjects.wo
-    Use Struct.wo
-    Use Buffers.wo
+    Use DataTypes/Boolean.wo
+    Use DataTypes/Integer.wo
+    Use DataTypes/String.wo
+    Use DataTypes/Date.wo
+    Use DataTypes/DateTime.wo
+    Use DataTypes/Real.wo
+    Use LanguageGuide/ExecutionControls.wo
+    Use LanguageGuide/Functions.wo
+    Use LanguageGuide/Array.wo
+    Use LanguageGuide/ClassesObjects.wo
+    Use LanguageGuide/Struct.wo
+    Use DDSamples/Buffers.wo
     Use FileManagement.wo
-    Use Constraints.wo
-    Use WebDD_Debug.wo
+    Use DDSamples/Constraints.wo
+    Use DDSamples/GlobalBuffer.wo
+//    Use Dd_debug.dg
     
     Function GetDefaultView Returns Handle
         Handle hView

@@ -1,0 +1,183 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg 
+
+Object oGlobalBuffer is a cWebView
+    Set piWidth to 700
+    Set psCaption to "Global Buffer"
+    Set pbServerOnShow to True
+
+    // Your DDO structure will go here
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+
+        Object oWebHtmlBox1 is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to ""
+            
+            Procedure EvaluateGB
+                // --- Global Buffer Test Code ---
+                
+                Send AddLn "<i>SELECT ID, Name, Category, Location_Id, ExpirationDate FROM item</i>"
+                Send AddLn ""
+                Send AddLn "<b>Clear item</b>"
+                Clear Item
+                Send AddLn "<b>Find GE item.ID</b>"
+                Find GE Item.ID
+                Send AddLn "<b>While (Found)</b>"
+                Send AddLn ("&nbsp;&nbsp;Send AddLn <u><b>item.ID</b></u>, item.Name, item.Category, item.Location_Id, item.ExpirationDate")
+                Send AddLn "&nbsp;&nbsp;<b>Find GT item.ID</b>"
+                Send AddLn "<b>Loop</b>"
+                Send AddLn ""
+                While (Found)
+                    Send AddLn ("<u><b>" + String(Item.ID) + "</b></u>, " + Item.Name + ", " + Item.Category + ", " + String(Item.Location_Id) + ", " + String(Item.ExpirationDate))
+                    Find GT Item.ID
+                Loop
+
+
+                Send AddLn ""
+                Send AddLn ""
+                Send AddLn "<i>SELECT ID, Name, Category, Location_Id, ExpirationDate FROM item <b>ORDER BY Name</b></i>"
+                Send AddLn ""
+                Send AddLn "<b>Clear item</b>"
+                Clear Item
+                Send AddLn "<b>Find GE item by Index.2</b>"
+                Find GE Item by Index.2
+                Send AddLn "<b>While (Found)</b>"
+                Send AddLn ("&nbsp;&nbsp;Send AddLn <u>item.ID</u>, <u>item.Name</u>, item.Category, item.Location_Id, item.ExpirationDate")
+                Send AddLn "&nbsp;&nbsp;<b>Find GT item by Index.2</b>"
+                Send AddLn "<b>Loop</b>"
+                Send AddLn ""
+                While (Found)
+                    Send AddLn ("<u>" + String(Item.ID) + "</u>, <u><b>" + Item.Name + "</b></u>, " + Item.Category + ", " + String(Item.Location_Id) + ", " + String(Item.ExpirationDate))
+                    Find GT Item by Index.2
+                Loop
+
+
+                Boolean bFoundItem
+                Send AddLn ""
+                Send AddLn ""
+                Send AddLn "<i>SELECT ID, Name, Category, Location_Id, ExpirationDate FROM item <b>WHERE Name LIKE 'P%'</b> ORDER BY Name</i>"
+                Send AddLn ""
+                Send AddLn "<b>Clear item</b>"
+                Clear Item
+                Send AddLn "<b>Move 'P' to Item.Name</b>"
+                Move 'P' to Item.Name
+                Send AddLn "<b>Find GE item by Index.2</b>"
+                Find GE Item by Index.2
+                Send AddLn "<b>Move Found to bFoundItem</b>"
+                Move Found to bFoundItem
+                Send AddLn "<b>While (bFoundItem and Uppercase(Left(item.Name, 1)) = 'P')</b>"
+                    Send AddLn ("&nbsp;&nbsp;Send AddLn item.ID, <b>item.Name</b>, item.Category, item.Location_Id, item.ExpirationDate")
+                    Send AddLn "&nbsp;&nbsp;<b>Find GT item by Index.2</b>"
+                    Send AddLn "&nbsp;&nbsp;<b>Move Found to bFoundItem</b>"
+                Send AddLn "<b>Loop</b>"
+                Send AddLn ""
+                While (bFoundItem and Uppercase(Left(Item.Name, 1)) = 'P')
+                    Send AddLn ("<u>" + String(Item.ID) + "</u>, <u><b>" + Item.Name + "</b></u>, " + Item.Category + ", " + String(Item.Location_Id) + ", " + String(Item.ExpirationDate))
+                    Find GT Item by Index.2
+                    Move Found to bFoundItem
+                Loop
+
+
+
+
+                Send AddLn ""
+                Send AddLn ""
+                Send AddLn "<i>SELECT I.ID, I.Name, I.Category, I.Location_Id, <b>L.Name AS Location</b>, I.ExpirationDate"
+                Send AddLn "FROM item I"
+                Send AddLn "<b>LEFT JOIN location L ON I.Location_Id=L.ID<br>ORDER BY I.location_Id</b></i>"
+                Send AddLn ""
+                Send AddLn "<b>Clear item</b>"
+                Clear Item
+                Send AddLn "<b>Find GE item by Index.4</b>"
+                Find GE Item by Index.4
+                Send AddLn "<b>While (Found)</b>"
+                    Send AddLn "&nbsp;&nbsp;<b>Clear location</b>"
+                    Send AddLn "&nbsp;&nbsp;<b>Move item.Location_Id to location.ID</b>"
+                    Send AddLn "&nbsp;&nbsp;<b>Find EQ location by Index.1</b>"
+                    
+                    Send AddLn ("&nbsp;&nbsp;Send AddLn <u>item.ID</u>, item.Name, item.Category, item.Location_Id, <u><b>location.Name</b></u>, item.ExpirationDate")
+                    Send AddLn "&nbsp;&nbsp;<b>Find GT item by Index.4</b>"
+                Send AddLn "<b>Loop</b>"
+                Send AddLn ""
+                While (Found)
+                    Clear location
+                    Move Item.Location_Id to location.ID
+                    Find EQ location by Index.1
+                    Send AddLn ("<u>" + String(Item.ID) + "</u>, " + Item.Name + ", " + Item.Category + ", " + String(Item.Location_Id) + ", <u><b>" + location.Name + "</b></u>, " + String(Item.ExpirationDate))
+                    Find GT Item by Index.4
+                Loop
+
+
+                Boolean bFoundLocation
+                Send AddLn ""
+                Send AddLn ""
+                Send AddLn "<i>SELECT I.ID, I.Name, I.Category, I.Location_Id, L.Name AS Location I.ExpirationDate"
+                Send AddLn "FROM item I"
+                Send AddLn "LEFT JOIN location L ON I.Location_Id=L.ID"
+                Send AddLn "<b>ORDER BY L.Name</b></i>"
+                Send AddLn ""
+                Send AddLn "<b>Clear location</b>"
+                Clear location
+                Send AddLn "<b>Find GE location by Index.2</b>"
+                Find GE location by Index.2
+                Send AddLn "<b>Move Found to bFoundLocation</b>"
+                Move Found to bFoundLocation
+                Send AddLn "<b>While (bFoundLocation)</b>"
+                Send AddLn "&nbsp;&nbsp;<b>Clear Item</b>"
+                Send AddLn "&nbsp;&nbsp;<b>Move location.ID to Item.Location_Id</b>"
+                Send AddLn "&nbsp;&nbsp;<b>Find GE Item by Index.4</b>"
+                Send AddLn "&nbsp;&nbsp;<b>While (Found and location.ID = Item.Location_Id)</b>"
+                Send AddLn ("&nbsp;&nbsp;&nbsp;&nbsp;Send AddLn <u>item.ID</u>, item.Name, item.Category, item.Location_Id, <u><b>location.Name</b></u>, item.ExpirationDate")
+                Send AddLn "&nbsp;&nbsp;&nbsp;&nbsp;<b>Find GT Item by Index.4</b>"
+                Send AddLn "&nbsp;&nbsp;<b>Loop</b>"
+                Send AddLn "&nbsp;&nbsp;<b>Find GT location by Index.2</b>"
+                Send AddLn "&nbsp;&nbsp;<b>Move Found to bFoundLocation</b>"
+                Send AddLn "<b>Loop</b>"
+                Send AddLn ""
+                While (bFoundLocation)
+                    Clear Item
+                    Move location.ID to Item.Location_Id
+                    Find GE Item by Index.4
+                    While (Found and location.ID = Item.Location_Id)
+                        Send AddLn ("<u>" + String(Item.ID) + "</u>, " + Item.Name + ", " + Item.Category + ", " + String(Item.Location_Id) + ", <u><b>" + location.Name + "</b></u>, " + String(Item.ExpirationDate))
+//                        If (Item.Location_Id = 2) Move '' to location.name
+//                        Move (Item.name + '#') to Item.name
+//                        SaveRecord Item // - Will only save the item record and not propagate to related tables
+//                        Save Item // - Will save item and location because location is a parent to item
+                        Find GT Item by Index.4
+                    Loop
+                    Find GT location by Index.2
+                    Move Found to bFoundLocation
+                Loop
+
+
+
+
+
+                // --- Tests End Here ---
+            End_Procedure
+            
+            
+            Procedure AddLn String sText
+                String sFullText sNewLine
+                //Move (Character(10)) to sNewLine
+                Move "<br>" to sNewLine
+                WebGet psHtml of oWebHtmlBox1 to sFullText
+                Move (sFullText + sNewLine + sText) to sFullText
+                WebSet psHtml of oWebHtmlBox1 to sFullText
+            End_Procedure
+        End_Object
+        
+
+        
+    End_Object 
+    
+    Procedure OnShow
+        Send EvaluateGB of oWebHtmlBox1
+    End_Procedure
+
+End_Object
