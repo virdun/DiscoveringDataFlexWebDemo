@@ -144,8 +144,6 @@ Object oItemOverview is a cWebView
                 Send Search
             End_Procedure
         End_Object
-        
-        
 
         Object oWebGrid1 is a cWebList
             Set pbServerOnRowClick to True
@@ -234,6 +232,238 @@ Object oItemOverview is a cWebView
                     Send ShowYesNo (Self) (RefProc(DeleteItem)) "Are you sure you want to delete this item?" "Delete item"
                 End_Procedure
             End_Object
+        End_Object
+
+
+        Object oWebButton1 is a cWebButton
+            Set piColumnSpan to 2
+            Set psCaption to "SQL test"
+        
+            Procedure OnClick
+                Handle hoSQLMngr hdbc hStmt
+                String sQuery
+
+                Object oSQLManager is a cSQLHandleManager
+                    Move Self to hoSQLMngr
+                End_Object
+
+                Move ("";
+                    + "SELECT id, name, itemCounter, is_deleted FROM location                      ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + "                                                                            ";
+                    + " WHERE ItemCounter > 5";
+                    ) to sQuery
+                
+//                Get SQLConnect of hoSQLMngr "MSSQLDRV" "SERVER=RUBEUSHAGRID\SQLEXPRESS;DATABASE=DiscoveringDataFlexDemo;trusted_connection=yes" to hdbc
+                Get SQLFileConnect of hoSQLMngr WebAppUser.File_number to hdbc
+                Get SQLOpen of hdbc to hStmt
+                Send SQLExecDirect of hStmt sQuery
+                Integer iID iFetchResult
+                Repeat
+                    Get SQLFetch of hStmt to iFetchResult
+                    If (iFetchResult <> 0) Begin
+                        Get SQLColumnValue of hStmt 1 to iID
+                    End
+                Until (iFetchResult = 0)
+                
+                Send SQLClose of hstmt
+                Send SQLDisconnect of hdbc
+
+            End_Procedure
         End_Object
         
     End_Object
