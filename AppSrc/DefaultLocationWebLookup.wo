@@ -17,6 +17,11 @@ Object oDefaultLocationWebLookup is a cWebModalDialog
     Set piHeight to 400
 
     Object oDefaultLocation_DD is a cDefaultLocationDataDictionary
+        Procedure OnConstrain
+            Constrain DefaultLocation.is_deleted eq 0
+            Constrain DefaultLocation as (activeLocations(DefaultLocation.ID))
+        End_Procedure
+
     End_Object 
 
     Set Main_DD To oDefaultLocation_DD

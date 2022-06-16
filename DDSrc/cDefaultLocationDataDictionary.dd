@@ -50,7 +50,7 @@ Class cDefaultLocationDataDictionary is a clocationDataDictionary
     
     Procedure OnConstrain
         Constrain DefaultLocation.is_deleted eq 0
-        Constrain DefaultLocation as (activeLocations(DefaultLocation.ID))
+//        Constrain DefaultLocation as (activeLocations(DefaultLocation.ID))
         //Forward Send OnConstrain
     End_Procedure
     
