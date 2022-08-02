@@ -112,7 +112,7 @@ Class cUtils is a cObject
             //Get psUsername of oSessionManager to sUsername
             Move (sMailBody + sCr + 'User: Server') to sMailBody
             
-            Get ServerVariable of ghoWebServiceDispatcher "HTTP_USER_AGENT" to sUserAgent
+            Move "Windows application" to sUserAgent
             Move (sMailBody + sCr + 'Browser: DataFlex') to sMailBody
             
             Move (sMailBody + sCr + 'IP: 127.0.0.1') to sMailBody
