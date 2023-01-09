@@ -5,6 +5,7 @@ Open Item
 Open location
 Open system
 Open DefaultLocation
+Open obsolescence
 
 Object category_val is a ValidationTable
     Procedure Fill_List
@@ -29,6 +30,7 @@ Class citemDataDictionary is a LoggingDataDictionary
 
         Set Add_Server_File to location.File_Number
         Set Add_Server_File to DefaultLocation.File_Number
+        Set Add_Server_File to obsolescence.File_Number
 
         Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
         Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
@@ -45,6 +47,9 @@ Class citemDataDictionary is a LoggingDataDictionary
         Set Field_WebPrompt_Object Field Item.ExpirationDate to oitemWebLookup
         
         Set ParentNullAllowed DefaultLocation.File_Number to True
+        
+        Set ParentNullAllowed obsolescence.File_Number to True
+        
         
 //        Set pbInheritConstraints to False
 

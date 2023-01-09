@@ -9,6 +9,7 @@ Use cWebEdit.pkg
 
 Use clocationDataDictionary.dd
 Use citemDataDictionary.dd
+Use cobsolescenceDataDictionary.dd
 Use cDefaultLocationDataDictionary.dd
 Use cWebRadio.pkg
 Use cWebCardContainer.pkg
@@ -32,7 +33,11 @@ Object oItem is a cWebView
 
     End_Object 
 
+    Object oobsolescence_DD is a cobsolescenceDataDictionary
+    End_Object
+
     Object oitem_DD is a citemDataDictionary
+        Set DDO_Server to oobsolescence_DD
         Set DDO_Server to oDefaultLocation_DD
         Set DDO_Server to olocation_DD
         Set Ordering to 2 // Define what index this view should use to find items
@@ -214,6 +219,14 @@ Object oItem is a cWebView
             Procedure OnClick
                 Send Request_ClearBindingTable of oDefaultLocation_Name
             End_Procedure
+        End_Object
+
+        Object oobsolescence_Stage is a cWebParentCombo
+            Entry_Item obsolescence.Stage
+            Set piColumnSpan to 4
+            Set psLabel to "Obsolescence"
+            Set peLabelPosition to lpTop
+            
         End_Object
 
         Object oWebButton2 is a cWebButton

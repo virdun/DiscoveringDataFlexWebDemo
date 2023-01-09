@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
-  DATE: 2021-10-01      TIME: 10:09                                  PAGE:  1
+  DATE: 2022-12-23      TIME: 10:39                                  PAGE:  1
   FILE DEFINITION FOR FILE: item (# 2)
 -----------------------------------------------------------------------------
   DRIVER NAME               : MSSQLDRV
@@ -7,8 +7,8 @@
   USER DISPLAY NAME         : item
   DATAFLEX FILE NAME        : item
 -----------------------------------------------------------------------------
-  RECORD LENGTH             : 16536     ( USED: 16536 )
-  MAX NUMBER OF RECORDS     : 2147483647  ( USED: 25 )
+  RECORD LENGTH             : 16547     ( USED: 16547 )
+  MAX NUMBER OF RECORDS     : 2147483647  ( USED: 29 )
   FILE COMPRESSION          : NONE
   RE-USE DELETED SPACE      : YES
   LOCKING TYPE              : RECORD
@@ -30,6 +30,7 @@ NUM  FIELD NAME       TYPE SIZE  OFFST IX   RELATES TO FILE.FIELD
   7  Created          DTM     26 16492      
   8  Importance       NUM    6.0 16515      
   9  DefaultLocatioID  NUM    6.0 16526  6   DefaultLocation.FIELD_1 (4,1)
+ 10  Obsolescence_Id  NUM   10.0 16537      
 
 
 INDEX# FIELDS          DES U/C    LENGTH LEVELS SEGMENTS MODE

@@ -6,3 +6,4 @@
 #REPLACE system.int_test_b |FN1,4
 #REPLACE system.int_test_c |FN1,5
 #REPLACE system.int_test_d |FN1,6
+#REPLACE system.obsolescence_id |FN1,7
