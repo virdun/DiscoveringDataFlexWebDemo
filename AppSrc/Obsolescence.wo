@@ -1,0 +1,36 @@
+﻿// C:\DataFlex Projects\DiscoveringDataFlexWebDemo\AppSrc\Obsolescence.wo
+// Obsolescence
+//
+
+Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg
+
+Use cobsolescenceDataDictionary.dd
+
+Object oObsolescence is a cWebView
+    Set piColumnCount to 12
+    Set psCaption to "Obsolescence"
+    Set piWidth to 700
+
+    Object oobsolescence_DD is a cobsolescenceDataDictionary
+        Send Remove_Client_File Item.File_Number
+    End_Object 
+
+    Set Main_DD To oobsolescence_DD
+    Set Server  To oobsolescence_DD
+
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oobsolescenceStage is a cWebForm
+            Entry_Item obsolescence.Stage
+            Set piColumnSpan to 4
+            Set piColumnIndex to 0
+            Set peLabelPosition to lpTop
+            Set psLabel to "Stage"
+        End_Object 
+    End_Object 
+
+End_Object 

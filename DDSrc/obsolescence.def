@@ -1,31 +1,31 @@
 -----------------------------------------------------------------------------
-  DATE: 2022-12-23      TIME: 10:35                                  PAGE:  1
-  FILE DEFINITION FOR FILE: system (# 1)
+  DATE: 2022-12-23      TIME: 10:38                                  PAGE:  1
+  FILE DEFINITION FOR FILE: obsolescence (# 5)
 -----------------------------------------------------------------------------
   DRIVER NAME               : MSSQLDRV
-  FILE ROOT NAME            : MSSQLDRV:system
-  USER DISPLAY NAME         : system
-  DATAFLEX FILE NAME        : system
+  FILE ROOT NAME            : MSSQLDRV:obsolescence
+  USER DISPLAY NAME         : obsolescence
+  DATAFLEX FILE NAME        : obsolescence
 -----------------------------------------------------------------------------
-  RECORD LENGTH             : 77        ( USED: 77 )
-  MAX NUMBER OF RECORDS     : 2147483647  ( USED: 1 )
+  RECORD LENGTH             : 31        ( USED: 31 )
+  MAX NUMBER OF RECORDS     : 2147483647  ( USED: 0 )
   FILE COMPRESSION          : NONE
   RE-USE DELETED SPACE      : YES
   LOCKING TYPE              : RECORD
   HEADER INTEGRITY CHECKING : NO 
   TRANSACTION TYPE          : SERVER LOGGED
-  RECORD IDENTITY INDEX     : 0 ( 0 , 0 )
+  RECORD IDENTITY INDEX     : 1 ( 0 , 0 )
   FILE LOGIN PARAMETER      : DFCONNID=DiscoveringDFDemo
-  SYSTEM FILE               : YES
+  SYSTEM FILE               : NO 
 -----------------------------------------------------------------------------
 
 NUM  FIELD NAME       TYPE SIZE  OFFST IX   RELATES TO FILE.FIELD
 ---  ---------------  ---- ----- ----- --   ---------------------------------
-  1  item_id          NUM    6.0     1      
-  2  location_id      NUM    6.0    12      
-  3  int_test_a       NUM    1.0    23      
-  4  int_test_b       NUM    2.0    34      
-  5  int_test_c       NUM    3.0    45      
-  6  int_test_d       NUM   10.0    56      
-  7  obsolescence_id  NUM   10.0    67      
+  1  Id               NUM   10.0     1  1   
+  2  Stage            ASC     20    12      
+
+
+INDEX# FIELDS          DES U/C    LENGTH LEVELS SEGMENTS MODE
+------ --------------- --- ---    ------ ------ -------- -------
+  1    Id              NO  NO       0      0       1     ON-LINE
 

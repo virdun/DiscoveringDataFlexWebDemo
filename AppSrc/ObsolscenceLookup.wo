@@ -1,0 +1,120 @@
+﻿//
+//  This shows the basic structure of a modal dialog. It explains where the controls go and how to 
+//  initialize it (PopupTheDialog & OnShow). The DialogResult  method explains how to return data 
+//  from your dialog. The commented oOpenDialog_btn is an example of a button that opens this dialog. 
+//  This button would be placed on another view.
+//
+//    Object oOpenDialog_btn is a cWebButton
+//        Set psCaption to "Open Dialog"
+//        
+//        Procedure OnClick
+//            Send PopupTheDialog of oWebModalDialog Self "Param 1" "Param 2"
+//        End_Procedure
+//        
+//        Procedure OnCloseModalDialog Handle hoModalDialog
+//            String sResult
+//            
+//            Get DialogResult of hoModalDialog to sResult
+//        End_Procedure
+//    End_Object
+//
+
+
+Use cWebModalDialog.pkg
+Use cWebPanel.pkg
+Use cWebButton.pkg
+Use cWebForm.pkg
+Use cobsolescenceDataDictionary.dd
+Use cWebCombo.pkg
+Use cWebList.pkg
+Use cWebColumn.pkg
+
+Object oObsolscenceLookup is a cWebModalDialog
+    Object oobsolescence_DD is a cobsolescenceDataDictionary
+    End_Object
+
+    Set Main_DD to oobsolescence_DD
+    Set Server to oobsolescence_DD
+
+    Set psCaption to "ObsolscenceLookup"
+    Set piMinWidth to 500
+    Set piMinHeight to 200
+    Set pbServerOnSubmit to True    // enable the OnSubmit event
+    
+    Object oMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oWebList1 is a cWebList
+            Object oobsolescence_Stage is a cWebColumn
+                Entry_Item obsolescence.Stage
+                Set psCaption to "Stage"
+                Set piWidth to 50
+            End_Object
+            
+        End_Object
+
+    End_Object 
+    
+    Object oBottomPanel is a cWebPanel
+        Set piColumnCount to 6
+        Set peRegion to prBottom
+
+        Object oOkButton is a cWebButton
+            Set psCaption to C_$OK
+            Set piColumnSpan to 1
+            Set piColumnIndex to 4
+
+            Procedure OnClick
+                Send Ok
+            End_Procedure
+        End_Object 
+
+        Object oCancelButton is a cWebButton
+            Set psCaption to C_$Cancel
+            Set piColumnSpan to 1
+            Set piColumnIndex to 5
+
+            Procedure OnClick
+                Send Cancel
+            End_Procedure
+        End_Object 
+    End_Object 
+
+    Procedure OnSubmit
+        Send Ok
+    End_Procedure
+    
+    Procedure Ok
+        //  Do some calculations / saves / validations here ..
+        Forward Send Ok
+    End_Procedure
+
+    Procedure Cancel
+        Forward Send Cancel
+    End_Procedure
+    
+//    //  This is an example of how a dialog is called. You can pass any number of set up parameters 
+//    //  which will use WebSet to configure controls or to store the values. 
+//    Procedure PopupTheDialog  Handle hReturnObj String sSetupParameter1 String sSetupParameter2
+//        // Invoke the modal dialog    
+//        Send Popup hReturnObj
+//
+//        // Initialize any object properites as needed via WebSet and perform finds
+//        
+//    End_Procedure
+//    
+//
+//    //  This is an example of a method that would be called by the return object when 
+//    //  OnCloseModalDialog is executed. It will use WebGet to get the result values from the 
+//    //  controls. It can also use the DDO structure to get values of the record buffer here. If one 
+//    //  return value is not enough consider using a Struct or ByRef parameters to return multiple 
+//    //  values.
+//    Function DialogResult Returns String
+//        String sResult
+//        
+//        //  Get the 'result' of the dialog when needed
+//        
+//        Function_Return sResult
+//    End_Function
+//
+End_Object

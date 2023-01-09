@@ -1,46 +1,54 @@
 -----------------------------------------------------------------------------
-  DATE: 2021-03-24      TIME: 17:08                                  PAGE:  1
+  DATE: 21-02-2023      TIME: 23:50                                  PAGE:  1
   FILE DEFINITION FOR FILE: item (# 2)
 -----------------------------------------------------------------------------
-  DRIVER NAME               : DATAFLEX
-  FILE ROOT NAME            : item
+  DRIVER NAME               : MSSQLDRV
+  FILE ROOT NAME            : MSSQLDRV:item
   USER DISPLAY NAME         : item
   DATAFLEX FILE NAME        : item
 -----------------------------------------------------------------------------
-  RECORD LENGTH             : 256       ( USED: 207 )
-  MAX NUMBER OF RECORDS     : 10000     ( USED: 5 )
+  RECORD LENGTH             : 16547     ( USED: 16547 )
+  MAX NUMBER OF RECORDS     : 2147483647  ( USED: 29 )
   FILE COMPRESSION          : NONE
   RE-USE DELETED SPACE      : YES
-  LOCKING TYPE              : FILE
-  HEADER INTEGRITY CHECKING : YES
-  TRANSACTION TYPE          : CLIENT ATOMIC
-  RECORD IDENTITY INDEX     : 0 ( 0 , 0 )
-  FILE LOGIN PARAMETER      : 
+  LOCKING TYPE              : RECORD
+  HEADER INTEGRITY CHECKING : NO 
+  TRANSACTION TYPE          : SERVER LOGGED
+  RECORD IDENTITY INDEX     : 1 ( 0 , 0 )
+  FILE LOGIN PARAMETER      : DFCONNID=DiscoveringDFDemo
   SYSTEM FILE               : NO 
 -----------------------------------------------------------------------------
 
 NUM  FIELD NAME       TYPE SIZE  OFFST IX   RELATES TO FILE.FIELD
 ---  ---------------  ---- ----- ----- --   ---------------------------------
   1  ID               NUM    6.0     1  1   
-  2  Name             ASC     50     4  2   
-  3  Description      TEX    128    54      
-  4  Category         ASC     20   182  3   
-  5  Location_Id      NUM    6.0   202  4   location.FIELD_1 (3,1)
-  6  ExpirationDate   DAT      6   205  5   
+  2  Name             ASC     50    12  2   
+  3  Description      TEX    128    62      
+  4  Category         ASC     20 16445  3   
+  5  Location_Id      NUM    6.0 16465  4   location.FIELD_1 (3,1)
+  6  ExpirationDate   DAT     10 16476  5   
+  7  Created          DTM     26 16492      
+  8  Importance       NUM    6.0 16515      
+  9  DefaultLocatioID  NUM    6.0 16526  6   DefaultLocation.FIELD_1 (4,1)
+ 10  Obsolescence_Id  NUM   10.0 16537      obsolescence.FIELD_1 (5,1)
 
 
 INDEX# FIELDS          DES U/C    LENGTH LEVELS SEGMENTS MODE
 ------ --------------- --- ---    ------ ------ -------- -------
-  1    ID              NO  NO       3      2       1     ON-LINE
+  1    ID              NO  NO       0      0       1     ON-LINE
 
-  2    Name            NO  NO       53     5       2     ON-LINE
+  2    Name            NO  NO       0      0       2     ON-LINE
        ID              NO  NO 
 
-  3    Category        NO  NO       23     3       2     ON-LINE
+  3    Category        NO  NO       0      0       2     ON-LINE
        ID              NO  NO 
 
-  4    Location_Id     NO  NO       6      3       2     ON-LINE
+  4    Location_Id     NO  NO       0      0       2     ON-LINE
        ID              NO  NO 
 
-  5    ExpirationDate  NO  NO       3      2       1     ON-LINE
+  5    ExpirationDate  NO  NO       0      0       2     ON-LINE
+       ID              NO  NO 
+
+  6    DefaultLocatioID NO  NO       0      0       2     ON-LINE
+       ID              NO  NO 
 

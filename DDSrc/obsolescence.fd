@@ -1,0 +1,4 @@
+#REPLACE FILE5 obsolescence
+#REPLACE obsolescence.File_Number |CI5
+#REPLACE obsolescence.Id |FN5,1
+#REPLACE obsolescence.Stage |FS5,2

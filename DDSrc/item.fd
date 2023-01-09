@@ -1,5 +1,5 @@
 #REPLACE FILE2 item
-#REPLACE item.Recnum |FN2,0
+#REPLACE item.File_Number |CI2
 #REPLACE item.ID |FN2,1
 #REPLACE item.Name |FS2,2
 #REPLACE item.Description |FS2,3
@@ -9,3 +9,4 @@
 #REPLACE item.Created |FM2,7
 #REPLACE item.Importance |FN2,8
 #REPLACE item.DefaultLocatioID |FN2,9
+#REPLACE item.Obsolescence_Id |FN2,10

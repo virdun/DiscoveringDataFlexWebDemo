@@ -126,6 +126,11 @@ Object oWebApp is a cWebApp
                     Set psLoadViewOnClick to "oStatistics"
                 End_Object
 
+                Object oObsolescenceItem1 is a cWebMenuItemLoadView
+                    Set psCaption to "Obsolescence"
+                    Set psLoadViewOnClick to "oObsolescence"
+                End_Object
+
             End_Object  
     
             Object oTestMenu is a cWebMenuItem
@@ -288,6 +293,8 @@ Object oWebApp is a cWebApp
     Use FileManagement.wo
     Use DDSamples/Constraints.wo
     Use DDSamples/GlobalBuffer.wo
+    Use Obsolescence.wo
+    Use ObsolscenceLookup.wo
 //    Use Dd_debug.dg
     
     Function GetDefaultView Returns Handle
