@@ -1,12 +1,28 @@
-﻿Use cWebBaseDEO.pkg
+﻿Use cWebDatePicker.pkg
 
 { OverrideProperty=psMask Visibility=Private }
-Class cWebDatePicker is a cWebBaseDEO
+Class cWebDatePickerMosaic is a cWebDatePicker
     
     Procedure Construct_Object
         Forward Send Construct_Object
 
-        Set psJSClass to "df.WebDatePicker"
+        { WebProperty=Client } 
+        Property String psJsonDateColors "{}" // {"2023-01-24": "green", "2023-01-19": "red"}
+        { WebProperty=Client } 
+        Property String psSelectedMonth "" // "2023-01-01"
+        
+        //  OnMonthChanged event
+        { WebProperty=Client } 
+        Property Boolean pbServerOnMonthChanged False
+        { WebProperty=Client } 
+        Property String psClientOnMonthChanged ""     
+       
+        Set psJSClass to "df.WebDatePickerMosaic"
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnMonthChanged String sDate
+        //  Empty event stub
     End_Procedure
     
     Procedure End_Construct_Object

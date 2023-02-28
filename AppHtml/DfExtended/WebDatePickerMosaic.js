@@ -1,24 +1,28 @@
 /*
 Class:
-    df.WebDatePicker
+    df.WebDatePickerMosaic
 Extends:
-    df.WebBaseDEO
+    df.WebDatePicker
 
-This is the client-side representation of the cWebDatePicker class. It renders a datepicker control 
-directly into the form. This datepicker will behave like a data entry object and display its value 
-by highlighting the date it in the datepicker. The datepicker is rendered by the df.DatePicker 
-class which is instantiated as sub object (_oPicker).
+This is the client-side representation of the WebDatePickerMosaic class.
+It adds the option to style each day separately
 
 Revision:
-    2012/04/02  (HW, DAW) 
+    2023/01/27  (JB, FRONT-IOT) 
         Initial version.
 */
-df.WebDatePicker = function WebDatePicker(sName, oParent){
-    df.WebDatePicker.base.constructor.call(this, sName, oParent);
+df.WebDatePickerMosaic = function WebDatePickerMosaic(sName, oParent){
+    df.WebDatePickerMosaic.base.constructor.call(this, sName, oParent);
+    this.prop(df.tString, "psJsonDateColors", "{}"); // {"2023-01-24": "green", "2023-01-19": "red"}
+    this.prop(df.tString, "psSelectedMonth", ""); // '2023-01-01'
+    this.event("OnMonthChanged", df.cCallModeWait);
 
-    this._sControlClass = "WebDatePicker";
+    this._sControlClass = "WebDatePickerMosaic WebDatePicker"; // Adding WebDatePicker here gives us the styling
+    this.addSync("psSelectedMonth");
 };
-df.defineClass("df.WebDatePicker", "df.WebBaseDEO",{
+df.defineClass("df.WebDatePickerMosaic", "df.WebDatePicker",{
+
+// - - - Control API - - -
 
 
 
@@ -48,6 +52,8 @@ displayCalendar : function(){
     //  Generate dates
     iYear = this._iDisplayYear;
     iMonth = this._iDisplayMonth;
+    var currentMonth=('0'+(iMonth+1)).slice(-2);
+    this.psSelectedMonth = (iYear + '-' + currentMonth + '-01');
     
     dToday = new Date();
     dDate = new Date(iYear, iMonth, 1, 1, 1, 1);
@@ -114,6 +120,19 @@ displayCalendar : function(){
             sCSS += (sCSS !== "" ? " " : "") + "WebDP_Today";
         }
         
+        if (this.psJsonDateColors !== '{}') {
+            const day = dDate.getDate();
+            const month = dDate.getMonth() + 1; // Return Value is 0 indexed
+            const year = dDate.getFullYear();
+
+            //var sDate = dDate.toISOString();
+            //var asDate = sDate.split('T');
+            var sDatePart = year + '-' + ('0' + month).slice(-2) + '-' + ('0' + day).slice(-2);
+            if (JSON.parse(this.psJsonDateColors)[sDatePart]) {
+                sCSS += (sCSS !== "" ? " " : "") + JSON.parse(this.psJsonDateColors)[sDatePart];
+            }
+        }
+
         //  Generate day cell
         aHtml.push('<td class="', sCSS, '" data-date="', dDate.getDate(), '" data-month="', dDate.getMonth(), '" data-year="', dDate.getFullYear(), '">', dDate.getDate(), '</td>');
         
@@ -152,14 +171,48 @@ displayCalendar : function(){
         //  Set animation target class
         if(eOld){
             df.dom.addClass(eOld, ((this._iLastDisplayYear < this._iDisplayYear ||  (this._iLastDisplayYear === this._iDisplayYear && this._iLastDisplayMonth < this._iDisplayMonth)) ? "WebDP_HideNext" : "WebDP_HidePrev"));
+            this.fireMonthChanged();
         }
     }
     
     this._iLastDisplayYear = this._iDisplayYear;
     this._iLastDisplayMonth = this._iDisplayMonth;
+},
+
+/* 
+Fires the onMonthChanged event.
+
+@private
+*/
+fireMonthChanged : function(){
+    this.fire("OnMonthChanged", [ this.get('psValue') ]);
+},
+
+
+/*
+This setter updates the current value of the component. It will first update the internal typed 
+values and then update the displayed value according to the proper masking rules.
+
+@param sVal The new value.
+*/
+set_psJsonDateColors : function(sVal){
+    this.psJsonDateColors = sVal;
+    this.displayCalendar();
+    
+    //  If a new value is set we assume that errors don't apply any more
+    if(!this._bRendering){
+        this.hideAllControlErrors();
+    }
+},
+
+currentMonth : function() {
+    //  Generate dates
+    iYear = this._iDisplayYear;
+    iMonth = this._iDisplayMonth;
+
+    var currentMonth=('0'+(iMonth+1)).slice(-2);
+    return (iYear + '-' + currentMonth + '-01');
 }
-
-
 
 });
 
