@@ -1,0 +1,17 @@
+﻿Use cWebBaseDEO.pkg
+
+{ OverrideProperty=psMask Visibility=Private }
+Class cWebDatePicker is a cWebBaseDEO
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+
+        Set psJSClass to "df.WebDatePicker"
+    End_Procedure
+    
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+        
+        WebPublishProcedure OnMonthChanged
+    End_Procedure
+End_Class
