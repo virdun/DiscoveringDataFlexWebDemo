@@ -26,6 +26,9 @@ NUM  FIELD NAME       TYPE SIZE  OFFST IX   RELATES TO FILE.FIELD
   3  Rights           NUM    2.0    41      
   4  FullName         ASC     30    42      
   5  LastLogin        DAT      6    72      
+  4  FullName         ASC     30    47      
+  5  LastLogin        DAT     10    77      
+  6  id               NUM   10.0    93      
 
 
 INDEX# FIELDS          DES U/C    LENGTH LEVELS SEGMENTS MODE

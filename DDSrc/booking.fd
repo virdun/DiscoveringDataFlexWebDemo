@@ -1,0 +1,7 @@
+#REPLACE FILE6 booking
+#REPLACE booking.File_Number |CI6
+#REPLACE booking.id |FN6,1
+#REPLACE booking.start_date |FD6,2
+#REPLACE booking.end_date |FD6,3
+#REPLACE booking.item_id |FN6,4
+#REPLACE booking.user_id |FN6,5

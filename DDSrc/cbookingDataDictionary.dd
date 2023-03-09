@@ -1,0 +1,26 @@
+﻿Use DataDict.pkg
+
+Open booking
+Open Item
+Open system
+
+Class cbookingDataDictionary is a DataDictionary
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Set Main_File to booking.File_Number
+
+        Set Add_System_File to system.File_Number DD_Lock_On_All
+
+        Set Add_Server_File to Item.File_Number
+        
+        Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
+        Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
+        Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
+        Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
+
+        Set Field_Auto_Increment Field booking.id to File_Field system.booking_id
+
+    End_Procedure
+
+End_Class
