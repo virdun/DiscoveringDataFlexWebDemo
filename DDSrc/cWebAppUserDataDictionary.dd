@@ -1,0 +1,36 @@
+﻿Use DataDict.pkg
+
+Open WebAppUser
+Open booking
+Open WebAppSession
+Open system
+
+Register_Object oWebAppUserWebLookup
+
+Class cWebAppUserDataDictionary is a DataDictionary
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Set Main_File to WebAppUser.File_Number
+
+        Set Add_System_File to system.File_Number DD_Lock_On_All
+        Set Add_Client_File to WebAppSession.File_Number
+
+        Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
+        Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
+        Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
+        Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
+
+        Set Field_WebPrompt_Object Field WebAppUser.LoginName to oWebAppUserWebLookup
+
+        Set Field_Auto_Increment Field WebAppUser.id to File_Field system.user_id
+
+    End_Procedure
+
+End_Class
+
+    #IFDEF Is$WebApp
+    Use WebAppUserWebLookup.wo
+    #ELSE
+    #ENDIF
+    

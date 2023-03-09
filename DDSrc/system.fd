@@ -7,3 +7,5 @@
 #REPLACE system.int_test_c |FN1,5
 #REPLACE system.int_test_d |FN1,6
 #REPLACE system.obsolescence_id |FN1,7
+#REPLACE system.user_id |FN1,8
+#REPLACE system.booking_id |FN1,9

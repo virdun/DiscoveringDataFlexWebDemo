@@ -1,14 +1,14 @@
 -----------------------------------------------------------------------------
-  DATE: 28-02-2023      TIME: 15:54                                  PAGE:  1
-  FILE DEFINITION FOR FILE: WebAppUser (# 264)
+  DATE: 28-02-2023      TIME: 16:06                                  PAGE:  1
+  FILE DEFINITION FOR FILE: booking (# 6)
 -----------------------------------------------------------------------------
   DRIVER NAME               : MSSQLDRV
-  FILE ROOT NAME            : MSSQLDRV:WebAppUser
-  USER DISPLAY NAME         : WebApp User
-  DATAFLEX FILE NAME        : WebAppUser
+  FILE ROOT NAME            : MSSQLDRV:booking
+  USER DISPLAY NAME         : booking
+  DATAFLEX FILE NAME        : booking
 -----------------------------------------------------------------------------
-  RECORD LENGTH             : 103       ( USED: 103 )
-  MAX NUMBER OF RECORDS     : 2147483647  ( USED: 2 )
+  RECORD LENGTH             : 65        ( USED: 65 )
+  MAX NUMBER OF RECORDS     : 2147483647  ( USED: 0 )
   FILE COMPRESSION          : NONE
   RE-USE DELETED SPACE      : YES
   LOCKING TYPE              : RECORD
@@ -21,15 +21,14 @@
 
 NUM  FIELD NAME       TYPE SIZE  OFFST IX   RELATES TO FILE.FIELD
 ---  ---------------  ---- ----- ----- --   ---------------------------------
-  1  LoginName        ASC     20     1  1   
-  2  Password         ASC     20    21      
-  3  Rights           NUM    2.0    41      
-  4  FullName         ASC     30    47      
-  5  LastLogin        DAT     10    77      
-  6  id               NUM   10.0    93      
+  1  id               NUM   10.0     1  1   
+  2  start_date       DAT     10    12      
+  3  end_date         DAT     10    28      
+  4  item_id          NUM    6.0    44      item.ID (2,1)
+  5  user_id          NUM   10.0    55      WebAppUser.id (264,6)
 
 
 INDEX# FIELDS          DES U/C    LENGTH LEVELS SEGMENTS MODE
 ------ --------------- --- ---    ------ ------ -------- -------
-  1    LoginName       NO  NO       0      0       1     ON-LINE
+  1    id              NO  NO       0      0       1     ON-LINE
 

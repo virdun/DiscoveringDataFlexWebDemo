@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
-  DATE: 2022-12-23      TIME: 10:35                                  PAGE:  1
+  DATE: 28-02-2023      TIME: 15:54                                  PAGE:  1
   FILE DEFINITION FOR FILE: system (# 1)
 -----------------------------------------------------------------------------
   DRIVER NAME               : MSSQLDRV
@@ -7,7 +7,7 @@
   USER DISPLAY NAME         : system
   DATAFLEX FILE NAME        : system
 -----------------------------------------------------------------------------
-  RECORD LENGTH             : 77        ( USED: 77 )
+  RECORD LENGTH             : 99        ( USED: 99 )
   MAX NUMBER OF RECORDS     : 2147483647  ( USED: 1 )
   FILE COMPRESSION          : NONE
   RE-USE DELETED SPACE      : YES
@@ -28,4 +28,6 @@ NUM  FIELD NAME       TYPE SIZE  OFFST IX   RELATES TO FILE.FIELD
   5  int_test_c       NUM    3.0    45      
   6  int_test_d       NUM   10.0    56      
   7  obsolescence_id  NUM   10.0    67      
+  8  user_id          NUM   10.0    78      
+  9  booking_id       NUM   10.0    89      
 

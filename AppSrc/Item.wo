@@ -10,6 +10,7 @@ Use cWebEdit.pkg
 Use clocationDataDictionary.dd
 Use citemDataDictionary.dd
 Use cobsolescenceDataDictionary.dd
+Use cbookingDataDictionary.dd
 Use cDefaultLocationDataDictionary.dd
 Use cWebRadio.pkg
 Use cWebCardContainer.pkg
@@ -18,6 +19,8 @@ Use cWebButton.pkg
 Use cWebLabel.pkg
 Use cWebCombo.pkg
 Use cWebDateForm.pkg
+Use cWebDatePickerMosaic.pkg
+Use cWebGroup.pkg
 
 Object oItem is a cWebView
     Set piColumnCount to 12
@@ -51,6 +54,19 @@ Object oItem is a cWebView
             If (sCategory = "Food") Begin
                 Set ParentNullAllowed DefaultLocation.File_Number to False
             End
+        End_Procedure
+        
+        Procedure Update
+            Forward Send Update
+            
+            Date dStartDate dEndDate
+            WebGet pdStartDate of oBookingDatePicker to dStartDate
+            WebGet pdEndDate of oBookingDatePicker to dEndDate
+            If (dStartDate <> '0000-00-00' and dEndDate <> '0000-00-00') Begin
+                Move dStartDate to booking.start_date
+                Move dEndDate to booking.end_date
+            End
+            Send None
         End_Procedure
         
         Procedure Backout
@@ -113,6 +129,12 @@ Object oItem is a cWebView
                 Send None
         End_Procedure
     End_Object 
+
+    Object obooking_DD is a cbookingDataDictionary
+        Set Constrain_file to Item.File_number
+        Set DDO_Server to oitem_DD
+        
+    End_Object
 
     Set Main_DD To oitem_DD
     Set Server  To oitem_DD
@@ -221,12 +243,155 @@ Object oItem is a cWebView
             End_Procedure
         End_Object
 
-        Object oobsolescence_Stage is a cWebParentCombo
-            Entry_Item obsolescence.Stage
-            Set piColumnSpan to 4
-            Set psLabel to "Obsolescence"
-            Set peLabelPosition to lpTop
-            
+        Object oWebGroup1 is a cWebGroup
+            Set psCaption to ""
+            Set piColumnCount to 5
+            Set piColumnSpan to 5
+
+            Object oobsolescence_Stage is a cWebParentCombo
+                Entry_Item obsolescence.Stage
+                Set piColumnSpan to 4
+                Set psLabel to "Obsolescence"
+                Set peLabelPosition to lpTop
+                
+                
+            End_Object
+        End_Object
+
+        Object oWebGroup2 is a cWebGroup
+            Set psCaption to ""
+            Set piColumnCount to 5
+            Set piColumnSpan to 5
+            Set piColumnIndex to 5
+
+            Object oBookingDatePicker is a cWebDatePickerMosaic
+                Set piColumnSpan to 6
+                Set pbShowLabel to False
+                Set pbServerOnMonthChanged to True
+                Set pbServerOnDateClick to True
+                Set Server to obooking_DD
+
+                { WebProperty=Server }
+                Property Date pdStartDate '0000-00-00'
+                { WebProperty=Server }
+                Property Date pdEndDate '0000-00-00'
+                
+                Procedure OnMonthChanged String sDate
+                    Send RenderDates
+                End_Procedure
+                
+                Procedure OnDateClick String sPickedDate
+                    Date dStartDate dEndDate
+                    WebGet pdStartDate to dStartDate
+                    WebGet pdEndDate to dEndDate
+                    
+                    If (dEndDate <> '0000-00-00' or dStartDate = '0000-00-00' or dStartDate > (Date(sPickedDate))) Begin
+                        Move (Date(sPickedDate)) to dStartDate
+                        Move '0000-00-00' to dEndDate
+                    End
+                    Else Move (Date(sPickedDate)) to dEndDate
+                    
+                    WebSet pdStartDate to dStartDate
+                    WebSet pdEndDate to dEndDate
+                    
+                    Set Changed_State of oitem_DD to True
+
+                    Send RenderDates
+                End_Procedure
+                
+                Procedure RenderDates
+                    Handle hoSQLMngr hstmt hdbc
+                    Integer iItemId iCnt iFetchResult
+                    Date dStartDate dEndDate dDate
+                    DateTime dActiveMonth
+                    String[] sDayStatus
+                    String sDate sDateFrom sDateTo sJsonDateColors sQuery sActiveDate
+                    
+                    Get Field_Current_Value of oitem_DD (RefTable(Item.id)) to iItemId
+                    
+                    // Render dates from the database
+                    WebGet psSelectedMonth to dActiveMonth
+                    If (dActiveMonth = '') Begin
+                        Move (CurrentDateTime()) to dActiveMonth
+                        Move (DateSetDay(dActiveMonth, 1)) to dActiveMonth
+                    End
+                    Move "" to sJsonDateColors
+
+                    Move dActiveMonth to sDateFrom
+                    Move (DateAddMonth(dActiveMonth, 1)) to sDateTo
+                    
+                    Move ("SELECT start_date, end_date, user_id FROM [booking] ";
+                        + "  WHERE [end_date] >= '" + String(Date(sDateFrom)) + "' AND [start_date] < '" + String(Date(sDateTo)) + "' ";
+                           + " AND item_id=" + String(iItemId) + " ") to sQuery
+        
+                    Object oSQLManager is a cSQLHandleManager
+                        Move Self to hoSQLMngr
+                    End_Object
+        
+                    Get SQLFileConnect of hoSQLMngr WebAppUser.File_number to hdbc
+                    Get SQLOpen of hdbc to hStmt
+                    Send SQLExecDirect of hStmt sQuery
+                    Repeat
+                        Get SQLFetch of hStmt to iFetchResult
+                        If (iFetchResult <> 0) Begin
+                            Get SQLColumnValue of hStmt 1 to dStartDate
+                            Get SQLColumnValue of hStmt 2 to dEndDate
+                            //Get SQLColumnValue of hStmt 3 to iUserID
+                            
+                            Send RenderDateSequence dStartDate dEndDate (&sJsonDateColors)
+                        End
+                    Until (iFetchResult = 0)
+                
+                    // Render currently selected dates
+                    WebGet pdStartDate to dStartDate
+                    WebGet pdEndDate to dEndDate
+                    
+                    Send RenderDateSequence dStartDate dEndDate (&sJsonDateColors)
+                
+                    WebSet psJsonDateColors of oBookingDatePicker to ('{' + sJsonDateColors +  '}')                    
+                End_Procedure
+                
+                Procedure RenderDateSequence Date dStartDate Date dEndDate String ByRef sJsonDateColors
+                    Boolean bFirst bValid
+                    String sMarker sJsonDateColorTmp
+                    Date dActiveDate
+
+                    Move sJsonDateColors to sJsonDateColorTmp
+                    If (dStartDate = '0000-00-00' or dEndDate = '0000-00-00') Procedure_Return
+                    
+                    Move dStartDate to dActiveDate
+                    Move True to bFirst
+                    While (dActiveDate <= dEndDate)
+                        Move "active" to sMarker
+                        If (bFirst or dActiveDate = dEndDate) Move "pinn" to sMarker
+                        Move False to bFirst
+                        
+                        If (sJsonDateColorTmp <> "") Move (sJsonDateColorTmp + ", ") to sJsonDateColorTmp
+                        Move (sJsonDateColorTmp + '"' + String(dActiveDate) + '": "' + sMarker + '"') to sJsonDateColorTmp
+                        
+                        Increment dActiveDate
+                    Loop
+                    
+                    Move sJsonDateColorTmp to sJsonDateColors
+                End_Procedure
+                
+                Procedure Refresh Integer eMode
+                    Boolean bAppSynching
+                        
+                    Get AppSynching to bAppSynching
+                
+                    Forward Send Refresh eMode
+                
+                    If (bAppSynching) Begin
+                        Procedure_Return
+                    End
+                    
+                    WebSet pdStartDate to '0000-00-00'
+                    WebSet pdEndDate to '0000-00-00'
+
+                    Send RenderDates
+                End_Procedure
+            End_Object
         End_Object
 
         Object oWebButton2 is a cWebButton
