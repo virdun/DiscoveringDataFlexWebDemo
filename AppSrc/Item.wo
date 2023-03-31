@@ -37,6 +37,13 @@ Object oItem is a cWebView
     End_Object 
 
     Object oobsolescence_DD is a cobsolescenceDataDictionary
+        Procedure OnConstrain
+            String sCategory
+            WebGet psValue of oitemCategory to sCategory
+            If (sCategory = "Renovation") Begin
+                Constrain obsolescence.Id ne 1
+            End
+        End_Procedure
     End_Object
 
     Object oitem_DD is a citemDataDictionary
@@ -128,6 +135,11 @@ Object oItem is a cWebView
                 
                 Send None
         End_Procedure
+        
+        Procedure OnPostFind Integer eMessage Boolean bFound
+            Send Rebuild_Constraints of oobsolescence_DD
+            Send Refill of oobsolescence_Stage
+        End_Procedure
     End_Object 
 
     Object obooking_DD is a cbookingDataDictionary
@@ -204,6 +216,12 @@ Object oItem is a cWebView
             Set piColumnIndex to 0
             Set peLabelPosition to lpTop
             Set psLabel to "Category"
+            Set pbServerOnChange to True
+            
+            Procedure OnChange String sNewValue String sOldValue
+                Send Rebuild_Constraints of oobsolescence_DD
+                Send Refill of oobsolescence_Stage
+            End_Procedure
         End_Object 
 
         Object olocationName is a cWebForm
@@ -254,7 +272,12 @@ Object oItem is a cWebView
                 Set psLabel to "Obsolescence"
                 Set peLabelPosition to lpTop
                 
-                
+                Procedure OnFill
+                    Forward Send OnFill
+                    // Use this to manually fill the Combo when not using Entry_Item
+                    // or Add additional items to the existing list
+                    // Send AddComboItem "" "None"
+                End_Procedure
             End_Object
         End_Object
 
